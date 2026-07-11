@@ -1,32 +1,39 @@
-ADELIE v6.8.1 — CONTINUE TO ROOMS FIX
+ADELIE v6.9 — COMPLETE PROJECT PLANNER FIX
 
-WHY THE LAST PATCH FAILED
-The previous loader waited for the external PDF library before loading the
-actual planner. If that external script was delayed or blocked, the planner
-never initialized, so Continue to Rooms did nothing.
+This is a full replacement of the Project Planner page and its JavaScript.
 
-THIS FIX
-- Loads interactive-project-planner.js immediately
-- Loads PDF support separately
-- Ensures PDF-library problems cannot block:
-  * Continue to Rooms
-  * Adding rooms
-  * Local autosave
-  * Early Netlify lead capture
-  * Completed binder submissions
+FILES TO REPLACE
+1. interactive-project-planner.html
+2. interactive-project-planner.js
+3. site-config.js
+
+WHAT THIS FIXES
+- Loads the planner JavaScript directly from the HTML page
+- Removes the unreliable dynamic loader
+- Captures early lead data after the first step
+- Lets the visitor continue immediately while data sends in the background
+- Saves all entries locally
+- Loads the complete project binder review
+- Sends the complete binder to Netlify
+- Includes Netlify form definitions directly on the planner page
+- Supports room-by-room data, budget, timeline and project notes
+- Allows print or Save as PDF through the browser
 
 INSTALL
 1. Extract this ZIP.
 2. Open GitHub Desktop.
-3. Select Repository > Show in Explorer.
-4. Copy site-config.js into the main repository folder.
-5. Choose Replace the file in the destination.
-6. Commit: Fix Project Planner Continue button
+3. Choose Repository > Show in Explorer.
+4. Copy all three files into the repository root.
+5. Choose Replace files in the destination.
+6. Commit: Replace and repair complete Project Planner
 7. Push origin.
 8. Wait for Netlify to show Published.
-9. Open an Incognito window and test again.
+9. Test in an Incognito window.
 
-IMPORTANT TEST
-Complete name, phone, email, property address, and consent, then click
-Continue to Rooms. The button intentionally will not continue if any required
-contact field or consent is missing.
+NETLIFY FORMS
+- interactive-project-planner-start
+- interactive-project-planner-complete
+
+IMPORTANT
+After deployment, Netlify should detect both forms because their definitions are
+included directly in interactive-project-planner.html.

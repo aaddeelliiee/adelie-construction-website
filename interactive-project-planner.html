@@ -68,6 +68,205 @@
     .room-checkboxes label{min-height:42px}
   }
 </style>
+
+<style>
+  .blueprint-summary-grid{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:1rem;
+    margin:1.25rem 0;
+  }
+  .blueprint-stat{
+    padding:1rem;
+    border:1px solid #e4e4e4;
+    border-radius:14px;
+    background:#fff;
+  }
+  .blueprint-stat strong{
+    display:block;
+    font-size:1.4rem;
+    margin-top:.25rem;
+  }
+  .readiness-card{
+    padding:1.25rem;
+    border:2px solid #f5bf21;
+    border-radius:16px;
+    background:#fffaf0;
+    margin:1rem 0 1.5rem;
+  }
+  .readiness-bar{
+    height:14px;
+    overflow:hidden;
+    border-radius:999px;
+    background:#e7e7e7;
+    margin:.75rem 0;
+  }
+  .readiness-bar span{
+    display:block;
+    width:0;
+    height:100%;
+    background:#f5bf21;
+    transition:width .3s ease;
+  }
+  .stage-timeline{
+    display:grid;
+    gap:.9rem;
+    margin-top:1rem;
+  }
+  .stage-row{
+    display:grid;
+    grid-template-columns:140px minmax(0,1fr) 90px;
+    align-items:center;
+    gap:.85rem;
+  }
+  .stage-track{
+    height:12px;
+    border-radius:999px;
+    background:#e8e8e8;
+    overflow:hidden;
+  }
+  .stage-track span{
+    display:block;
+    height:100%;
+    background:#f5bf21;
+  }
+  .stage-status{
+    font-size:.85rem;
+    font-weight:700;
+    color:#555;
+    text-align:right;
+  }
+  .estimate-card{
+    padding:1.35rem;
+    border-radius:16px;
+    background:#1f2021;
+    color:#fff;
+    margin:1.25rem 0;
+  }
+  .estimate-card strong{
+    display:block;
+    font-size:2rem;
+    color:#f5bf21;
+    margin:.25rem 0;
+  }
+  .estimate-breakdown{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:.65rem 1rem;
+    margin-top:1rem;
+  }
+  .estimate-breakdown div{
+    display:flex;
+    justify-content:space-between;
+    gap:1rem;
+    padding:.6rem 0;
+    border-bottom:1px solid rgba(255,255,255,.15);
+  }
+  .upload-zone{
+    padding:1rem;
+    border:2px dashed #d0d0d0;
+    border-radius:14px;
+    background:#fafafa;
+  }
+  .upload-zone input[type=file]{
+    width:100%;
+  }
+  .upload-preview{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:.75rem;
+    margin-top:1rem;
+  }
+  .upload-preview figure{
+    margin:0;
+    border:1px solid #e1e1e1;
+    border-radius:10px;
+    overflow:hidden;
+    background:#fff;
+  }
+  .upload-preview img{
+    width:100%;
+    aspect-ratio:4/3;
+    object-fit:cover;
+    display:block;
+  }
+  .upload-preview figcaption{
+    padding:.5rem;
+    font-size:.75rem;
+    overflow-wrap:anywhere;
+  }
+  .advisor-summary{
+    padding:1.25rem;
+    border-left:5px solid #f5bf21;
+    background:#f7f7f7;
+    border-radius:0 12px 12px 0;
+    margin:1.25rem 0;
+  }
+  .lead-score-grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:.75rem;
+    margin-top:1rem;
+  }
+  .lead-score-grid div{
+    padding:.8rem;
+    background:#fff;
+    border:1px solid #e5e5e5;
+    border-radius:10px;
+    display:flex;
+    justify-content:space-between;
+    gap:1rem;
+  }
+  .professional-binder-header{
+    display:none;
+  }
+  .planner-help-text{
+    color:#666;
+    font-size:.88rem;
+  }
+  @media(max-width:800px){
+    .blueprint-summary-grid,.upload-preview,.lead-score-grid,.estimate-breakdown{
+      grid-template-columns:1fr;
+    }
+    .stage-row{
+      grid-template-columns:1fr;
+      gap:.35rem;
+    }
+    .stage-status{text-align:left}
+  }
+  @media print{
+    body *{visibility:hidden !important}
+    #binder-review,#binder-review *,#print-binder-cover,#print-binder-cover *{
+      visibility:visible !important;
+    }
+    #print-binder-cover{
+      display:block !important;
+      position:relative;
+      page-break-after:always;
+      padding:1in;
+      min-height:9in;
+    }
+    #binder-review{
+      position:absolute;
+      left:0;
+      top:0;
+      width:100%;
+      padding:.5in;
+    }
+    #binder-review section{
+      break-inside:avoid;
+      margin-bottom:1.25rem;
+    }
+    .professional-binder-header{
+      display:block;
+    }
+    .site-header,.site-footer,.planner-sidebar,.planner-hero,.binder-export-actions,
+    .planner-nav-actions,.floating-actions,.planner-help-strip{
+      display:none !important;
+    }
+  }
+</style>
+
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -223,6 +422,28 @@
                   <option>Multiple goals</option>
                 </select>
               </label>
+              <label>Finish level
+                <select name="finish_level">
+                  <option value="">Choose one</option>
+                  <option>Practical / value focused</option>
+                  <option>Mid-range</option>
+                  <option>Premium</option>
+                  <option>Luxury / custom</option>
+                  <option>Not sure</option>
+                </select>
+              </label>
+
+              <label>Decision-making status
+                <select name="decision_status">
+                  <option value="">Choose one</option>
+                  <option>Planning by myself</option>
+                  <option>Planning with spouse or family</option>
+                  <option>Working with a designer</option>
+                  <option>Working with an architect</option>
+                  <option>All decision-makers are ready</option>
+                </select>
+              </label>
+
               <label>How finalized is your vision?
                 <select name="design_readiness">
                   <option value="">Choose one</option>
@@ -435,6 +656,13 @@
               </label>
             </div>
 
+            
+            <div class="readiness-card">
+              <h3>Your preliminary project timeline</h3>
+              <p class="planner-help-text">This adjusts automatically based on your answers. It is a planning reference, not a guaranteed schedule.</p>
+              <div class="stage-timeline" id="stage-timeline"></div>
+            </div>
+
             <div class="planner-nav-actions">
               <button class="button secondary" data-back="budget" type="button">Back</button>
               <button class="button primary" data-next="review" type="button">Review Project Binder</button>
@@ -442,15 +670,46 @@
           </section>
 
           <section class="planner-panel" data-panel="review">
+            <div id="print-binder-cover" hidden>
+              <div class="professional-binder-header">
+                <img src="assets/adelie-logo.png" alt="ADELIE Construction" style="max-width:220px">
+                <h1>ADELIE PROJECT BINDER</h1>
+                <p id="print-project-name"></p>
+                <p id="print-property-address"></p>
+                <p id="print-prepared-date"></p>
+              </div>
+            </div>
             <p class="eyebrow dark">Review and Send</p>
             <h2>Your ADELIE Project Binder</h2>
             <p>Review your complete project information below.</p>
+
+            
+            <div class="readiness-card">
+              <h3>Project Readiness Score</h3>
+              <div class="readiness-bar"><span id="readiness-bar"></span></div>
+              <strong id="readiness-score">0%</strong>
+              <p id="readiness-message">Complete the planner to improve your readiness score.</p>
+              <div class="lead-score-grid" id="lead-score-grid"></div>
+            </div>
+
+            <div class="estimate-card">
+              <span>Preliminary planning range</span>
+              <strong id="estimated-range">Complete the room details</strong>
+              <small id="estimate-confidence">Confidence: Low</small>
+              <div class="estimate-breakdown" id="estimate-breakdown"></div>
+              <p class="planner-help-text" style="color:#ddd">This is not a quote. Existing conditions, design, permits, engineering, selections, labor availability, and site access can materially change cost.</p>
+            </div>
+
+            <div class="advisor-summary">
+              <h3>ADELIE Project Summary</h3>
+              <p id="generated-project-summary"></p>
+            </div>
 
             <div class="binder-review" id="binder-review"></div>
 
             <div class="binder-export-actions">
               <button class="button primary" id="send-binder-lead" type="button">Send Complete Binder to ADELIE</button>
-              <button class="button secondary" id="print-binder" type="button">Print or Save as PDF</button>
+              <button class="button secondary" id="print-binder" type="button">Export Professional Binder</button>
               <a class="button secondary" href="contact.html">Open Consultation Form</a>
             </div>
 
@@ -499,6 +758,11 @@
     <input name="contact_consent">
     <input name="lead_stage">
     <input name="submitted_at">
+    <input name="readiness_score">
+    <input name="lead_quality_score">
+    <input name="estimated_cost_range">
+    <textarea name="generated_summary"></textarea>
+    <input name="uploaded_file_names">
   </form>
 
   <footer class="site-footer">
@@ -509,6 +773,6 @@
   </footer>
 
   <script src="script.js"></script>
-  <script src="interactive-project-planner.js?v=6.10.1"></script>
+  <script src="interactive-project-planner.js?v=6.11"></script>
 </body>
 </html>

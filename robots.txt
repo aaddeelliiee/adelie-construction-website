@@ -32,3 +32,7 @@ User-agent: Google-Extended
 Allow: /
 
 Sitemap: https://www.adelieconstruction.com/sitemap.xml
+
+# Structured public content indexes
+# https://www.adelieconstruction.com/academy-index.json
+# https://www.adelieconstruction.com/knowledge-base.json

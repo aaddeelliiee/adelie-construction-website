@@ -144,5 +144,24 @@
       "publisher": "ADELIE Construction",
       "geography": "San Diego County, California"
     }
-  ]
+  ],
+  "remodelingAcademy": {
+    "url": "https://www.adelieconstruction.com/academy.html",
+    "machineIndex": "https://www.adelieconstruction.com/academy-index.json",
+    "articleCount": 126,
+    "topics": [
+      "Kitchen Remodeling",
+      "Bathroom Remodeling",
+      "Whole-Home Remodeling",
+      "ADUs & Home Additions",
+      "Planning & Budgeting",
+      "Contractors & Contracts",
+      "Permits & Inspections",
+      "Materials & Finishes",
+      "Construction Process",
+      "Outdoor Living",
+      "Maintenance & Closeout",
+      "San Diego Planning Considerations"
+    ]
+  }
 }

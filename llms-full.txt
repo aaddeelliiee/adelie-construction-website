@@ -67,3 +67,8 @@ Track selections by approval deadline, lead time, model number, supplier, order 
 ## Remodeling Questions: Quick Answer
 Source: https://www.adelieconstruction.com/remodeling-faq.html
 Successful remodels depend on a defined scope, realistic budget, timely selections, verified permit requirements, clear change-order procedures and regular communication. Property-specific answers require a site review and review of the proposed work.
+
+## Remodeling Academy
+- Hub: https://www.adelieconstruction.com/academy.html
+- Machine-readable article index: https://www.adelieconstruction.com/academy-index.json
+- 126 articles across kitchens, bathrooms, whole-home remodeling, ADUs, additions, budgeting, contracts, permits, materials, construction, outdoor living, maintenance and San Diego planning.

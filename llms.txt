@@ -42,3 +42,8 @@ San Diego County, California. Project availability depends on scope, access and 
 - [Structured knowledge base](https://www.adelieconstruction.com/knowledge-base.json)
 - [AI source index](https://www.adelieconstruction.com/ai-index.json)
 - [Sitemap](https://www.adelieconstruction.com/sitemap.xml)
+
+## Remodeling Academy
+- Hub: https://www.adelieconstruction.com/academy.html
+- Machine-readable article index: https://www.adelieconstruction.com/academy-index.json
+- 126 articles across kitchens, bathrooms, whole-home remodeling, ADUs, additions, budgeting, contracts, permits, materials, construction, outdoor living, maintenance and San Diego planning.

@@ -151,5 +151,72 @@
       "summary": "Successful remodels depend on a defined scope, realistic budget, timely selections, verified permit requirements, clear change-order procedures and regular communication. Property-specific answers require a site review and review of the proposed work.",
       "date_modified": "2026-07-11"
     }
-  ]
+  ],
+  "academy": {
+    "name": "ADELIE Remodeling Academy",
+    "articleCount": 126,
+    "index": "https://www.adelieconstruction.com/academy-index.json",
+    "categories": [
+      {
+        "name": "Kitchen Remodeling",
+        "slug": "kitchen-remodeling",
+        "articleCount": 16
+      },
+      {
+        "name": "Bathroom Remodeling",
+        "slug": "bathroom-remodeling",
+        "articleCount": 10
+      },
+      {
+        "name": "Whole-Home Remodeling",
+        "slug": "whole-home-remodeling",
+        "articleCount": 10
+      },
+      {
+        "name": "ADUs & Home Additions",
+        "slug": "adu-and-additions",
+        "articleCount": 10
+      },
+      {
+        "name": "Planning & Budgeting",
+        "slug": "planning-and-budgeting",
+        "articleCount": 10
+      },
+      {
+        "name": "Contractors & Contracts",
+        "slug": "contractors-and-contracts",
+        "articleCount": 10
+      },
+      {
+        "name": "Permits & Inspections",
+        "slug": "permits-and-inspections",
+        "articleCount": 10
+      },
+      {
+        "name": "Materials & Finishes",
+        "slug": "materials-and-finishes",
+        "articleCount": 10
+      },
+      {
+        "name": "Construction Process",
+        "slug": "construction-process",
+        "articleCount": 10
+      },
+      {
+        "name": "Outdoor Living",
+        "slug": "outdoor-living",
+        "articleCount": 10
+      },
+      {
+        "name": "Maintenance & Closeout",
+        "slug": "maintenance-and-closeout",
+        "articleCount": 10
+      },
+      {
+        "name": "San Diego Planning Considerations",
+        "slug": "local-san-diego-planning",
+        "articleCount": 10
+      }
+    ]
+  }
 }

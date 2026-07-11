@@ -1,23 +1,22 @@
-ADELIE v6.9 — COMPLETE PROJECT PLANNER FIX
+ADELIE v6.10 — SIMPLIFIED PROJECT PLANNER
 
-This is a full replacement of the Project Planner page and its JavaScript.
+This update makes the planner faster and easier for homeowners.
 
-FILES TO REPLACE
-1. interactive-project-planner.html
-2. interactive-project-planner.js
-3. site-config.js
+REPLACE THESE FILES
+- interactive-project-planner.html
+- interactive-project-planner.js
+- site-config.js
 
-WHAT THIS FIXES
-- Loads the planner JavaScript directly from the HTML page
-- Removes the unreliable dynamic loader
-- Captures early lead data after the first step
-- Lets the visitor continue immediately while data sends in the background
-- Saves all entries locally
-- Loads the complete project binder review
-- Sends the complete binder to Netlify
-- Includes Netlify form definitions directly on the planner page
-- Supports room-by-room data, budget, timeline and project notes
-- Allows print or Save as PDF through the browser
+IMPROVEMENTS
+- Converts home age, goals, planning readiness, budget priorities, access,
+  household constraints, and many room details into dropdown menus.
+- Adds large, visible quick-add room buttons.
+- Adds rooms instantly by type.
+- Adds a centered Add Another Room control.
+- Makes room planning mostly dropdowns and checkboxes.
+- Leaves only optional notes as typed text.
+- Preserves local autosave, early lead capture, full binder review,
+  Netlify complete-binder submission, printing, and Save as PDF.
 
 INSTALL
 1. Extract this ZIP.
@@ -25,15 +24,7 @@ INSTALL
 3. Choose Repository > Show in Explorer.
 4. Copy all three files into the repository root.
 5. Choose Replace files in the destination.
-6. Commit: Replace and repair complete Project Planner
+6. Commit: Simplify Project Planner inputs and room setup
 7. Push origin.
-8. Wait for Netlify to show Published.
+8. Wait for Netlify to publish.
 9. Test in an Incognito window.
-
-NETLIFY FORMS
-- interactive-project-planner-start
-- interactive-project-planner-complete
-
-IMPORTANT
-After deployment, Netlify should detect both forms because their definitions are
-included directly in interactive-project-planner.html.

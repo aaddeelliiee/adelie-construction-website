@@ -5,11 +5,6 @@ if(toggle&&nav){toggle.addEventListener('click',()=>{const open=nav.classList.to
 document.querySelectorAll('.reveal').forEach(el=>new IntersectionObserver(([entry],obs)=>{if(entry.isIntersecting){entry.target.classList.add('visible');obs.unobserve(entry.target)}},{threshold:.12}).observe(el));
 document.querySelectorAll('#year').forEach(el=>el.textContent=new Date().getFullYear());
 
-document.querySelectorAll('.resources-v5 .dropdown-menu').forEach(menu=>{
-  if(!menu.querySelector('a[href="interactive-project-planner.html"]')){
-    const a=document.createElement('a');a.href='interactive-project-planner.html';a.textContent='Interactive Project Planner';menu.appendChild(a);
-  }
-});
 
 
 const adelieEnhancementStyles=document.createElement('link');

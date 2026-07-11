@@ -24,3 +24,11 @@
 
 /* v6.4 consented early contact capture */
 .profile-contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}.profile-contact-grid label{display:grid;gap:.35rem;font-weight:700}.profile-contact-grid label span{font-weight:500;color:#6b675e}.profile-contact-grid .full{grid-column:1/-1}.profile-capture-consent{display:flex!important;grid-template-columns:auto 1fr!important;align-items:flex-start;gap:.65rem!important;background:#fff8df;border:1px solid #e0cc7d;border-radius:8px;padding:.9rem}.profile-capture-consent input{margin-top:.25rem}.profile-privacy-note{font-size:.86rem;color:#5d594f;margin:0}.profile-capture-status{font-size:.9rem;font-weight:700;min-height:1.5em}.profile-capture-status[data-state="success"]{color:#176b36}.profile-capture-status[data-state="error"]{color:#9d2b20}.profile-capture-status[data-state="working"]{color:#6f5600}@media(max-width:650px){.profile-contact-grid{grid-template-columns:1fr}.profile-contact-grid .full{grid-column:auto}}
+
+
+/* v6.7 — dedicated Project Planner navigation tab */
+.main-nav .planner-top-link{display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;padding:.58rem .78rem;border:1px solid #f5bf21;border-radius:6px;background:#fff8dd;color:#171819;font-weight:800;line-height:1.2;box-shadow:0 3px 10px rgba(0,0,0,.05)}
+.main-nav .planner-top-link:hover,.main-nav .planner-top-link:focus,.main-nav .planner-top-link.active{background:#f5bf21;color:#171819;transform:translateY(-1px)}
+.main-nav .planner-top-link:after{display:none!important}
+@media(max-width:1100px) and (min-width:901px){.main-nav .planner-top-link{padding:.48rem .58rem;font-size:.78rem}.main-nav{gap:12px}}
+@media(max-width:900px){.main-nav .planner-top-link{width:100%;padding:.8rem 1rem;background:#f5bf21;border-color:#f5bf21}}

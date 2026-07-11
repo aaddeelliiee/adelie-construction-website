@@ -5,6 +5,13 @@ if(toggle&&nav){toggle.addEventListener('click',()=>{const open=nav.classList.to
 document.querySelectorAll('.reveal').forEach(el=>new IntersectionObserver(([entry],obs)=>{if(entry.isIntersecting){entry.target.classList.add('visible');obs.unobserve(entry.target)}},{threshold:.12}).observe(el));
 document.querySelectorAll('#year').forEach(el=>el.textContent=new Date().getFullYear());
 
+document.querySelectorAll('.resources-v5 .dropdown-menu').forEach(menu=>{
+  if(!menu.querySelector('a[href="interactive-project-planner.html"]')){
+    const a=document.createElement('a');a.href='interactive-project-planner.html';a.textContent='Interactive Project Planner';menu.appendChild(a);
+  }
+});
+
+
 const adelieEnhancementStyles=document.createElement('link');
 adelieEnhancementStyles.rel='stylesheet';
 adelieEnhancementStyles.href='adelie-enhancements.css';
@@ -50,7 +57,8 @@ if(assistant){
     materials:{label:'Material Selection Guide',href:'material-selection-guide.html'},
     financing:{label:'Financing Information',href:'financing.html'},
     contact:{label:'Request a Consultation',href:'contact.html'},
-    services:{label:'All Remodeling Services',href:'services.html'}
+    services:{label:'All Remodeling Services',href:'services.html'},
+    planner:{label:'Interactive Project Planner',href:'interactive-project-planner.html'}
   };
 
   const knowledge=[
@@ -68,7 +76,7 @@ if(assistant){
     {keys:['service area','serve','location','city','where'],text:'ADELIE serves homeowners throughout San Diego County, with project availability based on scope, access and scheduling. Share the project city in the form so the team can confirm availability.',links:[]},
     {keys:['financing','loan','payment','finance'],text:'Financing options and approval terms vary by lender. Review total cost, interest, fees and repayment terms carefully, and avoid finalizing financing until the project scope is sufficiently defined.',links:['financing','budget']},
     {keys:['license','licensed','bonded','insured','insurance'],text:'Before hiring any contractor, verify the active license status and confirm the insurance documents that apply to your project. ADELIE can provide current business and project documentation during the consultation process.',links:['contractor','contact']},
-    {keys:['download','worksheet','checklist','workbook','pdf','form'],text:'The ADELIE Homeowner Toolkit includes free branded workbooks for planning, budgeting, comparing bids, tracking selections, preparing your home and completing a final walkthrough.',links:['downloads']},
+    {keys:['download','worksheet','checklist','workbook','pdf','form'],text:'The ADELIE Homeowner Toolkit includes free branded workbooks for planning, budgeting, comparing bids, tracking selections, preparing your home and completing a final walkthrough.',links:['downloads','planner']},
     {keys:['call','phone','contact','talk','consultation','appointment'],text:'You can request a consultation through the project form or call ADELIE at 1-877-ADELIEC. Include the project city, project type, goals, approximate timing and any plans or photos already available.',links:['contact']},
     {keys:['service','services','what do you do','scope'],text:'ADELIE coordinates kitchen, bathroom and whole-home remodeling, ADUs, additions, cabinets, flooring, tile, painting, plumbing, electrical and outdoor living work. The exact scope is defined after a site review and planning conversation.',links:['services','contact']},
     {keys:['hello','hi','hey','good morning','good afternoon'],text:'Hello. I can help you find the right planning guide, explain common remodeling terms, suggest which worksheet to use, or help prepare a consultation request.',links:['downloads','services']},

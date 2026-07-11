@@ -163,5 +163,12 @@
       "Maintenance & Closeout",
       "San Diego Planning Considerations"
     ]
-  }
+  },
+  "resources": [
+    {
+      "title": "Interactive Remodel Project Planner",
+      "url": "https://www.adelieconstruction.com/interactive-project-planner.html",
+      "description": "A room-by-room planning tool that organizes property details, project goals, preliminary measurements, selections, budget priorities, timeline and logistics, then exports an ADELIE Project Binder PDF."
+    }
+  ]
 }

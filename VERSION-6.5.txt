@@ -1,0 +1,9 @@
+ADELIE Construction Website Version 6.5
+
+Added the Interactive Project Planner:
+- room-by-room scope builder
+- property, budget, timeline and logistics sections
+- local autosave
+- ADELIE Project Binder PDF export
+- consultation handoff
+- sitemap, AI index and navigation updates

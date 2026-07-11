@@ -75,3 +75,5 @@ Successful remodels depend on a defined scope, realistic budget, timely selectio
 
 ## ADELIE Project Advisor
 - https://www.adelieconstruction.com/project-advisor.html — guided homeowner project profile covering property, scope, goals, budget, timing and constraints.
+
+- Interactive Project Planner: https://www.adelieconstruction.com/interactive-project-planner.html - room-by-room remodel planning tool with PDF project binder export.

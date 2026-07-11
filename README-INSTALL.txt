@@ -1,22 +1,15 @@
-ADELIE v6.10 — SIMPLIFIED PROJECT PLANNER
+ADELIE v6.10.1 — ROOM CHECKBOX LAYOUT FIX
 
-This update makes the planner faster and easier for homeowners.
+The global website form styles were forcing the room-scope checkboxes to
+stretch across their grid cells. This separated each checkbox from its label.
 
-REPLACE THESE FILES
-- interactive-project-planner.html
-- interactive-project-planner.js
-- site-config.js
-
-IMPROVEMENTS
-- Converts home age, goals, planning readiness, budget priorities, access,
-  household constraints, and many room details into dropdown menus.
-- Adds large, visible quick-add room buttons.
-- Adds rooms instantly by type.
-- Adds a centered Add Another Room control.
-- Makes room planning mostly dropdowns and checkboxes.
-- Leaves only optional notes as typed text.
-- Preserves local autosave, early lead capture, full binder review,
-  Netlify complete-binder submission, printing, and Save as PDF.
+FIXES
+- Keeps every checkbox directly beside its description
+- Prevents checkboxes from inheriting full-width input styles
+- Makes each selection a clean clickable card
+- Improves two-column desktop layout
+- Uses a single-column layout on phones
+- Preserves all planner data capture and binder functionality
 
 INSTALL
 1. Extract this ZIP.
@@ -24,7 +17,7 @@ INSTALL
 3. Choose Repository > Show in Explorer.
 4. Copy all three files into the repository root.
 5. Choose Replace files in the destination.
-6. Commit: Simplify Project Planner inputs and room setup
+6. Commit: Fix Project Planner room checkbox layout
 7. Push origin.
 8. Wait for Netlify to publish.
-9. Test in an Incognito window.
+9. Refresh in an Incognito window.

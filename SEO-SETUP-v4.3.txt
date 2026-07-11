@@ -1,0 +1,15 @@
+ADELIE Construction Website v4.3 — Google-ready SEO update
+
+Included:
+- robots.txt allowing crawling and referencing the sitemap
+- sitemap.xml containing all indexable public HTML pages
+- canonical URLs standardized to https://www.adelieconstruction.com
+- Open Graph and Twitter sharing metadata on every page
+- favicon and Apple touch icon references on every page
+- consistent GeneralContractor/HomeAndConstructionBusiness structured data
+- Netlify Forms configuration preserved
+
+After deployment:
+1. Verify the live robots.txt URL.
+2. In Google Search Console, submit sitemap.xml under Sitemaps.
+3. Use URL Inspection to request indexing for the homepage, Services, Service Areas, and Contact pages.

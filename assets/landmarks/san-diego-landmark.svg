@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 620" role="img" aria-labelledby="title desc">
+<title id="title">San Diego landmark illustration</title>
+<desc id="desc">Original illustrated postcard representing California Tower at Balboa Park in San Diego, California.</desc>
+<rect width="1000" height="620" fill="#f4efe5"/>
+<circle cx="815" cy="115" r="72" fill="#e2a84b" opacity=".85"/>
+<path d="M0 420 C180 365 320 430 480 395 C670 352 790 420 1000 365 L1000 620 L0 620 Z" fill="#e2a84b" opacity=".35"/>
+<g fill="#29313d" opacity=".96"><rect x="70" y="253" width="77" height="107" rx="3"/><rect x="165" y="224" width="49" height="136" rx="3"/><rect x="232" y="195" width="66" height="165" rx="3"/><rect x="316" y="166" width="83" height="194" rx="3"/><rect x="417" y="137" width="55" height="223" rx="3"/><rect x="490" y="278" width="72" height="82" rx="3"/><rect x="580" y="249" width="89" height="111" rx="3"/></g>
+<path d="M0 430 H1000" stroke="#29313d" stroke-width="12"/>
+<text x="62" y="505" font-family="Arial, sans-serif" font-size="30" letter-spacing="6" fill="#29313d">SAN DIEGO</text>
+<text x="62" y="555" font-family="Georgia, serif" font-size="34" fill="#29313d">California Tower at Balboa Park</text>
+<text x="840" y="555" text-anchor="end" font-family="Arial, sans-serif" font-size="18" fill="#29313d">SAN DIEGO COUNTY</text>
+</svg>

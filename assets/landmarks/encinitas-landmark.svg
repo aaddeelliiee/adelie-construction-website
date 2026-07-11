@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 620" role="img" aria-labelledby="title desc">
+<title id="title">Encinitas landmark illustration</title>
+<desc id="desc">Original illustrated postcard representing Swami&#x27;s Beach in Encinitas, California.</desc>
+<rect width="1000" height="620" fill="#f4efe5"/>
+<circle cx="815" cy="115" r="72" fill="#e2a84b" opacity=".85"/>
+<path d="M0 420 C180 365 320 430 480 395 C670 352 790 420 1000 365 L1000 620 L0 620 Z" fill="#e2a84b" opacity=".35"/>
+<g fill="#29313d" opacity=".96"><rect x="70" y="182" width="58" height="178" rx="3"/><rect x="146" y="153" width="75" height="207" rx="3"/><rect x="239" y="124" width="47" height="236" rx="3"/><rect x="304" y="265" width="64" height="95" rx="3"/><rect x="386" y="236" width="81" height="124" rx="3"/><rect x="485" y="207" width="53" height="153" rx="3"/><rect x="556" y="178" width="70" height="182" rx="3"/></g>
+<path d="M0 430 H1000" stroke="#29313d" stroke-width="12"/>
+<text x="62" y="505" font-family="Arial, sans-serif" font-size="30" letter-spacing="6" fill="#29313d">ENCINITAS</text>
+<text x="62" y="555" font-family="Georgia, serif" font-size="34" fill="#29313d">Swami&#x27;s Beach</text>
+<text x="840" y="555" text-anchor="end" font-family="Arial, sans-serif" font-size="18" fill="#29313d">SAN DIEGO COUNTY</text>
+</svg>

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 620" role="img" aria-labelledby="title desc">
+<title id="title">Chula Vista landmark illustration</title>
+<desc id="desc">Original illustrated postcard representing Living Coast Discovery Center in Chula Vista, California.</desc>
+<rect width="1000" height="620" fill="#fff7dc"/>
+<circle cx="815" cy="115" r="72" fill="#f5bf21" opacity=".85"/>
+<path d="M0 420 C180 365 320 430 480 395 C670 352 790 420 1000 365 L1000 620 L0 620 Z" fill="#f5bf21" opacity=".35"/>
+<g fill="#222222" opacity=".96"><rect x="70" y="189" width="86" height="171" rx="3"/><rect x="174" y="160" width="58" height="200" rx="3"/><rect x="250" y="131" width="75" height="229" rx="3"/><rect x="343" y="272" width="47" height="88" rx="3"/><rect x="408" y="243" width="64" height="117" rx="3"/><rect x="490" y="214" width="81" height="146" rx="3"/><rect x="589" y="185" width="53" height="175" rx="3"/></g>
+<path d="M0 430 H1000" stroke="#222222" stroke-width="12"/>
+<text x="62" y="505" font-family="Arial, sans-serif" font-size="30" letter-spacing="6" fill="#222222">CHULA VISTA</text>
+<text x="62" y="555" font-family="Georgia, serif" font-size="34" fill="#222222">Living Coast Discovery Center</text>
+<text x="840" y="555" text-anchor="end" font-family="Arial, sans-serif" font-size="18" fill="#222222">SAN DIEGO COUNTY</text>
+</svg>

@@ -1,0 +1,7 @@
+ADELIE Construction Website v5.2
+
+Editorial cleanup release:
+- Removed visible SEO and developer commentary from public pages.
+- Replaced generic search-focused copy with homeowner-focused project guidance.
+- Rewrote About, Projects, Promise and local specialty-page sections that referenced ranking, keywords or page architecture.
+- Preserved Netlify Forms, Resource Center, downloadable PDFs, sitemap, robots.txt and existing site functionality.

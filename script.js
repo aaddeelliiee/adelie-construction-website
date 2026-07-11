@@ -159,3 +159,19 @@ if(assistant){
   });
 }
 
+
+/* ADELIE v6 Project Advisor enhancements */
+(()=>{
+  const a=document.querySelector('#adelie-assistant'); if(!a||a.dataset.v6==='true')return; a.dataset.v6='true';
+  const panel=a.querySelector('.assistant-panel'), messages=a.querySelector('.assistant-messages');
+  const form=a.querySelector('.assistant-lead');
+  const project=form?.querySelector('[name="project_type"]');
+  const progress=document.createElement('div'); progress.className='assistant-progress'; progress.textContent='Project Advisor: ask a question or choose a next step.';
+  messages?.before(progress);
+  const actions=document.createElement('div'); actions.className='assistant-action-row';
+  const options=[['Plan my project','academy.html'],['Choose a workbook','downloads.html'],['Build a budget','remodel-budget-planner.html'],['Request consultation','contact.html']];
+  options.forEach(([label,href])=>{const b=document.createElement('button');b.type='button';b.textContent=label;b.addEventListener('click',()=>location.href=href);actions.appendChild(b)});
+  messages?.after(actions);
+  const classify=q=>q.includes('kitchen')?'Kitchen remodel':q.includes('bath')||q.includes('shower')?'Bathroom remodel':q.includes('adu')?'ADU':q.includes('addition')?'Home addition':q.includes('whole')||q.includes('entire')?'Whole-home remodel':'';
+  a.addEventListener('submit',e=>{const input=a.querySelector('.assistant-question-input'); if(!input)return; const type=classify(input.value.toLowerCase()); if(type&&project){const o=[...project.options].find(x=>x.text.toLowerCase()===type.toLowerCase());if(o)project.value=o.value||o.text;} progress.textContent=type?`Project identified: ${type}. Relevant guidance and forms are ready.`:'Project Advisor: add the room, city or project stage for a more specific answer.';},true);
+})();

@@ -1,0 +1,60 @@
+{
+  "organization": {
+    "name": "ADELIE Construction",
+    "service_area": "San Diego County, California",
+    "phone": "1-877-ADELIEC",
+    "website": "https://www.adelieconstruction.com/",
+    "positioning": "Residential remodeling with transparent scope, assumptions, allowances, changes and project coordination."
+  },
+  "services": [
+    "Kitchen remodeling",
+    "Bathroom remodeling",
+    "Whole-home remodeling",
+    "ADU construction",
+    "Home additions",
+    "Cabinet installation",
+    "Flooring installation",
+    "Tile and stone",
+    "Painting",
+    "Plumbing coordination",
+    "Electrical coordination",
+    "Pools and outdoor living"
+  ],
+  "core_answers": [
+    {
+      "question": "What should homeowners prepare before requesting a proposal?",
+      "answer": "Define the rooms and work included, prioritize must-have outcomes, establish a planning budget, gather plans or property information, and identify undecided selections and assumptions."
+    },
+    {
+      "question": "What makes contractor estimates comparable?",
+      "answer": "The estimates should address the same scope, allowances, exclusions, permit responsibilities, supervision, schedule assumptions, cleanup, change-order process and payment milestones."
+    },
+    {
+      "question": "Why is contingency important?",
+      "answer": "Contingency provides a reserve for concealed conditions, owner changes and other project-specific risks that may not be known before demolition."
+    },
+    {
+      "question": "How should selections be prioritized?",
+      "answer": "Select products that affect framing, rough plumbing, electrical, cabinetry and tile layout first. Decorative items that do not affect concealed work can often be finalized later."
+    }
+  ],
+  "resources": [
+    {
+      "title": "ADELIE Remodeling Academy",
+      "url": "https://www.adelieconstruction.com/academy.html"
+    },
+    {
+      "title": "Free Download Center",
+      "url": "https://www.adelieconstruction.com/downloads.html"
+    },
+    {
+      "title": "Remodel Budget Planner",
+      "url": "https://www.adelieconstruction.com/remodel-budget-planner.html"
+    },
+    {
+      "title": "Remodeling FAQ",
+      "url": "https://www.adelieconstruction.com/remodeling-faq.html"
+    }
+  ],
+  "disclaimer": "General educational information only. Project-specific pricing, permits, code, engineering and schedules must be verified for the property and scope."
+}

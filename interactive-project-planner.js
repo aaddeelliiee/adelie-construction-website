@@ -1,69 +1,663 @@
-(()=>{
-const STORAGE='adelieInteractiveProjectBinderV1';
-const PROFILE='adelieProjectProfileV1';
-const EARLY_CAPTURE='adelieInteractivePlannerLeadV1';
-const COMPLETE_CAPTURE='adelieInteractivePlannerCompleteV1';
-const stateDefault={project_name:'',project_type:'',name:'',phone:'',email:'',property_address:'',contact_consent:false,year_built:'',stories:'',foundation:'',overall_goals:'',rooms:[],budget_range:'',contingency:'',must_haves:'',nice_to_haves:'',value_options:'',owner_supplied:'',desired_start:'',target_completion:'',occupied:'',plans_status:'',constraints:'',open_questions:'',updated_at:''};
-const $=(s,c=document)=>c.querySelector(s), $$=(s,c=document)=>[...c.querySelectorAll(s)];
-const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-let state=load(); let current='overview';
-function load(){try{const saved=JSON.parse(localStorage.getItem(STORAGE)||'{}');const profile=JSON.parse(localStorage.getItem(PROFILE)||'{}');return {...stateDefault,...profile,...saved,rooms:Array.isArray(saved.rooms)?saved.rooms:[]}}catch{return structuredClone(stateDefault)}}
-function save(){state.updated_at=new Date().toISOString();localStorage.setItem(STORAGE,JSON.stringify(state));$('#planner-save-status').textContent='Saved '+new Date().toLocaleTimeString([], {hour:'numeric',minute:'2-digit'})+' on this device.';updateProgress()}
-function bindFields(){$$('[name]').forEach(el=>{if(el.closest('.room-card'))return;if(state[el.name]!==undefined){if(el.type==='checkbox')el.checked=Boolean(state[el.name]);else el.value=state[el.name]||''}el.addEventListener('input',()=>{state[el.name]=el.type==='checkbox'?el.checked:el.value;save();if(el.name==='project_name')updateTitle()})})}
-function updateTitle(){$('#planner-project-title').textContent=state.project_name||state.project_type||'Untitled Remodel'}
-function completion(){const core=['project_name','project_type','property_address','overall_goals','budget_range','desired_start'];let done=core.filter(k=>state[k]).length+(state.rooms.length?2:0)+(state.rooms.filter(r=>r.goals||r.scope).length?1:0)+(state.must_haves?1:0)+(state.constraints?1:0);return Math.min(100,Math.round(done/12*100))}
-function updateProgress(){const n=completion();$('#planner-progress-bar').style.width=n+'%';$('#planner-progress-label').textContent=n+'% complete';updateTitle()}
-function show(section){current=section;$$('.planner-panel').forEach(p=>p.classList.toggle('active',p.dataset.panel===section));$$('.planner-steps button').forEach(b=>b.classList.toggle('active',b.dataset.section===section));if(section==='review')renderReview();scrollTo({top:$('#planner-app').offsetTop-20,behavior:'smooth'})}
-function roomTemplate(r,i){const types=['Kitchen','Primary bathroom','Guest bathroom','Powder room','Living room','Dining room','Bedroom','Laundry room','Office','Garage','ADU','Home addition','Exterior / outdoor','Other'];return `<article class="room-card" data-room-id="${r.id}"><header><div><span class="room-number">Space ${i+1}</span><h3>${esc(r.name||r.type||'New room')}</h3></div><button class="room-remove" type="button">Remove</button></header><div class="room-grid"><label>Room or space name<input data-room="name" value="${esc(r.name)}" placeholder="Example: Main kitchen"></label><label>Type<select data-room="type"><option value="">Choose one</option>${types.map(x=>`<option ${r.type===x?'selected':''}>${x}</option>`).join('')}</select></label><label>Approximate dimensions<input data-room="dimensions" value="${esc(r.dimensions)}" placeholder="Example: 12 ft x 16 ft"></label><label>Priority<select data-room="priority"><option value="">Choose one</option>${['Essential','High','Medium','Optional / future phase'].map(x=>`<option ${r.priority===x?'selected':''}>${x}</option>`).join('')}</select></label><label class="full">Existing conditions<textarea data-room="existing" rows="3" placeholder="What is there now? Include known damage, layout problems or systems that may be affected.">${esc(r.existing)}</textarea></label><label class="full">Goals for this space<textarea data-room="goals" rows="3" placeholder="Describe function, appearance, storage, comfort or accessibility goals.">${esc(r.goals)}</textarea></label><label class="full">Expected scope<textarea data-room="scope" rows="4" placeholder="Demolition, walls, plumbing, electrical, cabinets, flooring, windows, doors, finishes, etc.">${esc(r.scope)}</textarea></label><label class="full">Selections and products<textarea data-room="selections" rows="4" placeholder="List selected or preferred cabinets, fixtures, tile, flooring, appliances, paint and other products.">${esc(r.selections)}</textarea></label><label class="full">Measurements and notes<textarea data-room="measurements" rows="3" placeholder="Record preliminary measurements, model numbers, clearances or field-verification notes.">${esc(r.measurements)}</textarea></label><label class="full">Questions for the contractor or designer<textarea data-room="questions" rows="3">${esc(r.questions)}</textarea></label></div></article>`}
-function renderRooms(){const list=$('#room-list');list.innerHTML=state.rooms.map(roomTemplate).join('');$('#room-empty').hidden=state.rooms.length>0;$$('.room-card').forEach(card=>{const room=state.rooms.find(r=>r.id===card.dataset.roomId);$$('[data-room]',card).forEach(el=>el.addEventListener('input',()=>{room[el.dataset.room]=el.value;save();renderRoomHeading(card,room)}));$('.room-remove',card).addEventListener('click',()=>{if(confirm('Remove this room from the binder?')){state.rooms=state.rooms.filter(r=>r.id!==room.id);save();renderRooms()}})})}
-function renderRoomHeading(card,r){$('h3',card).textContent=r.name||r.type||'New room'}
-function addRoom(){state.rooms.push({id:'room-'+Date.now()+'-'+Math.random().toString(36).slice(2,6),name:'',type:'',dimensions:'',priority:'',existing:'',goals:'',scope:'',selections:'',measurements:'',questions:''});save();renderRooms();setTimeout(()=>$('.room-card:last-child input')?.focus(),50)}
-function lines(text){return String(text||'').split(/\n+/).map(x=>x.trim()).filter(Boolean)}
-function reviewSection(title,content){return `<section><h3>${title}</h3>${content||'<p class="muted">Not provided.</p>'}</section>`}
-function renderReview(){const overview=`<dl><div><dt>Project</dt><dd>${esc(state.project_name||state.project_type||'Untitled remodel')}</dd></div><div><dt>Property</dt><dd>${esc(state.property_address||'Not provided')}</dd></div><div><dt>Home</dt><dd>${esc([state.year_built&&'Built '+state.year_built,state.stories,state.foundation].filter(Boolean).join(' · ')||'Not provided')}</dd></div><div><dt>Owner</dt><dd>${esc([state.name,state.phone,state.email].filter(Boolean).join(' · ')||'Not provided')}</dd></div></dl>${state.overall_goals?`<h4>Overall goals</h4><p>${esc(state.overall_goals)}</p>`:''}`;
-const rooms=state.rooms.length?state.rooms.map((r,i)=>`<article class="binder-room-summary"><h4>${i+1}. ${esc(r.name||r.type||'Room')}</h4><p><strong>Type:</strong> ${esc(r.type||'Not specified')} &nbsp; <strong>Dimensions:</strong> ${esc(r.dimensions||'To verify')} &nbsp; <strong>Priority:</strong> ${esc(r.priority||'Not ranked')}</p>${r.goals?`<p><strong>Goals:</strong> ${esc(r.goals)}</p>`:''}${r.scope?`<p><strong>Scope:</strong> ${esc(r.scope)}</p>`:''}${r.selections?`<p><strong>Selections:</strong> ${esc(r.selections)}</p>`:''}${r.questions?`<p><strong>Open questions:</strong> ${esc(r.questions)}</p>`:''}</article>`).join(''):'<p class="muted">No rooms have been added.</p>';
-const budget=`<dl><div><dt>Budget range</dt><dd>${esc(state.budget_range||'Not established')}</dd></div><div><dt>Contingency</dt><dd>${esc(state.contingency||'Not established')}</dd></div></dl>${state.must_haves?`<h4>Must-haves</h4><p>${esc(state.must_haves)}</p>`:''}${state.nice_to_haves?`<h4>Optional upgrades</h4><p>${esc(state.nice_to_haves)}</p>`:''}${state.value_options?`<h4>Value or phasing options</h4><p>${esc(state.value_options)}</p>`:''}`;
-const timeline=`<dl><div><dt>Desired start</dt><dd>${esc(state.desired_start||'Not provided')}</dd></div><div><dt>Target completion</dt><dd>${esc(state.target_completion||'Not provided')}</dd></div><div><dt>Occupancy</dt><dd>${esc(state.occupied||'Not provided')}</dd></div><div><dt>Plans / permits</dt><dd>${esc(state.plans_status||'Not provided')}</dd></div></dl>${state.constraints?`<h4>Constraints</h4><p>${esc(state.constraints)}</p>`:''}${state.open_questions?`<h4>Questions to resolve</h4><p>${esc(state.open_questions)}</p>`:''}`;
-$('#binder-review').innerHTML=reviewSection('Project overview',overview)+reviewSection('Room-by-room plan',rooms)+reviewSection('Budget and priorities',budget)+reviewSection('Timeline and logistics',timeline)}
-async function logoData(){try{const img=new Image();img.crossOrigin='anonymous';img.src='assets/adelie-logo.png';await img.decode();const c=document.createElement('canvas');c.width=img.naturalWidth;c.height=img.naturalHeight;c.getContext('2d').drawImage(img,0,0);return c.toDataURL('image/png')}catch{return null}}
-function safeName(){return (state.project_name||'ADELIE Project Binder').replace(/[^a-z0-9 _-]/gi,'').trim()||'ADELIE Project Binder'}
-async function exportPdf(){const status=$('#binder-export-status');status.textContent='Preparing your binder PDF...';try{if(!window.jspdf?.jsPDF)throw new Error('PDF library unavailable');const {jsPDF}=window.jspdf;const doc=new jsPDF({unit:'pt',format:'letter'});const gold=[245,191,33], ink=[30,31,32], gray=[90,90,90];let y=54;const margin=54,pageH=792,pageW=612,maxW=pageW-margin*2;const logo=await logoData();
-const newPage=()=>{doc.addPage();y=54;header()};const ensure=h=>{if(y+h>740)newPage()};const header=()=>{doc.setDrawColor(...gold);doc.setLineWidth(3);doc.line(margin,40,pageW-margin,40);doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(...gray);doc.text('ADELIE CONSTRUCTION · PROJECT BINDER',margin,30);doc.text('1-877-ADELIEC',pageW-margin,30,{align:'right'})};
-const title=(t,size=18)=>{ensure(size+22);doc.setFont('helvetica','bold');doc.setFontSize(size);doc.setTextColor(...ink);const arr=doc.splitTextToSize(t,maxW);doc.text(arr,margin,y);y+=arr.length*(size*1.18)+10;doc.setDrawColor(...gold);doc.setLineWidth(2);doc.line(margin,y,pageW-margin,y);y+=15};
-const para=(t,label='')=>{if(!t)return;doc.setFont('helvetica',label?'bold':'normal');doc.setFontSize(10);doc.setTextColor(...ink);if(label){ensure(18);doc.text(label,margin,y);y+=14;doc.setFont('helvetica','normal')}const arr=doc.splitTextToSize(String(t),maxW);arr.forEach(line=>{ensure(14);doc.text(line,margin,y);y+=13});y+=7};
-const kv=(k,v)=>{if(!v)return;ensure(18);doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(...gray);doc.text(k.toUpperCase(),margin,y);doc.setFont('helvetica','normal');doc.setTextColor(...ink);const arr=doc.splitTextToSize(String(v),maxW-150);doc.text(arr,margin+150,y);y+=Math.max(16,arr.length*12+4)};
-header();if(logo)doc.addImage(logo,'PNG',margin,58,145,55,undefined,'FAST');doc.setFillColor(...gold);doc.rect(margin,135,maxW,8,'F');doc.setFont('helvetica','bold');doc.setTextColor(...ink);doc.setFontSize(26);doc.text('ADELIE PROJECT BINDER',margin,185);doc.setFontSize(16);doc.text(state.project_name||state.project_type||'Preliminary Remodel Plan',margin,214);doc.setFont('helvetica','normal');doc.setFontSize(11);doc.setTextColor(...gray);doc.text('Prepared '+new Date().toLocaleDateString(),margin,238);y=282;kv('Property',state.property_address);kv('Homeowner',state.name);kv('Phone',state.phone);kv('Email',state.email);kv('Project type',state.project_type);kv('Home profile',[state.year_built&&'Built '+state.year_built,state.stories,state.foundation].filter(Boolean).join(' · '));y+=20;para('This binder organizes preliminary homeowner goals and decisions. It is not a quote, contract, design, engineering opinion, inspection or permit determination. All dimensions, conditions, selections, pricing and requirements must be verified for the specific project.');
-newPage();title('1. Project Overview');para(state.overall_goals,'Overall goals');kv('Budget range',state.budget_range);kv('Desired start',state.desired_start);kv('Target completion',state.target_completion);kv('Occupancy',state.occupied);kv('Plans / permits',state.plans_status);
-state.rooms.forEach((r,i)=>{newPage();title(`${i+2}. ${r.name||r.type||'Room Plan'}`);kv('Space type',r.type);kv('Approx. dimensions',r.dimensions||'Field verification required');kv('Priority',r.priority);para(r.existing,'Existing conditions');para(r.goals,'Goals');para(r.scope,'Expected scope');para(r.selections,'Selections and products');para(r.measurements,'Measurements and notes');para(r.questions,'Questions to resolve')});
-newPage();title('Budget and Priorities');kv('Target budget',state.budget_range);kv('Contingency',state.contingency);para(state.must_haves,'Non-negotiable priorities');para(state.nice_to_haves,'Optional upgrades');para(state.value_options,'Value and phasing options');para(state.owner_supplied,'Owner-supplied items');title('Timeline and Logistics',16);kv('Desired start',state.desired_start);kv('Target completion',state.target_completion);kv('Occupancy',state.occupied);kv('Plans / permits',state.plans_status);para(state.constraints,'Household, access and scheduling constraints');para(state.open_questions,'Questions to resolve');
-newPage();title('Planning Checklist');['Verify field dimensions and existing conditions','Confirm design and structural requirements','Verify permit and HOA requirements','Complete finish and fixture selections','Confirm product model numbers and lead times','Compare complete contractor scopes and exclusions','Establish a realistic contingency','Document decisions and approved changes','Confirm site access and household plan','Review final scope before construction'].forEach((x,i)=>{ensure(18);doc.rect(margin,y-9,9,9);doc.setFont('helvetica','normal');doc.setFontSize(10);doc.setTextColor(...ink);doc.text(x,margin+18,y);y+=20});
-const pages=doc.getNumberOfPages();for(let p=1;p<=pages;p++){doc.setPage(p);doc.setFontSize(8);doc.setTextColor(...gray);doc.text(`ADELIE Construction · ${safeName()}`,margin,770);doc.text(`Page ${p} of ${pages}`,pageW-margin,770,{align:'right'})}doc.save(safeName()+'.pdf');status.textContent='Your ADELIE Project Binder PDF has been downloaded.'}catch(err){console.error(err);status.textContent='The direct PDF export could not load. Opening the print-ready binder instead.';window.print()}}
+(() => {
+  "use strict";
 
-function encodeForm(data){return new URLSearchParams(Object.entries(data).filter(([,v])=>v!==undefined&&v!==null).map(([k,v])=>[k,Array.isArray(v)?v.join(', '):String(v)])).toString()}
-async function postNetlify(data){const response=await fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:encodeForm(data)});if(!response.ok)throw new Error('Submission failed');return response}
-function contactReady(){return Boolean(state.name?.trim()&&state.phone?.trim()&&state.email?.trim()&&state.property_address?.trim()&&state.contact_consent)}
-function setCaptureNote(text,kind=''){const el=$('#planner-capture-note');if(!el)return;el.textContent=text;el.dataset.state=kind}
-async function captureEarlyLead(){
-  if(!contactReady())return false;
-  const fingerprint=[state.name,state.phone,state.email,state.property_address,state.project_type].join('|').toLowerCase();
-  if(localStorage.getItem(EARLY_CAPTURE)===fingerprint){setCaptureNote('Contact details already saved with ADELIE. You can continue building the binder.','success');return true}
-  setCaptureNote('Saving your contact information with ADELIE…','working');
-  try{
-    await postNetlify({'form-name':'interactive-project-planner-start',name:state.name,phone:state.phone,email:state.email,property_address:state.property_address,project_type:state.project_type||'Not selected yet',project_name:state.project_name||'',lead_stage:'Planner started',contact_consent:'yes',page_url:location.href,started_at:new Date().toISOString()});
-    localStorage.setItem(EARLY_CAPTURE,fingerprint);setCaptureNote('Contact details saved. ADELIE can follow up even if you finish the binder later.','success');return true
-  }catch(err){console.error(err);setCaptureNote('Your binder is saved locally, but the contact submission did not go through. Check your connection and press Continue again.','error');return false}
-}
-async function sendBinderLead(){
-  const status=$('#binder-export-status');
-  if(!contactReady()){status.textContent='Return to Project Overview and complete your name, phone, email, address and contact consent first.';show('overview');return}
-  status.textContent='Sending your binder summary to ADELIE…';
-  try{
-    await postNetlify({'form-name':'interactive-project-planner-complete',name:state.name,phone:state.phone,email:state.email,property_address:state.property_address,project_name:state.project_name||'',project_type:state.project_type||'',budget_range:state.budget_range||'',desired_start:state.desired_start||'',room_count:state.rooms.length,room_names:state.rooms.map(r=>r.name||r.type).filter(Boolean).join(', '),project_summary:buildText(),binder_json:JSON.stringify(state),contact_consent:'yes',lead_stage:'Binder summary completed',submitted_at:new Date().toISOString()});
-    localStorage.setItem(COMPLETE_CAPTURE,new Date().toISOString());status.textContent='Your project binder summary was sent to ADELIE successfully.'
-  }catch(err){console.error(err);status.textContent='The summary could not be sent. Your binder is still saved on this device; please check your connection and try again.'}
-}
-function useConsultation(){localStorage.setItem(PROFILE,JSON.stringify({...state,goals:state.overall_goals,budget:state.budget_range,timeline:state.desired_start,project_details:buildText()}));location.href='project-advisor.html#consultation'}
-function buildText(){return [`Interactive Project Binder: ${state.project_name||state.project_type}`,`Property: ${state.property_address}`,`Goals: ${state.overall_goals}`,`Rooms: ${state.rooms.map(r=>r.name||r.type).filter(Boolean).join(', ')}`,`Budget: ${state.budget_range}`,`Timeline: ${state.desired_start}`,`Must-haves: ${state.must_haves}`,`Constraints: ${state.constraints}`,`Open questions: ${state.open_questions}`].filter(x=>!x.endsWith(': ')).join('\n')}
-function init(){bindFields();renderRooms();updateProgress();$$('.planner-steps button').forEach(b=>b.addEventListener('click',()=>show(b.dataset.section)));$$('[data-next]').forEach(b=>b.addEventListener('click',async()=>{if(b.closest('[data-panel="overview"]')){if(!contactReady()){setCaptureNote('Complete your name, phone, email, property address and contact consent before continuing.','error');return}const sent=await captureEarlyLead();if(!sent)return}show(b.dataset.next)}));$$('[data-back]').forEach(b=>b.addEventListener('click',()=>show(b.dataset.back)));$('#add-room').addEventListener('click',addRoom);$('#add-first-room').addEventListener('click',addRoom);$('#export-binder').addEventListener('click',exportPdf);$('#print-binder').addEventListener('click',()=>window.print());$('#send-binder-lead').addEventListener('click',sendBinderLead);$('#send-to-consultation').addEventListener('click',useConsultation);$('.planner-reset').addEventListener('click',()=>{if(confirm('Start a new binder? This will erase the planner information saved on this device.')){localStorage.removeItem(STORAGE);state=structuredClone(stateDefault);location.reload()}});window.addEventListener('beforeprint',renderReview)}
-document.addEventListener('DOMContentLoaded',init);
+  const STORAGE_KEY = "adelieInteractiveProjectBinderV2";
+  const EARLY_CAPTURE_KEY = "adelieInteractivePlannerLeadV2";
+  const COMPLETE_CAPTURE_KEY = "adelieInteractivePlannerCompleteV2";
+
+  const defaultState = {
+    project_name: "",
+    project_type: "",
+    name: "",
+    phone: "",
+    email: "",
+    property_address: "",
+    contact_consent: false,
+    year_built: "",
+    stories: "",
+    foundation: "",
+    overall_goals: "",
+    rooms: [],
+    budget_range: "",
+    contingency: "",
+    must_haves: "",
+    nice_to_haves: "",
+    value_options: "",
+    owner_supplied: "",
+    desired_start: "",
+    target_completion: "",
+    occupied: "",
+    plans_status: "",
+    constraints: "",
+    open_questions: "",
+    updated_at: ""
+  };
+
+  const $ = (selector, root = document) => root.querySelector(selector);
+  const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
+
+  let state = loadState();
+  let initialized = false;
+
+  function cloneDefault() {
+    return JSON.parse(JSON.stringify(defaultState));
+  }
+
+  function loadState() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+      return {
+        ...cloneDefault(),
+        ...saved,
+        rooms: Array.isArray(saved.rooms) ? saved.rooms : []
+      };
+    } catch (error) {
+      console.error("Could not load planner state:", error);
+      return cloneDefault();
+    }
+  }
+
+  function saveState() {
+    state.updated_at = new Date().toISOString();
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (error) {
+      console.error("Could not save planner state:", error);
+    }
+
+    const status = $("#planner-save-status");
+    if (status) {
+      status.textContent =
+        "Saved " +
+        new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }) +
+        " on this device.";
+    }
+    updateProgress();
+  }
+
+  function escapeHtml(value) {
+    return String(value ?? "").replace(/[&<>"']/g, character => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
+    })[character]);
+  }
+
+  function setCaptureNote(message, kind = "") {
+    const note = $("#planner-capture-note");
+    if (!note) return;
+    note.textContent = message;
+    note.dataset.state = kind;
+  }
+
+  function contactReady() {
+    return Boolean(
+      state.name.trim() &&
+      state.phone.trim() &&
+      state.email.trim() &&
+      state.property_address.trim() &&
+      state.contact_consent
+    );
+  }
+
+  function bindMainFields() {
+    $$("[name]").forEach(field => {
+      if (field.closest(".room-card")) return;
+      if (!(field.name in state)) return;
+
+      if (field.type === "checkbox") {
+        field.checked = Boolean(state[field.name]);
+      } else {
+        field.value = state[field.name] || "";
+      }
+
+      const update = () => {
+        state[field.name] =
+          field.type === "checkbox" ? field.checked : field.value;
+        saveState();
+        updateTitle();
+      };
+
+      field.addEventListener("input", update);
+      field.addEventListener("change", update);
+    });
+  }
+
+  function updateTitle() {
+    const title = $("#planner-project-title");
+    if (title) {
+      title.textContent =
+        state.project_name || state.project_type || "Untitled Remodel";
+    }
+  }
+
+  function calculateProgress() {
+    const checks = [
+      state.project_name,
+      state.project_type,
+      state.property_address,
+      state.overall_goals,
+      state.rooms.length > 0,
+      state.budget_range,
+      state.must_haves,
+      state.desired_start,
+      state.constraints
+    ];
+    const completed = checks.filter(Boolean).length;
+    return Math.round((completed / checks.length) * 100);
+  }
+
+  function updateProgress() {
+    const percent = calculateProgress();
+    const bar = $("#planner-progress-bar");
+    const label = $("#planner-progress-label");
+    if (bar) bar.style.width = `${percent}%`;
+    if (label) label.textContent = `${percent}% complete`;
+    updateTitle();
+  }
+
+  function showPanel(panelName) {
+    $$(".planner-panel").forEach(panel => {
+      panel.classList.toggle("active", panel.dataset.panel === panelName);
+    });
+    $$(".planner-steps button").forEach(button => {
+      button.classList.toggle("active", button.dataset.section === panelName);
+    });
+
+    if (panelName === "review") renderReview();
+
+    const planner = $("#planner-app");
+    if (planner) {
+      window.scrollTo({
+        top: Math.max(0, planner.offsetTop - 20),
+        behavior: "smooth"
+      });
+    }
+  }
+
+  function roomTemplate(room, index) {
+    const types = [
+      "Kitchen",
+      "Primary bathroom",
+      "Guest bathroom",
+      "Powder room",
+      "Living room",
+      "Dining room",
+      "Bedroom",
+      "Laundry room",
+      "Office",
+      "Garage",
+      "ADU",
+      "Home addition",
+      "Exterior / outdoor",
+      "Other"
+    ];
+
+    const priorities = [
+      "Essential",
+      "High",
+      "Medium",
+      "Optional / future phase"
+    ];
+
+    return `
+      <article class="room-card" data-room-id="${escapeHtml(room.id)}">
+        <header>
+          <div>
+            <span class="room-number">Space ${index + 1}</span>
+            <h3>${escapeHtml(room.name || room.type || "New room")}</h3>
+          </div>
+          <button class="room-remove" type="button">Remove</button>
+        </header>
+
+        <div class="room-grid">
+          <label>Room or space name
+            <input data-room="name" value="${escapeHtml(room.name)}"
+              placeholder="Example: Main kitchen">
+          </label>
+
+          <label>Type
+            <select data-room="type">
+              <option value="">Choose one</option>
+              ${types.map(type =>
+                `<option value="${escapeHtml(type)}" ${room.type === type ? "selected" : ""}>${escapeHtml(type)}</option>`
+              ).join("")}
+            </select>
+          </label>
+
+          <label>Approximate dimensions
+            <input data-room="dimensions" value="${escapeHtml(room.dimensions)}"
+              placeholder="Example: 12 ft x 16 ft">
+          </label>
+
+          <label>Priority
+            <select data-room="priority">
+              <option value="">Choose one</option>
+              ${priorities.map(priority =>
+                `<option value="${escapeHtml(priority)}" ${room.priority === priority ? "selected" : ""}>${escapeHtml(priority)}</option>`
+              ).join("")}
+            </select>
+          </label>
+
+          <label class="full">Existing conditions
+            <textarea data-room="existing" rows="3">${escapeHtml(room.existing)}</textarea>
+          </label>
+
+          <label class="full">Goals for this space
+            <textarea data-room="goals" rows="3">${escapeHtml(room.goals)}</textarea>
+          </label>
+
+          <label class="full">Expected scope
+            <textarea data-room="scope" rows="4">${escapeHtml(room.scope)}</textarea>
+          </label>
+
+          <label class="full">Selections and products
+            <textarea data-room="selections" rows="4">${escapeHtml(room.selections)}</textarea>
+          </label>
+
+          <label class="full">Measurements and notes
+            <textarea data-room="measurements" rows="3">${escapeHtml(room.measurements)}</textarea>
+          </label>
+
+          <label class="full">Questions for the contractor or designer
+            <textarea data-room="questions" rows="3">${escapeHtml(room.questions)}</textarea>
+          </label>
+        </div>
+      </article>
+    `;
+  }
+
+  function renderRooms() {
+    const roomList = $("#room-list");
+    const emptyState = $("#room-empty");
+    if (!roomList || !emptyState) return;
+
+    roomList.innerHTML = state.rooms.map(roomTemplate).join("");
+    emptyState.hidden = state.rooms.length > 0;
+
+    $$(".room-card").forEach(card => {
+      const room = state.rooms.find(item => item.id === card.dataset.roomId);
+      if (!room) return;
+
+      $$("[data-room]", card).forEach(field => {
+        const update = () => {
+          room[field.dataset.room] = field.value;
+          const heading = $("h3", card);
+          if (heading) heading.textContent = room.name || room.type || "New room";
+          saveState();
+        };
+        field.addEventListener("input", update);
+        field.addEventListener("change", update);
+      });
+
+      const removeButton = $(".room-remove", card);
+      if (removeButton) {
+        removeButton.addEventListener("click", () => {
+          if (!window.confirm("Remove this room from the binder?")) return;
+          state.rooms = state.rooms.filter(item => item.id !== room.id);
+          saveState();
+          renderRooms();
+        });
+      }
+    });
+  }
+
+  function addRoom() {
+    state.rooms.push({
+      id: `room-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+      name: "",
+      type: "",
+      dimensions: "",
+      priority: "",
+      existing: "",
+      goals: "",
+      scope: "",
+      selections: "",
+      measurements: "",
+      questions: ""
+    });
+    saveState();
+    renderRooms();
+
+    window.setTimeout(() => {
+      const fields = $$(".room-card input");
+      const lastField = fields[fields.length - 1];
+      if (lastField) lastField.focus();
+    }, 50);
+  }
+
+  function encodeForm(data) {
+    const values = Object.entries(data).map(([key, value]) => [
+      key,
+      Array.isArray(value) ? value.join(", ") : String(value ?? "")
+    ]);
+    return new URLSearchParams(values).toString();
+  }
+
+  async function postNetlify(data) {
+    const response = await fetch("/", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: encodeForm(data),
+      keepalive: true
+    });
+    if (!response.ok) {
+      throw new Error(`Netlify submission failed: ${response.status}`);
+    }
+  }
+
+  function captureEarlyLeadInBackground() {
+    const fingerprint = [
+      state.name,
+      state.phone,
+      state.email,
+      state.property_address,
+      state.project_type
+    ].join("|").toLowerCase();
+
+    if (localStorage.getItem(EARLY_CAPTURE_KEY) === fingerprint) {
+      setCaptureNote(
+        "Contact details already saved with ADELIE. You can continue building the binder.",
+        "success"
+      );
+      return;
+    }
+
+    setCaptureNote("Saving your contact information with ADELIE…", "working");
+
+    postNetlify({
+      "form-name": "interactive-project-planner-start",
+      name: state.name,
+      phone: state.phone,
+      email: state.email,
+      property_address: state.property_address,
+      project_type: state.project_type || "Not selected yet",
+      project_name: state.project_name || "",
+      lead_stage: "Planner started",
+      contact_consent: "yes",
+      page_url: window.location.href,
+      started_at: new Date().toISOString()
+    }).then(() => {
+      localStorage.setItem(EARLY_CAPTURE_KEY, fingerprint);
+      setCaptureNote(
+        "Contact details saved. ADELIE can follow up even if you finish the binder later.",
+        "success"
+      );
+    }).catch(error => {
+      console.error(error);
+      setCaptureNote(
+        "You can continue planning. Your binder is saved locally, but the contact submission could not be confirmed.",
+        "error"
+      );
+    });
+  }
+
+  function renderReview() {
+    const container = $("#binder-review");
+    if (!container) return;
+
+    const roomSections = state.rooms.length
+      ? state.rooms.map((room, index) => `
+          <article class="binder-room-summary">
+            <h4>${index + 1}. ${escapeHtml(room.name || room.type || "Room")}</h4>
+            <p><strong>Type:</strong> ${escapeHtml(room.type || "Not specified")}</p>
+            <p><strong>Dimensions:</strong> ${escapeHtml(room.dimensions || "To verify")}</p>
+            ${room.goals ? `<p><strong>Goals:</strong> ${escapeHtml(room.goals)}</p>` : ""}
+            ${room.scope ? `<p><strong>Scope:</strong> ${escapeHtml(room.scope)}</p>` : ""}
+            ${room.selections ? `<p><strong>Selections:</strong> ${escapeHtml(room.selections)}</p>` : ""}
+            ${room.questions ? `<p><strong>Questions:</strong> ${escapeHtml(room.questions)}</p>` : ""}
+          </article>
+        `).join("")
+      : '<p class="muted">No rooms have been added.</p>';
+
+    container.innerHTML = `
+      <section>
+        <h3>Project overview</h3>
+        <p><strong>Project:</strong> ${escapeHtml(state.project_name || state.project_type || "Untitled remodel")}</p>
+        <p><strong>Property:</strong> ${escapeHtml(state.property_address || "Not provided")}</p>
+        <p><strong>Homeowner:</strong> ${escapeHtml(state.name || "Not provided")}</p>
+        ${state.overall_goals ? `<p><strong>Goals:</strong> ${escapeHtml(state.overall_goals)}</p>` : ""}
+      </section>
+
+      <section>
+        <h3>Room-by-room plan</h3>
+        ${roomSections}
+      </section>
+
+      <section>
+        <h3>Budget and priorities</h3>
+        <p><strong>Budget:</strong> ${escapeHtml(state.budget_range || "Not established")}</p>
+        <p><strong>Contingency:</strong> ${escapeHtml(state.contingency || "Not established")}</p>
+        ${state.must_haves ? `<p><strong>Must-haves:</strong> ${escapeHtml(state.must_haves)}</p>` : ""}
+        ${state.nice_to_haves ? `<p><strong>Optional upgrades:</strong> ${escapeHtml(state.nice_to_haves)}</p>` : ""}
+      </section>
+
+      <section>
+        <h3>Timeline and logistics</h3>
+        <p><strong>Desired start:</strong> ${escapeHtml(state.desired_start || "Not provided")}</p>
+        <p><strong>Occupancy:</strong> ${escapeHtml(state.occupied || "Not provided")}</p>
+        <p><strong>Plans / permits:</strong> ${escapeHtml(state.plans_status || "Not provided")}</p>
+        ${state.constraints ? `<p><strong>Constraints:</strong> ${escapeHtml(state.constraints)}</p>` : ""}
+      </section>
+    `;
+  }
+
+  function buildTextSummary() {
+    return [
+      `Interactive Project Binder: ${state.project_name || state.project_type || "Untitled remodel"}`,
+      `Property: ${state.property_address}`,
+      `Homeowner: ${state.name}`,
+      `Phone: ${state.phone}`,
+      `Email: ${state.email}`,
+      `Goals: ${state.overall_goals}`,
+      `Rooms: ${state.rooms.map(room => room.name || room.type).filter(Boolean).join(", ")}`,
+      `Budget: ${state.budget_range}`,
+      `Timeline: ${state.desired_start}`,
+      `Must-haves: ${state.must_haves}`,
+      `Constraints: ${state.constraints}`,
+      `Open questions: ${state.open_questions}`
+    ].filter(line => !line.endsWith(": ")).join("\n");
+  }
+
+  async function sendCompletedBinder() {
+    const status = $("#binder-export-status");
+    if (!contactReady()) {
+      if (status) {
+        status.textContent =
+          "Return to Project Overview and complete the required contact information first.";
+      }
+      showPanel("overview");
+      return;
+    }
+
+    if (status) status.textContent = "Sending your binder summary to ADELIE…";
+
+    try {
+      await postNetlify({
+        "form-name": "interactive-project-planner-complete",
+        name: state.name,
+        phone: state.phone,
+        email: state.email,
+        property_address: state.property_address,
+        project_name: state.project_name,
+        project_type: state.project_type,
+        budget_range: state.budget_range,
+        desired_start: state.desired_start,
+        room_count: state.rooms.length,
+        room_names: state.rooms.map(room => room.name || room.type).filter(Boolean).join(", "),
+        project_summary: buildTextSummary(),
+        binder_json: JSON.stringify(state),
+        contact_consent: "yes",
+        lead_stage: "Binder summary completed",
+        submitted_at: new Date().toISOString()
+      });
+
+      localStorage.setItem(COMPLETE_CAPTURE_KEY, new Date().toISOString());
+      if (status) {
+        status.textContent =
+          "Your project binder summary was sent to ADELIE successfully.";
+      }
+    } catch (error) {
+      console.error(error);
+      if (status) {
+        status.textContent =
+          "The summary could not be sent. Your binder is still saved on this device.";
+      }
+    }
+  }
+
+  function exportBinder() {
+    renderReview();
+
+    if (window.jspdf?.jsPDF) {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ unit: "pt", format: "letter" });
+      const margin = 48;
+      const maxWidth = 516;
+      let y = 58;
+
+      const addLine = (text, size = 10, bold = false) => {
+        doc.setFont("helvetica", bold ? "bold" : "normal");
+        doc.setFontSize(size);
+        const lines = doc.splitTextToSize(String(text || ""), maxWidth);
+        lines.forEach(line => {
+          if (y > 735) {
+            doc.addPage();
+            y = 58;
+          }
+          doc.text(line, margin, y);
+          y += size + 4;
+        });
+        y += 4;
+      };
+
+      doc.setDrawColor(245, 191, 33);
+      doc.setLineWidth(4);
+      doc.line(margin, 42, 564, 42);
+      addLine("ADELIE PROJECT BINDER", 22, true);
+      addLine(state.project_name || state.project_type || "Preliminary Remodel Plan", 15, true);
+      addLine(`Prepared ${new Date().toLocaleDateString()}`);
+      addLine("");
+      addLine(`Homeowner: ${state.name}`, 10, true);
+      addLine(`Phone: ${state.phone}`);
+      addLine(`Email: ${state.email}`);
+      addLine(`Property: ${state.property_address}`);
+      addLine(`Project type: ${state.project_type}`);
+      addLine("");
+      addLine("Overall goals", 14, true);
+      addLine(state.overall_goals || "Not provided.");
+
+      state.rooms.forEach((room, index) => {
+        addLine("");
+        addLine(`${index + 1}. ${room.name || room.type || "Room"}`, 14, true);
+        addLine(`Type: ${room.type || "Not specified"}`);
+        addLine(`Dimensions: ${room.dimensions || "To verify"}`);
+        addLine(`Priority: ${room.priority || "Not ranked"}`);
+        if (room.goals) addLine(`Goals: ${room.goals}`);
+        if (room.scope) addLine(`Scope: ${room.scope}`);
+        if (room.selections) addLine(`Selections: ${room.selections}`);
+        if (room.questions) addLine(`Questions: ${room.questions}`);
+      });
+
+      addLine("");
+      addLine("Budget and priorities", 14, true);
+      addLine(`Target budget: ${state.budget_range || "Not established"}`);
+      addLine(`Contingency: ${state.contingency || "Not established"}`);
+      if (state.must_haves) addLine(`Must-haves: ${state.must_haves}`);
+      if (state.nice_to_haves) addLine(`Optional upgrades: ${state.nice_to_haves}`);
+
+      addLine("");
+      addLine("Timeline and logistics", 14, true);
+      addLine(`Desired start: ${state.desired_start || "Not provided"}`);
+      addLine(`Target completion: ${state.target_completion || "Not provided"}`);
+      addLine(`Occupancy: ${state.occupied || "Not provided"}`);
+      addLine(`Plans / permits: ${state.plans_status || "Not provided"}`);
+      if (state.constraints) addLine(`Constraints: ${state.constraints}`);
+
+      const filename = (
+        state.project_name ||
+        "ADELIE Project Binder"
+      ).replace(/[^a-z0-9 _-]/gi, "").trim() || "ADELIE Project Binder";
+
+      doc.save(`${filename}.pdf`);
+
+      const status = $("#binder-export-status");
+      if (status) status.textContent = "Your ADELIE Project Binder PDF was downloaded.";
+      return;
+    }
+
+    window.print();
+  }
+
+  function resetPlanner() {
+    if (!window.confirm(
+      "Start a new binder? This will erase the planner information saved on this device."
+    )) return;
+
+    localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(EARLY_CAPTURE_KEY);
+    state = cloneDefault();
+    window.location.reload();
+  }
+
+  function init() {
+    if (initialized) return;
+    if (!$("#planner-app")) return;
+    initialized = true;
+
+    bindMainFields();
+    renderRooms();
+    updateProgress();
+
+    $$(".planner-steps button").forEach(button => {
+      button.addEventListener("click", () => showPanel(button.dataset.section));
+    });
+
+    $$("[data-next]").forEach(button => {
+      button.addEventListener("click", () => {
+        const currentPanel = button.closest('[data-panel="overview"]');
+
+        if (currentPanel) {
+          if (!contactReady()) {
+            setCaptureNote(
+              "Complete your name, phone, email, property address and contact consent before continuing.",
+              "error"
+            );
+            return;
+          }
+
+          // Do not block the planner while the lead submission runs.
+          showPanel(button.dataset.next);
+          captureEarlyLeadInBackground();
+          return;
+        }
+
+        showPanel(button.dataset.next);
+      });
+    });
+
+    $$("[data-back]").forEach(button => {
+      button.addEventListener("click", () => showPanel(button.dataset.back));
+    });
+
+    $("#add-room")?.addEventListener("click", addRoom);
+    $("#add-first-room")?.addEventListener("click", addRoom);
+    $("#export-binder")?.addEventListener("click", exportBinder);
+    $("#print-binder")?.addEventListener("click", () => window.print());
+    $("#send-binder-lead")?.addEventListener("click", sendCompletedBinder);
+    $("#send-to-consultation")?.addEventListener("click", () => {
+      window.location.href = "contact.html";
+    });
+    $(".planner-reset")?.addEventListener("click", resetPlanner);
+
+    window.addEventListener("beforeprint", renderReview);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init, { once: true });
+  } else {
+    init();
+  }
 })();

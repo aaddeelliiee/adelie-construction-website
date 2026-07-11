@@ -90,7 +90,7 @@
 <div>
 <p class="eyebrow">ADELIE Interactive Project Planner</p>
 <h1>Build your remodel room by room.</h1>
-<p>Organize your goals, measurements, selections, priorities, budget targets and open questions in one place. When you are finished, export a branded <strong>ADELIE Project Binder PDF</strong> for your records or consultation.</p>
+<p>Organize your goals, measurements, selections, priorities, budget targets and open questions in one place. Your contact details are saved as a preliminary lead after the first step—with your consent—so ADELIE can follow up even if you do not finish the binder. When you are finished, export a branded <strong>ADELIE Project Binder PDF</strong>.</p>
 <div class="planner-hero-actions"><a class="button primary" href="#planner-app">Start Planning</a><a class="button secondary" href="project-advisor.html">Build a Property Profile First</a></div>
 </div>
 <aside class="planner-hero-card"><span class="v6-badge">What You Will Create</span><h2>Your preliminary project binder</h2><ul><li>Property and contact profile</li><li>Room-by-room scope</li><li>Measurements and existing conditions</li><li>Finish and fixture selections</li><li>Budget priorities and timeline</li><li>Questions for your contractor</li></ul></aside>
@@ -115,9 +115,11 @@
 <div class="planner-form-grid">
 <label>Project name<input name="project_name" placeholder="Example: Vargas Kitchen and Main Floor Remodel"/></label>
 <label>Project type<select name="project_type"><option value="">Choose one</option><option>Kitchen remodel</option><option>Bathroom remodel</option><option>Whole-home remodel</option><option>ADU</option><option>Home addition</option><option>Outdoor living</option><option>Multiple areas</option></select></label>
-<label>Full name<input autocomplete="name" name="name"/></label><label>Phone<input autocomplete="tel" name="phone" type="tel"/></label>
-<label class="full">Property address<input autocomplete="street-address" name="property_address"/></label>
-<label>Email<input autocomplete="email" name="email" type="email"/></label><label>Approximate year built<input inputmode="numeric" name="year_built" placeholder="Example: 1988"/></label>
+<label>Full name<input autocomplete="name" name="name" required/></label><label>Phone<input autocomplete="tel" name="phone" type="tel" required/></label>
+<label class="full">Property address<input autocomplete="street-address" name="property_address" required/></label>
+<label>Email<input autocomplete="email" name="email" type="email" required/></label><label>Approximate year built<input inputmode="numeric" name="year_built" placeholder="Example: 1988"/></label>
+<label class="full planner-consent"><input name="contact_consent" type="checkbox" required/> I agree that ADELIE Construction may contact me about this project. Completing this first step sends my contact information to ADELIE.</label>
+<div class="full planner-capture-note" id="planner-capture-note" role="status" aria-live="polite">Your binder remains saved on this device. Contact information is only sent after you give consent and continue.</div>
 <label>Stories<select name="stories"><option value="">Choose one</option><option>Single story</option><option>Two story</option><option>Three or more stories</option><option>Condo / townhouse</option></select></label>
 <label>Foundation<select name="foundation"><option value="">Choose one</option><option>Slab on grade</option><option>Raised foundation / crawlspace</option><option>Basement</option><option>Unknown</option></select></label>
 <label class="full">What do you want the finished project to accomplish?<textarea name="overall_goals" placeholder="Describe function, appearance, storage, comfort, accessibility or resale goals." rows="5"></textarea></label>
@@ -157,7 +159,7 @@
 <section class="planner-panel" data-panel="review">
 <p class="eyebrow dark">Review and Export</p><h2>Your ADELIE Project Binder</h2><p>Review the information below, then export it as a branded PDF. The binder is a planning document, not a quote, construction contract, design, engineering opinion or permit determination.</p>
 <div class="binder-review" id="binder-review"></div>
-<div class="binder-export-actions"><button class="button primary" id="export-binder" type="button">Export ADELIE Project Binder PDF</button><button class="button secondary" id="send-to-consultation" type="button">Use in Consultation Request</button><button class="button secondary" id="print-binder" type="button">Print Binder</button></div>
+<div class="binder-export-actions"><button class="button primary" id="export-binder" type="button">Export ADELIE Project Binder PDF</button><button class="button secondary" id="send-binder-lead" type="button">Send Binder Summary to ADELIE</button><button class="button secondary" id="send-to-consultation" type="button">Open Full Consultation Form</button><button class="button secondary" id="print-binder" type="button">Print Binder</button></div>
 <p aria-live="polite" class="binder-export-status" id="binder-export-status" role="status"></p>
 <div class="planner-nav-actions"><button class="button secondary" data-back="timeline" type="button">Back and Edit</button></div>
 </section>
@@ -205,44 +207,6 @@
 <span class="float-icon">✦</span> <span>Free Estimate</span>
 </a>
 </div>
-<div class="assistant-widget" id="adelie-assistant">
-<button aria-controls="assistant-panel" aria-expanded="false" class="assistant-toggle" type="button"><span>Ask ADELIE</span></button>
-<section aria-label="ADELIE lead assistant" class="assistant-panel" hidden="" id="assistant-panel">
-<header><div><strong>ADELIE Assistant</strong><small>Project questions and estimate requests</small></div><button aria-label="Close assistant" class="assistant-close" type="button">×</button></header>
-<div aria-live="polite" class="assistant-messages"><div class="assistant-message bot">I can answer common questions and send your project information to ADELIE.</div></div>
-<div class="assistant-quick">
-<button data-question="services" type="button">Services</button>
-<button data-question="areas" type="button">Service areas</button>
-<button data-question="process" type="button">Process</button>
-<button data-question="estimate" type="button">Estimate</button>
-</div>
-<form action="/thank-you.html" class="assistant-lead" data-netlify="true" method="POST" name="ai-lead" netlify="" netlify-honeypot="bot-field">
-<input name="form-name" type="hidden" value="ai-lead"/>
-<p class="hidden-field"><label>Do not fill this out: <input name="bot-field"/></label></p>
-<p class="assistant-prompt">Tell us about your project:</p>
-<input aria-label="Full name" name="name" placeholder="Full name" required=""/>
-<input aria-label="Email address" name="email" placeholder="Email address" required="" type="email"/>
-<input aria-label="Phone number" name="phone" placeholder="Phone number" required=""/>
-<input aria-label="Project city" name="city" placeholder="Project city" required=""/>
-<select aria-label="Project type" name="project_type" required="">
-<option value="">Select project type</option>
-<option>Kitchen remodel</option><option>Bathroom remodel</option><option>Whole-home remodel</option>
-<option>ADU</option><option>Home addition</option><option>Pool or outdoor living</option><option>Other</option>
-</select>
-<select aria-label="Approximate budget" name="budget_range">
-<option value="">Approximate budget</option><option>Under $25,000</option><option>$25,000–$75,000</option>
-<option>$75,000–$150,000</option><option>$150,000–$300,000</option><option>$300,000+</option><option>Not sure yet</option>
-</select>
-<select aria-label="Desired timeline" name="timeline">
-<option value="">Desired timeline</option><option>As soon as possible</option><option>1–3 months</option>
-<option>3–6 months</option><option>6–12 months</option><option>Planning for later</option>
-</select>
-<textarea aria-label="Project details" name="project_details" placeholder="Project details, goals, and questions" required="" rows="4"></textarea>
-<label class="assistant-consent"><input name="contact_consent" required="" type="checkbox"/> I agree that ADELIE Construction may contact me about this request.</label>
-<button type="submit">Send to ADELIE</button>
-</form>
-<p class="assistant-disclosure">Your request is securely submitted through Netlify Forms.</p>
-</section>
-</div>
-<script defer="" src="vendor/jspdf.umd.min.js"></script><script defer="" src="interactive-project-planner.js"></script></body>
+<aside class="planner-help-strip"><div><strong>Have a quick remodeling question?</strong><span>Use Ask ADELIE on any guide or service page, or continue with this dedicated planner.</span></div><a class="button secondary" href="resources.html">Browse Guides</a></aside>
+</body>
 </html>

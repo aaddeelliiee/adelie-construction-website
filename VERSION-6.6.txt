@@ -1,0 +1,11 @@
+ADELIE Construction Website Version 6.6
+
+- Separated the compact Ask ADELIE Q&A assistant from the full project planner.
+- Project planning now lives on the dedicated Interactive Project Planner page.
+- Added consent-based preliminary lead capture after the planner contact step.
+- Added completed binder summary submission to Netlify Forms.
+- Added clear submission status, retry behavior and local-save protection.
+
+Netlify form names:
+- interactive-project-planner-start
+- interactive-project-planner-complete

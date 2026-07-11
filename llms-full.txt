@@ -72,3 +72,6 @@ Successful remodels depend on a defined scope, realistic budget, timely selectio
 - Hub: https://www.adelieconstruction.com/academy.html
 - Machine-readable article index: https://www.adelieconstruction.com/academy-index.json
 - 126 articles across kitchens, bathrooms, whole-home remodeling, ADUs, additions, budgeting, contracts, permits, materials, construction, outdoor living, maintenance and San Diego planning.
+
+## ADELIE Project Advisor
+- https://www.adelieconstruction.com/project-advisor.html — guided homeowner project profile covering property, scope, goals, budget, timing and constraints.

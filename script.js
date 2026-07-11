@@ -175,3 +175,133 @@ if(assistant){
   const classify=q=>q.includes('kitchen')?'Kitchen remodel':q.includes('bath')||q.includes('shower')?'Bathroom remodel':q.includes('adu')?'ADU':q.includes('addition')?'Home addition':q.includes('whole')||q.includes('entire')?'Whole-home remodel':'';
   a.addEventListener('submit',e=>{const input=a.querySelector('.assistant-question-input'); if(!input)return; const type=classify(input.value.toLowerCase()); if(type&&project){const o=[...project.options].find(x=>x.text.toLowerCase()===type.toLowerCase());if(o)project.value=o.value||o.text;} progress.textContent=type?`Project identified: ${type}. Relevant guidance and forms are ready.`:'Project Advisor: add the room, city or project stage for a more specific answer.';},true);
 })();
+
+
+/* ADELIE v6.3 Guided Project Profile */
+(()=>{
+  const assistant=document.querySelector('#adelie-assistant');
+  if(!assistant || assistant.dataset.profilePlanner==='true') return;
+  assistant.dataset.profilePlanner='true';
+  const STORAGE_KEY='adelieProjectProfileV1';
+  const leadForm=assistant.querySelector('.assistant-lead');
+  const fields={
+    projectType:leadForm?.querySelector('[name="project_type"]'),
+    city:leadForm?.querySelector('[name="city"]'),
+    budget:leadForm?.querySelector('[name="budget_range"]'),
+    timeline:leadForm?.querySelector('[name="timeline"]'),
+    details:leadForm?.querySelector('[name="project_details"]')
+  };
+
+  const questions=[
+    {id:'project_type',title:'What are you planning?',help:'Choose the project that best matches your primary goal.',type:'choice',required:true,options:['Kitchen remodel','Bathroom remodel','Whole-home remodel','ADU','Home addition','Pool or outdoor living','Other']},
+    {id:'city',title:'Where is the property?',help:'Enter the city or community so ADELIE can consider local service availability and permitting jurisdiction.',type:'text',placeholder:'Example: Vista, Carlsbad, San Marcos',required:true},
+    {id:'year_built',title:'Approximately when was the home built?',help:'The age of the home can affect utilities, concealed conditions, hazardous-material testing and code upgrades.',type:'choice',options:['Before 1940','1940–1959','1960–1979','1980–1999','2000–2014','2015 or newer','Not sure']},
+    {id:'stories',title:'How many stories does the home have?',help:'Stories and access can affect demolition, material handling, plumbing routes and staging.',type:'choice',options:['Single story','Two stories','Three or more','Condo or townhome','Not sure']},
+    {id:'foundation',title:'What foundation type does the home have?',help:'Foundation type matters when relocating plumbing, changing structure or building an addition.',type:'choice',options:['Concrete slab','Raised foundation / crawlspace','Basement','Mixed or hillside foundation','Not sure']},
+    {id:'occupied',title:'Will the home be occupied during construction?',help:'This helps plan temporary facilities, dust control, utility interruptions, pets and work hours.',type:'choice',options:['Yes, full time','Part of the time','No, the home will be vacant','Not sure yet']},
+    {id:'goals',title:'What are your main goals?',help:'Describe what is not working now and what a successful result should accomplish.',type:'textarea',placeholder:'Example: improve layout, add storage, replace aging finishes, create an accessible shower...',required:true},
+    {id:'layout_changes',title:'Do you expect layout or structural changes?',help:'Moving walls, doors, windows, plumbing or major appliances usually changes design, engineering and permit needs.',type:'multi',options:['No major layout changes','Move plumbing fixtures','Move walls or door openings','Add or enlarge windows/doors','Structural beam or load-bearing work','Add square footage','Not sure']},
+    {id:'budget',title:'What budget range are you considering?',help:'A planning range helps align scope and finish expectations. A site review is still required for pricing.',type:'choice',options:['Under $25,000','$25,000–$75,000','$75,000–$150,000','$150,000–$300,000','$300,000+','Not sure yet']},
+    {id:'timeline',title:'When would you like construction to begin?',help:'Design, engineering, permits and material lead times may need to happen before construction can start.',type:'choice',options:['As soon as possible','1–3 months','3–6 months','6–12 months','Planning for later','Not sure']},
+    {id:'planning_stage',title:'How far along are you?',help:'Choose everything you already have.',type:'multi',options:['Early ideas only','Measured drawings','Architectural plans','Engineering','Permit application submitted','Material selections started','Contractor proposals','HOA approval required','None of these yet']},
+    {id:'priorities',title:'Which priorities matter most?',help:'Pick up to four. These help ADELIE understand how you evaluate tradeoffs.',type:'multi',max:4,options:['Durability','Budget control','Faster completion','Premium finishes','Low maintenance','Energy efficiency','Accessibility / aging in place','More storage','Better layout','Resale value']},
+    {id:'constraints',title:'Are there important site or household constraints?',help:'Access, parking, pets and work-from-home needs affect project logistics.',type:'multi',options:['Limited parking or narrow access','HOA or condo rules','Pets in the home','Children in the home','Work from home','Sensitive neighbors / shared walls','Hillside or difficult access','No known constraints']},
+    {id:'notes',title:'Anything else ADELIE should know?',help:'Add known damage, leaks, prior work, plans, inspiration links or specific questions.',type:'textarea',placeholder:'Optional project notes'}
+  ];
+
+  const load=()=>{try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}')}catch{return {}}};
+  const save=p=>localStorage.setItem(STORAGE_KEY,JSON.stringify(p));
+  let profile=load(); let step=0;
+
+  const overlay=document.createElement('div');
+  overlay.className='project-profile-overlay'; overlay.hidden=true;
+  overlay.innerHTML=`<section class="project-profile-dialog" role="dialog" aria-modal="true" aria-labelledby="profile-title">
+    <header class="profile-header"><div><span class="v6-badge">ADELIE Project Advisor</span><h2 id="profile-title">Build your project profile</h2><p>Answer a few practical questions. Your progress is saved on this device.</p></div><button class="profile-close" type="button" aria-label="Close project planner">×</button></header>
+    <div class="profile-meter"><span></span></div><div class="profile-step-label"></div>
+    <div class="profile-body"></div>
+    <footer class="profile-footer"><button class="profile-back" type="button">Back</button><button class="profile-save-exit" type="button">Save & close</button><button class="profile-next" type="button">Next</button></footer>
+  </section>`;
+  document.body.appendChild(overlay);
+  const body=overlay.querySelector('.profile-body'), label=overlay.querySelector('.profile-step-label'), meter=overlay.querySelector('.profile-meter span');
+  const back=overlay.querySelector('.profile-back'), next=overlay.querySelector('.profile-next');
+
+  function control(q){
+    const value=profile[q.id];
+    if(q.type==='text') return `<input class="profile-input" data-profile-input="${q.id}" type="text" value="${String(value||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;')}" placeholder="${q.placeholder||''}">`;
+    if(q.type==='textarea') return `<textarea class="profile-input" data-profile-input="${q.id}" rows="5" placeholder="${q.placeholder||''}">${String(value||'').replace(/</g,'&lt;')}</textarea>`;
+    const values=Array.isArray(value)?value:[value].filter(Boolean);
+    const type=q.type==='multi'?'checkbox':'radio';
+    return `<div class="profile-options">${q.options.map((o,i)=>`<label class="profile-option"><input data-profile-input="${q.id}" type="${type}" name="profile_${q.id}" value="${o.replace(/"/g,'&quot;')}" ${values.includes(o)?'checked':''}><span>${o}</span></label>`).join('')}</div>${q.max?`<p class="profile-limit">Choose up to ${q.max}.</p>`:''}`;
+  }
+  function render(){
+    if(step>=questions.length){renderSummary();return}
+    const q=questions[step];
+    label.textContent=`Step ${step+1} of ${questions.length}`; meter.style.width=`${((step+1)/questions.length)*100}%`;
+    body.innerHTML=`<div class="profile-question"><p class="eyebrow dark">Project Profile</p><h3>${q.title}</h3><p>${q.help}</p>${control(q)}<p class="profile-error" hidden>Please complete this step before continuing.</p></div>`;
+    back.disabled=step===0; next.textContent=step===questions.length-1?'Review profile':'Next';
+    body.querySelectorAll('[data-profile-input]').forEach(el=>el.addEventListener('change',()=>capture(q)));
+    body.querySelectorAll('input[type=text],textarea').forEach(el=>el.addEventListener('input',()=>capture(q)));
+    setTimeout(()=>body.querySelector('input,textarea')?.focus(),50);
+  }
+  function capture(q){
+    const els=[...body.querySelectorAll(`[data-profile-input="${q.id}"]`)];
+    if(q.type==='multi'){
+      let vals=els.filter(x=>x.checked).map(x=>x.value);
+      if(q.max && vals.length>q.max){const changed=document.activeElement;if(changed&&changed.checked){changed.checked=false}vals=els.filter(x=>x.checked).map(x=>x.value)}
+      profile[q.id]=vals;
+    } else if(q.type==='choice') profile[q.id]=els.find(x=>x.checked)?.value||'';
+    else profile[q.id]=els[0]?.value.trim()||'';
+    save(profile);
+  }
+  function valid(q){capture(q); const v=profile[q.id]; return !q.required || (Array.isArray(v)?v.length>0:Boolean(v));}
+  function recommendationData(){
+    const p=profile, type=(p.project_type||'').toLowerCase();
+    const rec=[];
+    if(type.includes('kitchen')) rec.push(['Kitchen Planning Guide','kitchen-planning-guide.html'],['Kitchen Workbook','downloads/kitchen-remodel-planning-workbook-v2.pdf']);
+    else if(type.includes('bath')) rec.push(['Bathroom Planning Guide','bathroom-planning-guide.html'],['Bathroom Workbook','downloads/bathroom-remodel-planning-workbook-v2.pdf']);
+    else if(type.includes('adu')) rec.push(['ADU Construction Guide','adu-construction.html'],['Permit Planning Guide','san-diego-remodel-permit-guide.html']);
+    else if(type.includes('addition')) rec.push(['Home Additions Guide','home-additions.html'],['Permit Planning Guide','san-diego-remodel-permit-guide.html']);
+    else if(type.includes('whole')) rec.push(['Whole-Home Remodel Guide','whole-home-remodel-guide.html'],['Homeowner Project Binder','downloads/adelie-homeowner-project-binder.pdf']);
+    else rec.push(['Remodeling Academy','academy.html']);
+    rec.push(['Budget Planner','remodel-budget-planner.html'],['Compare Contractor Estimates','contractor-estimate-comparison-guide.html']);
+    return rec.slice(0,4);
+  }
+  function summaryText(){
+    const lines=['ADELIE PROJECT PROFILE'];
+    const labels={project_type:'Project',city:'City',year_built:'Home age',stories:'Stories / property type',foundation:'Foundation',occupied:'Occupancy during work',goals:'Goals',layout_changes:'Layout / structural changes',budget:'Budget range',timeline:'Desired start',planning_stage:'Planning completed',priorities:'Top priorities',constraints:'Site / household constraints',notes:'Additional notes'};
+    Object.entries(labels).forEach(([k,l])=>{const v=profile[k];if(v&&(Array.isArray(v)?v.length:String(v).trim()))lines.push(`${l}: ${Array.isArray(v)?v.join(', '):v}`)});
+    return lines.join('\n');
+  }
+  function syncLead(){
+    if(fields.projectType&&profile.project_type){const o=[...fields.projectType.options].find(x=>x.text.trim().toLowerCase()===profile.project_type.toLowerCase());if(o)fields.projectType.value=o.value||o.text}
+    if(fields.city&&profile.city)fields.city.value=profile.city;
+    if(fields.budget&&profile.budget){const o=[...fields.budget.options].find(x=>x.text.trim().toLowerCase()===profile.budget.toLowerCase());if(o)fields.budget.value=o.value||o.text}
+    if(fields.timeline&&profile.timeline){const o=[...fields.timeline.options].find(x=>x.text.trim().toLowerCase()===profile.timeline.toLowerCase());if(o)fields.timeline.value=o.value||o.text}
+    if(fields.details) fields.details.value=summaryText();
+    let hidden=leadForm?.querySelector('[name="project_profile_json"]');if(!hidden&&leadForm){hidden=document.createElement('input');hidden.type='hidden';hidden.name='project_profile_json';leadForm.appendChild(hidden)}if(hidden)hidden.value=JSON.stringify(profile);
+  }
+  function renderSummary(){
+    syncLead(); label.textContent='Project profile complete';meter.style.width='100%';
+    const rec=recommendationData();
+    const rows=Object.entries({Project:profile.project_type,Location:profile.city,'Home age':profile.year_built,'Stories / type':profile.stories,Foundation:profile.foundation,'Occupied during work':profile.occupied,Budget:profile.budget,'Desired start':profile.timeline}).filter(([,v])=>v);
+    body.innerHTML=`<div class="profile-summary"><p class="eyebrow dark">Planning Summary</p><h3>Your preliminary project profile</h3><p>This is a planning summary, not a quote or site assessment. It helps ADELIE prepare for a more useful first conversation.</p><dl>${rows.map(([k,v])=>`<div><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl>${profile.goals?`<h4>Main goals</h4><p>${profile.goals.replace(/</g,'&lt;')}</p>`:''}<h4>Recommended next steps</h4><div class="profile-recommendations">${rec.map(([l,h])=>`<a href="${h}">${l} →</a>`).join('')}</div><div class="profile-summary-actions"><button type="button" class="profile-print">Print / Save PDF</button><button type="button" class="profile-edit">Edit answers</button><button type="button" class="profile-use-lead">Use profile in consultation form</button></div></div>`;
+    back.hidden=true;next.hidden=true;overlay.querySelector('.profile-save-exit').textContent='Close';
+    body.querySelector('.profile-print')?.addEventListener('click',()=>window.print());
+    body.querySelector('.profile-edit')?.addEventListener('click',()=>{step=0;back.hidden=false;next.hidden=false;overlay.querySelector('.profile-save-exit').textContent='Save & close';render()});
+    body.querySelector('.profile-use-lead')?.addEventListener('click',()=>{syncLead();close();assistant.querySelector('.assistant-panel').hidden=false;assistant.querySelector('.assistant-toggle').setAttribute('aria-expanded','true');leadForm?.scrollIntoView({behavior:'smooth',block:'center'});leadForm?.querySelector('[name="name"]')?.focus()});
+  }
+  function open(){overlay.hidden=false;document.body.classList.add('profile-open');step=0;render()}
+  function close(){overlay.hidden=true;document.body.classList.remove('profile-open');syncLead()}
+  next.addEventListener('click',()=>{const q=questions[step];if(!valid(q)){body.querySelector('.profile-error').hidden=false;return}step++;render()});
+  back.addEventListener('click',()=>{if(step>0){step--;render()}});
+  overlay.querySelector('.profile-close').addEventListener('click',close);
+  overlay.querySelector('.profile-save-exit').addEventListener('click',close);
+  overlay.addEventListener('click',e=>{if(e.target===overlay)close()});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!overlay.hidden)close()});
+
+  const launch=document.createElement('button');launch.type='button';launch.className='assistant-profile-launch';launch.innerHTML='<strong>Build my project profile</strong><span>Home details, scope, budget, goals and timeline</span>';launch.addEventListener('click',open);
+  const quick=assistant.querySelector('.assistant-quick');quick?.before(launch);
+  const actions=assistant.querySelector('.assistant-action-row');
+  if(actions){const b=document.createElement('button');b.type='button';b.textContent='Build project profile';b.addEventListener('click',open);actions.prepend(b)}
+  syncLead();
+})();

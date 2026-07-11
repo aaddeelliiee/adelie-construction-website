@@ -218,5 +218,25 @@
         "articleCount": 10
       }
     ]
+  },
+  "project_advisor": {
+    "url": "https://www.adelieconstruction.com/project-advisor.html",
+    "purpose": "Guided preliminary remodeling profile",
+    "captures": [
+      "project type",
+      "city",
+      "year built",
+      "stories",
+      "foundation",
+      "occupancy",
+      "goals",
+      "layout changes",
+      "budget",
+      "timeline",
+      "planning stage",
+      "priorities",
+      "constraints"
+    ],
+    "limitations": "Educational planning tool; not a quote, inspection, design, engineering opinion or permit determination."
   }
 }

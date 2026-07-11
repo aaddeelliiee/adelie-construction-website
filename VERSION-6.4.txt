@@ -1,0 +1,7 @@
+ADELIE Construction Website Version 6.4
+
+- Project Advisor now collects name, phone, property address and email first.
+- Explicit consent is required before automatic early lead capture.
+- Preliminary contact details are posted to Netlify Forms as project-profile-start.
+- Full project profile continues to populate the existing consultation form.
+- No automatic submission occurs without consent.

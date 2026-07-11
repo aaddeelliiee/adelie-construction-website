@@ -177,24 +177,33 @@ if(assistant){
 })();
 
 
-/* ADELIE v6.3 Guided Project Profile */
+/* ADELIE v6.4 Guided Project Profile with consented early lead capture */
 (()=>{
   const assistant=document.querySelector('#adelie-assistant');
   if(!assistant || assistant.dataset.profilePlanner==='true') return;
   assistant.dataset.profilePlanner='true';
-  const STORAGE_KEY='adelieProjectProfileV1';
+  const STORAGE_KEY='adelieProjectProfileV2';
+  const CAPTURE_KEY='adelieEarlyLeadCapturedV1';
   const leadForm=assistant.querySelector('.assistant-lead');
   const fields={
+    name:leadForm?.querySelector('[name="name"]'),
+    email:leadForm?.querySelector('[name="email"]'),
+    phone:leadForm?.querySelector('[name="phone"]'),
+    address:leadForm?.querySelector('[name="property_address"]'),
     projectType:leadForm?.querySelector('[name="project_type"]'),
     city:leadForm?.querySelector('[name="city"]'),
     budget:leadForm?.querySelector('[name="budget_range"]'),
     timeline:leadForm?.querySelector('[name="timeline"]'),
     details:leadForm?.querySelector('[name="project_details"]')
   };
+  if(leadForm && !fields.address){
+    const input=document.createElement('input'); input.type='hidden'; input.name='property_address'; leadForm.appendChild(input); fields.address=input;
+  }
 
   const questions=[
+    {id:'contact',title:'First, how can ADELIE reach you?',help:'Enter your contact details and project address. With your permission, these details are securely saved as soon as this step is completed so ADELIE can follow up even if you do not finish the planner.',type:'contact',required:true},
     {id:'project_type',title:'What are you planning?',help:'Choose the project that best matches your primary goal.',type:'choice',required:true,options:['Kitchen remodel','Bathroom remodel','Whole-home remodel','ADU','Home addition','Pool or outdoor living','Other']},
-    {id:'city',title:'Where is the property?',help:'Enter the city or community so ADELIE can consider local service availability and permitting jurisdiction.',type:'text',placeholder:'Example: Vista, Carlsbad, San Marcos',required:true},
+    {id:'city',title:'Which city or community is the property in?',help:'This helps ADELIE consider service availability and the applicable permitting jurisdiction.',type:'text',placeholder:'Example: Vista, Carlsbad, San Marcos',required:true},
     {id:'year_built',title:'Approximately when was the home built?',help:'The age of the home can affect utilities, concealed conditions, hazardous-material testing and code upgrades.',type:'choice',options:['Before 1940','1940–1959','1960–1979','1980–1999','2000–2014','2015 or newer','Not sure']},
     {id:'stories',title:'How many stories does the home have?',help:'Stories and access can affect demolition, material handling, plumbing routes and staging.',type:'choice',options:['Single story','Two stories','Three or more','Condo or townhome','Not sure']},
     {id:'foundation',title:'What foundation type does the home have?',help:'Foundation type matters when relocating plumbing, changing structure or building an addition.',type:'choice',options:['Concrete slab','Raised foundation / crawlspace','Basement','Mixed or hillside foundation','Not sure']},
@@ -211,12 +220,12 @@ if(assistant){
 
   const load=()=>{try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}')}catch{return {}}};
   const save=p=>localStorage.setItem(STORAGE_KEY,JSON.stringify(p));
-  let profile=load(); let step=0;
+  let profile=load(); let step=0; let captureTimer;
 
   const overlay=document.createElement('div');
   overlay.className='project-profile-overlay'; overlay.hidden=true;
   overlay.innerHTML=`<section class="project-profile-dialog" role="dialog" aria-modal="true" aria-labelledby="profile-title">
-    <header class="profile-header"><div><span class="v6-badge">ADELIE Project Advisor</span><h2 id="profile-title">Build your project profile</h2><p>Answer a few practical questions. Your progress is saved on this device.</p></div><button class="profile-close" type="button" aria-label="Close project planner">×</button></header>
+    <header class="profile-header"><div><span class="v6-badge">ADELIE Project Advisor</span><h2 id="profile-title">Build your project profile</h2><p>Start with your contact information, then answer practical project questions. Progress is saved on this device.</p></div><button class="profile-close" type="button" aria-label="Close project planner">×</button></header>
     <div class="profile-meter"><span></span></div><div class="profile-step-label"></div>
     <div class="profile-body"></div>
     <footer class="profile-footer"><button class="profile-back" type="button">Back</button><button class="profile-save-exit" type="button">Save & close</button><button class="profile-next" type="button">Next</button></footer>
@@ -225,13 +234,23 @@ if(assistant){
   const body=overlay.querySelector('.profile-body'), label=overlay.querySelector('.profile-step-label'), meter=overlay.querySelector('.profile-meter span');
   const back=overlay.querySelector('.profile-back'), next=overlay.querySelector('.profile-next');
 
+  function esc(v){return String(v||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;')}
   function control(q){
+    if(q.type==='contact') return `<div class="profile-contact-grid">
+      <label>Full name<input class="profile-input" data-contact="name" autocomplete="name" value="${esc(profile.name)}" placeholder="Full name"></label>
+      <label>Phone number<input class="profile-input" data-contact="phone" type="tel" autocomplete="tel" value="${esc(profile.phone)}" placeholder="(760) 555-1234"></label>
+      <label class="full">Property address<input class="profile-input" data-contact="property_address" autocomplete="street-address" value="${esc(profile.property_address)}" placeholder="Street address, city and ZIP"></label>
+      <label class="full">Email address <span>(recommended)</span><input class="profile-input" data-contact="email" type="email" autocomplete="email" value="${esc(profile.email)}" placeholder="Email address"></label>
+      <label class="profile-capture-consent full"><input data-contact="early_contact_consent" type="checkbox" ${profile.early_contact_consent?'checked':''}> I agree that ADELIE Construction may securely save these details and contact me about this remodeling request.</label>
+      <p class="profile-privacy-note full">Your information is used only to respond to this request. Completing this step creates a preliminary lead in ADELIE’s Netlify form system; it does not commit you to a project.</p>
+      <div class="profile-capture-status full" role="status" aria-live="polite"></div>
+    </div>`;
     const value=profile[q.id];
-    if(q.type==='text') return `<input class="profile-input" data-profile-input="${q.id}" type="text" value="${String(value||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;')}" placeholder="${q.placeholder||''}">`;
-    if(q.type==='textarea') return `<textarea class="profile-input" data-profile-input="${q.id}" rows="5" placeholder="${q.placeholder||''}">${String(value||'').replace(/</g,'&lt;')}</textarea>`;
+    if(q.type==='text') return `<input class="profile-input" data-profile-input="${q.id}" type="text" value="${esc(value)}" placeholder="${q.placeholder||''}">`;
+    if(q.type==='textarea') return `<textarea class="profile-input" data-profile-input="${q.id}" rows="5" placeholder="${q.placeholder||''}">${esc(value)}</textarea>`;
     const values=Array.isArray(value)?value:[value].filter(Boolean);
     const type=q.type==='multi'?'checkbox':'radio';
-    return `<div class="profile-options">${q.options.map((o,i)=>`<label class="profile-option"><input data-profile-input="${q.id}" type="${type}" name="profile_${q.id}" value="${o.replace(/"/g,'&quot;')}" ${values.includes(o)?'checked':''}><span>${o}</span></label>`).join('')}</div>${q.max?`<p class="profile-limit">Choose up to ${q.max}.</p>`:''}`;
+    return `<div class="profile-options">${q.options.map(o=>`<label class="profile-option"><input data-profile-input="${q.id}" type="${type}" name="profile_${q.id}" value="${esc(o)}" ${values.includes(o)?'checked':''}><span>${o}</span></label>`).join('')}</div>${q.max?`<p class="profile-limit">Choose up to ${q.max}.</p>`:''}`;
   }
   function render(){
     if(step>=questions.length){renderSummary();return}
@@ -239,11 +258,23 @@ if(assistant){
     label.textContent=`Step ${step+1} of ${questions.length}`; meter.style.width=`${((step+1)/questions.length)*100}%`;
     body.innerHTML=`<div class="profile-question"><p class="eyebrow dark">Project Profile</p><h3>${q.title}</h3><p>${q.help}</p>${control(q)}<p class="profile-error" hidden>Please complete this step before continuing.</p></div>`;
     back.disabled=step===0; next.textContent=step===questions.length-1?'Review profile':'Next';
-    body.querySelectorAll('[data-profile-input]').forEach(el=>el.addEventListener('change',()=>capture(q)));
-    body.querySelectorAll('input[type=text],textarea').forEach(el=>el.addEventListener('input',()=>capture(q)));
+    if(q.type==='contact'){
+      body.querySelectorAll('[data-contact]').forEach(el=>{
+        const event=el.type==='checkbox'?'change':'input';
+        el.addEventListener(event,()=>{capture(q);scheduleEarlyCapture()});
+      });
+      updateCaptureStatus();
+    }else{
+      body.querySelectorAll('[data-profile-input]').forEach(el=>el.addEventListener('change',()=>capture(q)));
+      body.querySelectorAll('input[type=text],textarea').forEach(el=>el.addEventListener('input',()=>capture(q)));
+    }
     setTimeout(()=>body.querySelector('input,textarea')?.focus(),50);
   }
   function capture(q){
+    if(q.type==='contact'){
+      body.querySelectorAll('[data-contact]').forEach(el=>profile[el.dataset.contact]=el.type==='checkbox'?el.checked:el.value.trim());
+      save(profile); syncLead(); return;
+    }
     const els=[...body.querySelectorAll(`[data-profile-input="${q.id}"]`)];
     if(q.type==='multi'){
       let vals=els.filter(x=>x.checked).map(x=>x.value);
@@ -253,10 +284,42 @@ if(assistant){
     else profile[q.id]=els[0]?.value.trim()||'';
     save(profile);
   }
-  function valid(q){capture(q); const v=profile[q.id]; return !q.required || (Array.isArray(v)?v.length>0:Boolean(v));}
+  function contactReady(){return Boolean(profile.name&&profile.phone&&profile.property_address&&profile.early_contact_consent)}
+  function valid(q){capture(q); if(q.type==='contact')return contactReady(); const v=profile[q.id]; return !q.required || (Array.isArray(v)?v.length>0:Boolean(v));}
+  function updateCaptureStatus(text='',kind=''){
+    const el=body.querySelector('.profile-capture-status'); if(!el)return;
+    if(text){el.textContent=text;el.dataset.state=kind;return}
+    if(localStorage.getItem(CAPTURE_KEY)==='true') {el.textContent='Contact details saved with ADELIE.';el.dataset.state='success'}
+    else if(contactReady()){el.textContent='Saving contact details…';el.dataset.state='working'}
+    else {el.textContent='Complete the required fields and consent checkbox to save your contact details.';el.dataset.state='idle'}
+  }
+  function scheduleEarlyCapture(){
+    clearTimeout(captureTimer); updateCaptureStatus();
+    if(!contactReady() || localStorage.getItem(CAPTURE_KEY)==='true')return;
+    captureTimer=setTimeout(sendEarlyLead,900);
+  }
+  async function sendEarlyLead(){
+    if(!contactReady() || localStorage.getItem(CAPTURE_KEY)==='true')return;
+    updateCaptureStatus('Saving contact details…','working');
+    const data=new URLSearchParams({
+      'form-name':'project-profile-start',
+      name:profile.name||'', phone:profile.phone||'', email:profile.email||'',
+      property_address:profile.property_address||'',
+      city:profile.city||'', project_type:profile.project_type||'Not selected yet',
+      contact_consent:'yes', lead_stage:'Project Advisor started',
+      page_url:location.href, started_at:new Date().toISOString()
+    });
+    try{
+      const response=await fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:data.toString()});
+      if(!response.ok)throw new Error('Submission failed');
+      localStorage.setItem(CAPTURE_KEY,'true');
+      updateCaptureStatus('Contact details saved with ADELIE. You can continue building the profile.','success');
+    }catch(err){
+      updateCaptureStatus('We could not save automatically. Your answers remain on this device; please use the final Send to ADELIE button.','error');
+    }
+  }
   function recommendationData(){
-    const p=profile, type=(p.project_type||'').toLowerCase();
-    const rec=[];
+    const type=(profile.project_type||'').toLowerCase(), rec=[];
     if(type.includes('kitchen')) rec.push(['Kitchen Planning Guide','kitchen-planning-guide.html'],['Kitchen Workbook','downloads/kitchen-remodel-planning-workbook-v2.pdf']);
     else if(type.includes('bath')) rec.push(['Bathroom Planning Guide','bathroom-planning-guide.html'],['Bathroom Workbook','downloads/bathroom-remodel-planning-workbook-v2.pdf']);
     else if(type.includes('adu')) rec.push(['ADU Construction Guide','adu-construction.html'],['Permit Planning Guide','san-diego-remodel-permit-guide.html']);
@@ -268,11 +331,15 @@ if(assistant){
   }
   function summaryText(){
     const lines=['ADELIE PROJECT PROFILE'];
-    const labels={project_type:'Project',city:'City',year_built:'Home age',stories:'Stories / property type',foundation:'Foundation',occupied:'Occupancy during work',goals:'Goals',layout_changes:'Layout / structural changes',budget:'Budget range',timeline:'Desired start',planning_stage:'Planning completed',priorities:'Top priorities',constraints:'Site / household constraints',notes:'Additional notes'};
+    const labels={name:'Name',phone:'Phone',email:'Email',property_address:'Property address',project_type:'Project',city:'City',year_built:'Home age',stories:'Stories / property type',foundation:'Foundation',occupied:'Occupancy during work',goals:'Goals',layout_changes:'Layout / structural changes',budget:'Budget range',timeline:'Desired start',planning_stage:'Planning completed',priorities:'Top priorities',constraints:'Site / household constraints',notes:'Additional notes'};
     Object.entries(labels).forEach(([k,l])=>{const v=profile[k];if(v&&(Array.isArray(v)?v.length:String(v).trim()))lines.push(`${l}: ${Array.isArray(v)?v.join(', '):v}`)});
     return lines.join('\n');
   }
   function syncLead(){
+    if(fields.name&&profile.name)fields.name.value=profile.name;
+    if(fields.phone&&profile.phone)fields.phone.value=profile.phone;
+    if(fields.email&&profile.email)fields.email.value=profile.email;
+    if(fields.address&&profile.property_address)fields.address.value=profile.property_address;
     if(fields.projectType&&profile.project_type){const o=[...fields.projectType.options].find(x=>x.text.trim().toLowerCase()===profile.project_type.toLowerCase());if(o)fields.projectType.value=o.value||o.text}
     if(fields.city&&profile.city)fields.city.value=profile.city;
     if(fields.budget&&profile.budget){const o=[...fields.budget.options].find(x=>x.text.trim().toLowerCase()===profile.budget.toLowerCase());if(o)fields.budget.value=o.value||o.text}
@@ -283,23 +350,23 @@ if(assistant){
   function renderSummary(){
     syncLead(); label.textContent='Project profile complete';meter.style.width='100%';
     const rec=recommendationData();
-    const rows=Object.entries({Project:profile.project_type,Location:profile.city,'Home age':profile.year_built,'Stories / type':profile.stories,Foundation:profile.foundation,'Occupied during work':profile.occupied,Budget:profile.budget,'Desired start':profile.timeline}).filter(([,v])=>v);
-    body.innerHTML=`<div class="profile-summary"><p class="eyebrow dark">Planning Summary</p><h3>Your preliminary project profile</h3><p>This is a planning summary, not a quote or site assessment. It helps ADELIE prepare for a more useful first conversation.</p><dl>${rows.map(([k,v])=>`<div><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl>${profile.goals?`<h4>Main goals</h4><p>${profile.goals.replace(/</g,'&lt;')}</p>`:''}<h4>Recommended next steps</h4><div class="profile-recommendations">${rec.map(([l,h])=>`<a href="${h}">${l} →</a>`).join('')}</div><div class="profile-summary-actions"><button type="button" class="profile-print">Print / Save PDF</button><button type="button" class="profile-edit">Edit answers</button><button type="button" class="profile-use-lead">Use profile in consultation form</button></div></div>`;
+    const rows=Object.entries({Name:profile.name,Phone:profile.phone,'Property address':profile.property_address,Project:profile.project_type,Location:profile.city,'Home age':profile.year_built,'Stories / type':profile.stories,Foundation:profile.foundation,'Occupied during work':profile.occupied,Budget:profile.budget,'Desired start':profile.timeline}).filter(([,v])=>v);
+    body.innerHTML=`<div class="profile-summary"><p class="eyebrow dark">Planning Summary</p><h3>Your preliminary project profile</h3><p>Your contact details were saved after the first step with your consent. This summary is not a quote or site assessment; it helps ADELIE prepare for a useful first conversation.</p><dl>${rows.map(([k,v])=>`<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>${profile.goals?`<h4>Main goals</h4><p>${esc(profile.goals)}</p>`:''}<h4>Recommended next steps</h4><div class="profile-recommendations">${rec.map(([l,h])=>`<a href="${h}">${l} →</a>`).join('')}</div><div class="profile-summary-actions"><button type="button" class="profile-print">Print / Save PDF</button><button type="button" class="profile-edit">Edit answers</button><button type="button" class="profile-use-lead">Review and send full consultation request</button></div></div>`;
     back.hidden=true;next.hidden=true;overlay.querySelector('.profile-save-exit').textContent='Close';
     body.querySelector('.profile-print')?.addEventListener('click',()=>window.print());
     body.querySelector('.profile-edit')?.addEventListener('click',()=>{step=0;back.hidden=false;next.hidden=false;overlay.querySelector('.profile-save-exit').textContent='Save & close';render()});
-    body.querySelector('.profile-use-lead')?.addEventListener('click',()=>{syncLead();close();assistant.querySelector('.assistant-panel').hidden=false;assistant.querySelector('.assistant-toggle').setAttribute('aria-expanded','true');leadForm?.scrollIntoView({behavior:'smooth',block:'center'});leadForm?.querySelector('[name="name"]')?.focus()});
+    body.querySelector('.profile-use-lead')?.addEventListener('click',()=>{syncLead();close();assistant.querySelector('.assistant-panel').hidden=false;assistant.querySelector('.assistant-toggle').setAttribute('aria-expanded','true');leadForm?.scrollIntoView({behavior:'smooth',block:'center'});leadForm?.querySelector('[name="email"]')?.focus()});
   }
   function open(){overlay.hidden=false;document.body.classList.add('profile-open');step=0;render()}
   function close(){overlay.hidden=true;document.body.classList.remove('profile-open');syncLead()}
-  next.addEventListener('click',()=>{const q=questions[step];if(!valid(q)){body.querySelector('.profile-error').hidden=false;return}step++;render()});
+  next.addEventListener('click',async()=>{const q=questions[step];if(!valid(q)){body.querySelector('.profile-error').hidden=false;return}if(q.type==='contact'&&localStorage.getItem(CAPTURE_KEY)!=='true')await sendEarlyLead();step++;render()});
   back.addEventListener('click',()=>{if(step>0){step--;render()}});
   overlay.querySelector('.profile-close').addEventListener('click',close);
   overlay.querySelector('.profile-save-exit').addEventListener('click',close);
   overlay.addEventListener('click',e=>{if(e.target===overlay)close()});
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!overlay.hidden)close()});
 
-  const launch=document.createElement('button');launch.type='button';launch.className='assistant-profile-launch';launch.innerHTML='<strong>Build my project profile</strong><span>Home details, scope, budget, goals and timeline</span>';launch.addEventListener('click',open);
+  const launch=document.createElement('button');launch.type='button';launch.className='assistant-profile-launch';launch.innerHTML='<strong>Build my project profile</strong><span>Start with contact details, then home, scope, budget, goals and timeline</span>';launch.addEventListener('click',open);
   const quick=assistant.querySelector('.assistant-quick');quick?.before(launch);
   const actions=assistant.querySelector('.assistant-action-row');
   if(actions){const b=document.createElement('button');b.type='button';b.textContent='Build project profile';b.addEventListener('click',open);actions.prepend(b)}

@@ -47,7 +47,10 @@ if(assistant){
     downloads:{label:'Free Planning Downloads',href:'downloads.html'},
     estimates:{label:'Compare Contractor Estimates',href:'contractor-estimate-comparison-guide.html'},
     changes:{label:'Change Orders Explained',href:'change-orders-guide.html'},
-    materials:{label:'Material Selection Guide',href:'material-selection-guide.html'}
+    materials:{label:'Material Selection Guide',href:'material-selection-guide.html'},
+    financing:{label:'Financing Information',href:'financing.html'},
+    contact:{label:'Request a Consultation',href:'contact.html'},
+    services:{label:'All Remodeling Services',href:'services.html'}
   };
 
   const knowledge=[
@@ -63,7 +66,13 @@ if(assistant){
     {keys:['change order','extra work','unexpected','concealed'],text:'A change order should describe the reason for the change, added or removed scope, price impact and schedule impact before the work proceeds whenever practical.',links:['changes','budget']},
     {keys:['material','selection','tile','flooring','quartz','granite'],text:'Material decisions should be tracked by approval deadline, lead time and construction dependency. Products that affect rough plumbing, electrical, cabinetry or framing need to be selected first.',links:['materials','downloads']},
     {keys:['service area','serve','location','city','where'],text:'ADELIE serves homeowners throughout San Diego County, with project availability based on scope, access and scheduling. Share the project city in the form so the team can confirm availability.',links:[]},
-    {keys:['financing','loan','payment'],text:'Financing options and approval terms vary by lender. Review total cost, interest, fees and repayment terms carefully, and avoid finalizing financing until the project scope is sufficiently defined.',links:['budget']}
+    {keys:['financing','loan','payment','finance'],text:'Financing options and approval terms vary by lender. Review total cost, interest, fees and repayment terms carefully, and avoid finalizing financing until the project scope is sufficiently defined.',links:['financing','budget']},
+    {keys:['license','licensed','bonded','insured','insurance'],text:'Before hiring any contractor, verify the active license status and confirm the insurance documents that apply to your project. ADELIE can provide current business and project documentation during the consultation process.',links:['contractor','contact']},
+    {keys:['download','worksheet','checklist','workbook','pdf','form'],text:'The ADELIE Homeowner Toolkit includes free branded workbooks for planning, budgeting, comparing bids, tracking selections, preparing your home and completing a final walkthrough.',links:['downloads']},
+    {keys:['call','phone','contact','talk','consultation','appointment'],text:'You can request a consultation through the project form or call ADELIE at 1-877-ADELIEC. Include the project city, project type, goals, approximate timing and any plans or photos already available.',links:['contact']},
+    {keys:['service','services','what do you do','scope'],text:'ADELIE coordinates kitchen, bathroom and whole-home remodeling, ADUs, additions, cabinets, flooring, tile, painting, plumbing, electrical and outdoor living work. The exact scope is defined after a site review and planning conversation.',links:['services','contact']},
+    {keys:['hello','hi','hey','good morning','good afternoon'],text:'Hello. I can help you find the right planning guide, explain common remodeling terms, suggest which worksheet to use, or help prepare a consultation request.',links:['downloads','services']},
+    {keys:['emergency','leak','flood','sparking','gas smell'],text:'For an active leak, electrical hazard, gas odor or other immediate safety concern, contact the appropriate emergency service or utility first. The ADELIE assistant is for remodeling planning and is not an emergency dispatch service.',links:[]}
   ];
 
   const transcript=[];
@@ -105,7 +114,7 @@ if(assistant){
         if(option) projectType.value=option.value||option.text;
       }
     }else{
-      addMessage('bot','I can help with project planning, budgets, permits, timelines, contractor comparisons and material decisions. For property-specific advice, add your question to the project form and ADELIE will follow up.',['downloads','budget']);
+      addMessage('bot','I did not find a precise match, but I can help with budgets, permits, timelines, contractor proposals, materials, downloadable worksheets and consultation preparation. Try including the room, city, project stage or specific concern in your question.',['downloads','budget','contact']);
     }
     if(details && !details.value) details.value='Question asked through ADELIE Assistant: '+question;
   }
@@ -124,6 +133,26 @@ if(assistant){
 
   const starter=contextHint?`You are viewing a ${contextHint} page. Ask me about planning, budget, permits, timeline or next steps.`:'Ask a remodeling question, open a planning guide, or send your project details to ADELIE.';
   const first=messages?.querySelector('.assistant-message.bot'); if(first) first.textContent=starter;
+
+
+  const suggestionSets={
+    kitchen:['How should I plan a kitchen budget?','What should be selected first?','Download the kitchen workbook'],
+    bathroom:['What affects bathroom cost?','What should I know about waterproofing?','Download the bathroom workbook'],
+    adu:['What should I verify before planning an ADU?','What permits may be involved?','How should I plan the budget?'],
+    addition:['What affects an addition timeline?','What professionals may be needed?','How should I plan contingency?'],
+    'whole home':['How should a whole-home remodel be phased?','Can I live in the home during construction?','Download the complete workbook']
+  };
+  const suggestions=suggestionSets[contextHint]||['How do I compare contractor bids?','What should a remodel budget include?','Show me the free PDF checklists'];
+  const smartSuggestions=document.createElement('div');
+  smartSuggestions.className='assistant-smart-suggestions';
+  suggestions.forEach(text=>{const b=document.createElement('button');b.type='button';b.textContent=text;b.addEventListener('click',()=>answerQuestion(text));smartSuggestions.appendChild(b);});
+  composer.after(smartSuggestions);
+
+  document.addEventListener('keydown',event=>{
+    if(event.key==='Escape'&&!panel.hidden){closePanel();toggleButton?.focus();}
+  });
+  panel?.addEventListener('click',event=>event.stopPropagation());
+  assistant.addEventListener('click',event=>event.stopPropagation());
 
   leadForm?.addEventListener('submit',()=>{
     if(details && transcript.length && !details.value.includes('Assistant conversation')) details.value += '\n\nAssistant conversation:\n'+transcript.slice(-8).join('\n');

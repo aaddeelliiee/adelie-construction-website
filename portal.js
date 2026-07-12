@@ -35,7 +35,7 @@ $('schedule-list').innerHTML=data.length?`<div class="schedule-stack">${data.map
 async function loadPhotos(){const data=await rows('project_photos','taken_at',false),items=await Promise.all(data.map(async x=>({...x,url:await signed(x.bucket||'project-photos',x.storage_path)})));
 $('photos-list').innerHTML=items.length?`<div class="photo-grid">${items.map(x=>`<figure>${x.url?`<a href="${x.url}" target="_blank" rel="noopener"><img src="${x.url}" alt="${safe(x.caption||'Project photo')}"></a>`:''}<figcaption>${safe(x.caption||'Progress photo')}</figcaption></figure>`).join('')}</div>`:empty('No photos have been shared yet.')}
 async function loadDocuments(){const data=await rows('documents'),items=await Promise.all(data.map(async x=>({...x,url:await signed(x.bucket||'project-files',x.storage_path)})));
-$('documents-list').innerHTML=items.length?`<ul class="portal-list">${items.map(x=>`<li><strong>${safe(x.title)}</strong><span class="portal-muted"> · ${safe(x.category)}</span><br>${x.url?`<a href="${x.url}" target="_blank" rel="noopener">Open document</a>`:'File unavailable'}</li>`).join('')}</ul>`:empty('No documents have been shared yet.')}
+$('documents-list').innerHTML=items.length?`<ul class="portal-list">${items.map(x=>`<li><strong>${safe(x.title)}</strong><span class="portal-muted"> · ${safe(x.category)}</span>${x.notes?`<p>${safe(x.notes)}</p>`:''}${x.url?`<a href="${x.url}" target="_blank" rel="noopener">Open document</a>`:'File unavailable'}</li>`).join('')}</ul>`:empty('No documents have been shared yet.')}
 async function loadMessages(){const data=await rows('messages');
 $('messages-list').innerHTML=data.length?`<ul class="portal-list">${data.map(x=>`<li class="${String(x.body).startsWith('IMPORTANT:')?'important-message':''}"><strong>${x.sender_role==='admin'?'ADELIE Construction':'You'}</strong><span class="portal-muted"> · ${new Date(x.created_at).toLocaleString()}</span><p>${safe(x.body)}</p></li>`).join('')}</ul>`:empty('No messages yet.')}
 $('message-form').onsubmit=async e=>{e.preventDefault();
@@ -45,6 +45,28 @@ const {data:{user}}=await sb.auth.getUser();
 const {error}=await sb.from('messages').insert({project_id:projectId,sender_id:user.id,sender_role:'client',body});
 if(!error){e.target.reset();
 loadMessages()}};
+$('customer-photo-form').onsubmit=async event=>{
+  event.preventDefault();
+  const button=event.submitter,file=$('customer-photo-file').files[0],note=$('customer-photo-note').value.trim();
+  button.disabled=true;button.textContent='Uploading…';
+  const {data:{user}}=await sb.auth.getUser();
+  const path=`${projectId}/customer/${user.id}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g,'-')}`;
+  let {error}=await sb.storage.from('project-photos').upload(path,file);
+  if(!error)({error}=await sb.from('project_photos').insert({project_id:projectId,caption:note,bucket:'project-photos',storage_path:path,taken_at:new Date().toISOString(),uploaded_by:user.id,uploaded_role:'client'}));
+  if(error){await sb.storage.from('project-photos').remove([path]);alert(error.message)}else{event.target.reset();await loadPhotos();alert('Photo shared with ADELIE.')}
+  button.disabled=false;button.textContent='Share Photo';
+};
+$('customer-document-form').onsubmit=async event=>{
+  event.preventDefault();
+  const button=event.submitter,file=$('customer-document-file').files[0],title=$('customer-document-title').value.trim(),notes=$('customer-document-note').value.trim();
+  button.disabled=true;button.textContent='Uploading…';
+  const {data:{user}}=await sb.auth.getUser();
+  const path=`${projectId}/customer/${user.id}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g,'-')}`;
+  let {error}=await sb.storage.from('project-files').upload(path,file);
+  if(!error)({error}=await sb.from('documents').insert({project_id:projectId,title,category:'Customer Upload',notes,bucket:'project-files',storage_path:path,file_name:file.name,uploaded_by:user.id,uploaded_role:'client'}));
+  if(error){await sb.storage.from('project-files').remove([path]);alert(error.message)}else{event.target.reset();await loadDocuments();alert('Document shared with ADELIE.')}
+  button.disabled=false;button.textContent='Share Document';
+};
 $('logout').onclick=async()=>{await sb.auth.signOut();
 location.href='portal-login.html'};
 init();

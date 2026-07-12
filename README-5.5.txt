@@ -1,0 +1,1 @@
+Upload this complete ZIP to Netlify. The main navigation separates Project Rescue, Project Planner, and Remodel Academy as flagship tools with dropdown menus. Project Rescue now begins with a no-contact story worksheet and offers a separate optional application.

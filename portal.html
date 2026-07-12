@@ -33,6 +33,7 @@
 <a href="#schedule">Schedule</a>
 <a href="#photos">Photos</a>
 <a href="#documents">Documents</a>
+<a href="#share">Share Files</a>
 <a href="#messages">Messages</a>
 </nav>
 <main class="portal-main">
@@ -93,6 +94,32 @@
 <h2>Documents</h2>
 <div id="documents-list">
 </div>
+</div>
+</section>
+<section id="share" class="portal-grid section-gap">
+<div class="portal-card span-6">
+<p class="portal-kicker">Share with ADELIE</p>
+<h2>Upload a Photo</h2>
+<form id="customer-photo-form" class="portal-form">
+<label>Photo<input type="file" id="customer-photo-file" accept="image/*" required>
+</label>
+<label>Note<textarea id="customer-photo-note" required placeholder="Tell us what this photo shows or what you need help with."></textarea>
+</label>
+<button class="portal-btn primary" type="submit">Share Photo</button>
+</form>
+</div>
+<div class="portal-card span-6">
+<p class="portal-kicker">Share with ADELIE</p>
+<h2>Upload a Document</h2>
+<form id="customer-document-form" class="portal-form">
+<label>Document title<input id="customer-document-title" required>
+</label>
+<label>File<input type="file" id="customer-document-file" required>
+</label>
+<label>Note<textarea id="customer-document-note" required placeholder="Explain what this document is and anything ADELIE should know."></textarea>
+</label>
+<button class="portal-btn primary" type="submit">Share Document</button>
+</form>
 </div>
 </section>
 <section id="messages" class="portal-grid section-gap">

@@ -29,6 +29,7 @@ if(!projectId){
   $('photos-list').innerHTML=empty('Create a project to share photos.');
   $('documents-list').innerHTML=empty('Create a project to share documents.');
   $('messages-list').innerHTML=empty('Create a project to send messages.');
+  $('customer-uploads-list').innerHTML=empty('Create a project to receive customer uploads.');
   return;
 }
 await loadProject()}
@@ -42,7 +43,7 @@ $('project-progress').value=p.progress_percent||0;
 $('progress-value').textContent=(p.progress_percent||0)+'%';
 $('project-start').value=p.start_date||'';
 $('project-end').value=p.target_completion_date||'';
-await Promise.all([loadSchedule(),loadPhotos(),loadDocuments(),loadMessages(),loadCustomerAccounts()])}
+await Promise.all([loadSchedule(),loadPhotos(),loadDocuments(),loadMessages(),loadCustomerAccounts(),loadCustomerUploads()])}
 async function rows(table,order='created_at',ascending=false){const {data=[],error}=await sb.from(table).select('*').eq('project_id',projectId).order(order,{ascending});
 if(error){show(error.message,'error');
 return[]}return data}
@@ -83,6 +84,14 @@ async function deleteDocument(id,path){if(!confirm('Delete this document? The cu
 if(path&&!path.startsWith('assets/')){const {error:storageError}=await sb.storage.from('project-files').remove([path]);if(storageError)return show(storageError.message,'error')}
 const {error}=await sb.from('documents').delete().eq('id',id);
 if(error)return show(error.message,'error');show('Document deleted.');loadDocuments()}
+async function loadCustomerUploads(){
+  const [photos,documents]=await Promise.all([rows('project_photos','created_at',false),rows('documents','created_at',false)]);
+  const customerPhotos=await Promise.all(photos.filter(item=>item.uploaded_role==='client').map(async item=>({...item,url:await signed(item.bucket||'project-photos',item.storage_path)})));
+  const customerDocuments=await Promise.all(documents.filter(item=>item.uploaded_role==='client').map(async item=>({...item,url:await signed(item.bucket||'project-files',item.storage_path)})));
+  const photoHtml=customerPhotos.length?`<div class="photo-grid">${customerPhotos.map(item=>`<figure>${item.url?`<a href="${item.url}" target="_blank" rel="noopener"><img src="${item.url}" alt="${safe(item.caption||'Customer photo')}"></a>`:''}<figcaption><strong>Customer photo</strong><br>${safe(item.caption||'No note provided')}</figcaption></figure>`).join('')}</div>`:empty('No customer photos yet.');
+  const documentHtml=customerDocuments.length?`<ul class="portal-list">${customerDocuments.map(item=>`<li><strong>${safe(item.title)}</strong>${item.notes?`<p>${safe(item.notes)}</p>`:''}${item.url?`<a href="${item.url}" target="_blank" rel="noopener">Open document</a>`:'File unavailable'}</li>`).join('')}</ul>`:empty('No customer documents yet.');
+  $('customer-uploads-list').innerHTML=`<h3>Photos</h3>${photoHtml}<h3 style="margin-top:24px">Documents</h3>${documentHtml}`;
+}
 async function loadMessages(){const data=await rows('messages');
 $('message-count').textContent=data.filter(x=>x.sender_role==='client').length;
 $('messages-list').innerHTML=data.length?`<ul class="portal-list">${data.map(x=>`<li><strong>${x.sender_role==='admin'?'ADELIE':'Customer'}</strong><span class="portal-muted"> · ${new Date(x.created_at).toLocaleString()}</span><p>${safe(x.body)}</p></li>`).join('')}</ul>`:empty('No messages yet.')}

@@ -76,21 +76,23 @@ document.querySelectorAll('.photo-delete').forEach(b=>b.onclick=()=>deletePhoto(
 async function deletePhoto(id,path){if(!confirm('Delete this photo and its note? This cannot be undone.'))return;
 if(path){const {error:storageError}=await sb.storage.from('project-photos').remove([path]);if(storageError)return show(storageError.message,'error')}
 const {error}=await sb.from('project_photos').delete().eq('id',id);
-if(error)return show(error.message,'error');show('Photo and note deleted.');loadPhotos()}
+if(error)return show(error.message,'error');show('Photo and note deleted.');loadPhotos();loadCustomerUploads()}
 async function loadDocuments(){const data=await rows('documents'),items=await Promise.all(data.map(async x=>({...x,url:await signed(x.bucket||'project-files',x.storage_path)})));
 $('documents-list').innerHTML=items.length?`<ul class="portal-list">${items.map(x=>`<li class="managed-row"><div><strong>${safe(x.title)}</strong><span class="portal-muted"> · ${safe(x.category)}</span><br>${x.url?`<a href="${x.url}" target="_blank" rel="noopener">Open document</a>`:'File unavailable'}</div><button class="portal-btn danger document-delete" data-id="${x.id}" data-path="${safe(x.storage_path||'')}">Delete</button></li>`).join('')}</ul>`:empty('No documents shared yet.');
 document.querySelectorAll('.document-delete').forEach(b=>b.onclick=()=>deleteDocument(b.dataset.id,b.dataset.path))}
 async function deleteDocument(id,path){if(!confirm('Delete this document? The customer will no longer be able to open it.'))return;
 if(path&&!path.startsWith('assets/')){const {error:storageError}=await sb.storage.from('project-files').remove([path]);if(storageError)return show(storageError.message,'error')}
 const {error}=await sb.from('documents').delete().eq('id',id);
-if(error)return show(error.message,'error');show('Document deleted.');loadDocuments()}
+if(error)return show(error.message,'error');show('Document deleted.');loadDocuments();loadCustomerUploads()}
 async function loadCustomerUploads(){
   const [photos,documents]=await Promise.all([rows('project_photos','created_at',false),rows('documents','created_at',false)]);
   const customerPhotos=await Promise.all(photos.filter(item=>item.uploaded_role==='client').map(async item=>({...item,url:await signed(item.bucket||'project-photos',item.storage_path)})));
   const customerDocuments=await Promise.all(documents.filter(item=>item.uploaded_role==='client').map(async item=>({...item,url:await signed(item.bucket||'project-files',item.storage_path)})));
-  const photoHtml=customerPhotos.length?`<div class="photo-grid">${customerPhotos.map(item=>`<figure>${item.url?`<a href="${item.url}" target="_blank" rel="noopener"><img src="${item.url}" alt="${safe(item.caption||'Customer photo')}"></a>`:''}<figcaption><strong>Customer photo</strong><br>${safe(item.caption||'No note provided')}</figcaption></figure>`).join('')}</div>`:empty('No customer photos yet.');
-  const documentHtml=customerDocuments.length?`<ul class="portal-list">${customerDocuments.map(item=>`<li><strong>${safe(item.title)}</strong>${item.notes?`<p>${safe(item.notes)}</p>`:''}${item.url?`<a href="${item.url}" target="_blank" rel="noopener">Open document</a>`:'File unavailable'}</li>`).join('')}</ul>`:empty('No customer documents yet.');
+  const photoHtml=customerPhotos.length?`<div class="photo-grid">${customerPhotos.map(item=>`<figure>${item.url?`<a href="${item.url}" target="_blank" rel="noopener"><img src="${item.url}" alt="${safe(item.caption||'Customer photo')}"></a>`:''}<figcaption><strong>Customer photo</strong><br>${safe(item.caption||'No note provided')}</figcaption><button class="portal-btn danger customer-upload-photo-delete" data-id="${item.id}" data-path="${safe(item.storage_path)}">Delete Photo &amp; Note</button></figure>`).join('')}</div>`:empty('No customer photos yet.');
+  const documentHtml=customerDocuments.length?`<ul class="portal-list">${customerDocuments.map(item=>`<li class="managed-row"><div><strong>${safe(item.title)}</strong>${item.notes?`<p>${safe(item.notes)}</p>`:''}${item.url?`<a href="${item.url}" target="_blank" rel="noopener">Open document</a>`:'File unavailable'}</div><button class="portal-btn danger customer-upload-document-delete" data-id="${item.id}" data-path="${safe(item.storage_path)}">Delete</button></li>`).join('')}</ul>`:empty('No customer documents yet.');
   $('customer-uploads-list').innerHTML=`<h3>Photos</h3>${photoHtml}<h3 style="margin-top:24px">Documents</h3>${documentHtml}`;
+  document.querySelectorAll('.customer-upload-photo-delete').forEach(button=>button.onclick=()=>deletePhoto(button.dataset.id,button.dataset.path));
+  document.querySelectorAll('.customer-upload-document-delete').forEach(button=>button.onclick=()=>deleteDocument(button.dataset.id,button.dataset.path));
 }
 async function loadMessages(){const data=await rows('messages');
 $('message-count').textContent=data.filter(x=>x.sender_role==='client').length;

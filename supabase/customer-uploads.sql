@@ -48,3 +48,22 @@ with check (
       and role = 'client'
   )
 );
+
+drop policy if exists documents_client_delete on public.documents;
+create policy documents_client_delete on public.documents
+for delete to authenticated
+using (uploaded_by = auth.uid() and uploaded_role = 'client');
+
+drop policy if exists project_photos_client_delete on public.project_photos;
+create policy project_photos_client_delete on public.project_photos
+for delete to authenticated
+using (uploaded_by = auth.uid() and uploaded_role = 'client');
+
+drop policy if exists storage_client_delete on storage.objects;
+create policy storage_client_delete on storage.objects
+for delete to authenticated
+using (
+  bucket_id in ('project-files','project-photos')
+  and (storage.foldername(name))[2] = 'customer'
+  and (storage.foldername(name))[3]::uuid = auth.uid()
+);

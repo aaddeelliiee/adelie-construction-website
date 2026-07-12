@@ -214,3 +214,128 @@ window.ADELIE_CONFIG = {
     start();
   }
 })();
+
+/*
+ * ADELIE v6.11.3 — promote Remodel Academy to primary navigation.
+ */
+(() => {
+  "use strict";
+
+  const academyPages = new Set([
+    "academy.html",
+    "resources.html",
+    "downloads.html",
+    "remodeling-faq.html",
+    "remodeling-planning-guide.html",
+    "kitchen-planning-guide.html",
+    "bathroom-planning-guide.html",
+    "kitchen-remodel-cost-guide.html",
+    "bathroom-remodel-cost-guide.html",
+    "whole-home-remodel-guide.html",
+    "remodel-budget-planner.html",
+    "remodel-timeline-guide.html",
+    "material-selection-guide.html",
+    "quartz-vs-granite-guide.html",
+    "living-through-remodel-guide.html",
+    "change-orders-guide.html",
+    "choosing-a-contractor-guide.html",
+    "contractor-estimate-comparison-guide.html",
+    "san-diego-remodel-permit-guide.html"
+  ]);
+
+  const installStyle = () => {
+    if (document.getElementById("adelie-academy-menu-style")) return;
+
+    const style = document.createElement("style");
+    style.id = "adelie-academy-menu-style";
+    style.textContent = `
+      .academy-top-link {
+        white-space: nowrap;
+      }
+
+      .academy-top-link.active {
+        color: #202020;
+        box-shadow: inset 0 -3px 0 #f5bf21;
+      }
+
+      @media (max-width: 980px) {
+        .main-nav .academy-top-link {
+          display: block;
+          width: 100%;
+          padding: .9rem 1rem;
+          border: 1px solid #f5bf21;
+          border-radius: 8px;
+          background: #fff8df;
+          font-weight: 700;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+  };
+
+  const addAcademyLink = () => {
+    document.querySelectorAll(".main-nav").forEach(nav => {
+      const existingTopLink = [...nav.querySelectorAll("a")].find(link => {
+        const href = (link.getAttribute("href") || "").replace(/^\//, "");
+        return href === "academy.html" && link.classList.contains("top-link");
+      });
+
+      if (existingTopLink) {
+        existingTopLink.dataset.adelieAcademyLink = "true";
+        return;
+      }
+
+      if (nav.querySelector('[data-adelie-academy-link="true"]')) return;
+
+      const link = document.createElement("a");
+      link.href = "academy.html";
+      link.textContent = "Remodel Academy";
+      link.className = "top-link academy-top-link";
+      link.dataset.adelieAcademyLink = "true";
+
+      const currentPage =
+        (window.location.pathname.split("/").pop() || "index.html").toLowerCase();
+
+      if (academyPages.has(currentPage)) {
+        link.classList.add("active");
+        link.setAttribute("aria-current", "page");
+      }
+
+      const plannerLink = [...nav.querySelectorAll("a")].find(item => {
+        const href = (item.getAttribute("href") || "").replace(/^\//, "");
+        return href === "interactive-project-planner.html";
+      });
+
+      if (plannerLink) {
+        nav.insertBefore(link, plannerLink);
+        return;
+      }
+
+      const areasLink = [...nav.querySelectorAll("a")].find(item => {
+        const href = (item.getAttribute("href") || "").replace(/^\//, "");
+        return href === "areas.html";
+      });
+
+      const areasItem = areasLink?.closest(".nav-group") || areasLink;
+      if (areasItem) nav.insertBefore(link, areasItem);
+      else nav.appendChild(link);
+    });
+  };
+
+  const start = () => {
+    installStyle();
+    addAcademyLink();
+
+    const observer = new MutationObserver(addAcademyLink);
+    observer.observe(document.documentElement, {
+      childList: true,
+      subtree: true
+    });
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", start, { once: true });
+  } else {
+    start();
+  }
+})();

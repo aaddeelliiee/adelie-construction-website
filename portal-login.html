@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ADELIE Client Portal Login</title>
+<title>ADELIE Secure Portal Login</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
@@ -17,12 +17,13 @@
 <main class="login-wrap">
 <section class="login-card">
 <img src="assets/adelie-logo.png" alt="ADELIE Construction">
-<p class="portal-kicker">Secure homeowner access</p>
-<h1 class="portal-title">Client Portal</h1>
+<p class="portal-kicker">Secure account access</p>
+<h1 class="portal-title">ADELIE Portal</h1>
 <p class="portal-muted">Use the username and password provided by ADELIE. Administrators may continue using their email address.</p>
 <div id="login-message" class="notice hidden">
 </div>
 <form id="login-form" class="portal-form">
+<label>Account type<select id="account-type"><option value="customer">Customer</option><option value="employee">Employee</option><option value="admin">Administrator</option></select></label>
 <label>Username or administrator email<input type="text" id="login-id" autocomplete="username" required>
 </label>
 <label>Password<input type="password" id="password" autocomplete="current-password" required>

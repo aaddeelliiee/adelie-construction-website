@@ -34,6 +34,9 @@
 <a href="#documents">Documents</a>
 <a href="#customer-uploads">Customer Uploads</a>
 <a href="#messages">Messages</a>
+<a href="#employees">Employees</a>
+<a href="#employee-schedule">Employee Schedule</a>
+<a href="#team-chat">Team Chat</a>
 </nav>
 <main class="portal-main">
 <div id="admin-message" class="notice hidden">
@@ -222,6 +225,13 @@
 </form>
 </div>
 </section>
+<section id="employees" class="portal-grid section-gap">
+<div class="portal-card span-7"><p class="portal-kicker">Administrator only</p><h2>Employee Accounts</h2><div id="employees-list"></div></div>
+<div class="portal-card span-5"><h2>Create or Edit Employee</h2><form id="employee-form" class="portal-form"><input type="hidden" id="employee-id"><label>Full name<input id="employee-full-name" required></label><label>Job title<input id="employee-job-title"></label><label>Phone<input id="employee-phone" type="tel"></label><label>Username<input id="employee-username" pattern="[A-Za-z0-9._-]+" minlength="3" maxlength="32" required></label><label>Temporary/new password<input id="employee-password" type="password" minlength="10"></label><label>Assigned projects<select id="employee-projects" multiple size="6"></select></label><label class="checkline"><input id="employee-active" type="checkbox" checked> Active account</label><div class="button-row"><button class="portal-btn primary">Save Employee</button><button id="employee-cancel" class="portal-btn light" type="button">Clear</button></div></form></div>
+<div class="portal-card span-12"><p class="portal-kicker">Administrator only</p><h2>Private Employee Notes</h2><p class="portal-muted">These notes are never returned to employee or customer accounts.</p><form id="employee-note-form" class="portal-form"><label>Employee<select id="note-employee" required></select></label><label>Private note<textarea id="employee-note-body" required></textarea></label><button class="portal-btn primary">Save Private Note</button></form><div id="employee-notes-list"></div></div>
+</section>
+<section id="employee-schedule" class="portal-grid section-gap"><div class="portal-card span-7"><p class="portal-kicker">Work assignments</p><h2>Employee Schedule</h2><div id="employee-schedule-list"></div></div><div class="portal-card span-5"><h2>Add Schedule Item</h2><form id="employee-schedule-form" class="portal-form"><label>Employee<select id="schedule-employee" required></select></label><label>Project<select id="schedule-project"><option value="">No project</option></select></label><label>Title<input id="employee-schedule-title" required></label><label>Details<textarea id="employee-schedule-details"></textarea></label><div class="two-col"><label>Starts<input id="employee-schedule-start" type="datetime-local" required></label><label>Ends<input id="employee-schedule-end" type="datetime-local"></label></div><label>Status<select id="employee-schedule-status"><option>Scheduled</option><option>In Progress</option><option>Complete</option><option>Cancelled</option></select></label><button class="portal-btn primary">Add to Schedule</button></form></div></section>
+<section id="team-chat" class="portal-grid section-gap"><div class="portal-card span-7"><p class="portal-kicker">Internal only</p><h2>Team Chat &amp; Private Messages</h2><div id="admin-internal-thread"></div></div><div class="portal-card span-5"><h2>New Internal Message</h2><form id="admin-internal-form" class="portal-form"><label>Channel<select id="admin-internal-recipient"><option value="">Team Chat — everyone</option></select></label><label>Message<textarea id="admin-internal-body" maxlength="5000" required></textarea></label><button class="portal-btn primary">Send Internal Message</button></form><p class="portal-muted">This channel is isolated from all customer messages.</p></div></section>
 </main>
 </div>
 </div>

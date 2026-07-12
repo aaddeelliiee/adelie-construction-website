@@ -1,0 +1,19 @@
+ADELIE SECURE CLIENT PORTAL — SETUP
+
+1. In Supabase, open SQL Editor and run: supabase/portal-schema.sql
+2. In Authentication > Users, create/invite your administrator account.
+3. Copy the administrator user's UUID and run:
+   insert into public.portal_admins(user_id) values ('YOUR-UUID') on conflict do nothing;
+4. In Netlify Site configuration > Environment variables, add:
+   SUPABASE_URL=https://vctnzenargxmgiyqemzx.supabase.co
+   SUPABASE_SERVICE_ROLE_KEY=<copy from Supabase Settings > API; never put this in website files>
+5. Deploy this complete ZIP. Netlify will install @supabase/supabase-js for the invitation function.
+6. Open /portal-login.html and sign in with the admin account. You will be redirected to /portal-admin.html.
+7. Invite the client email from the admin portal and assign Vista001.
+
+SECURITY NOTES
+- The publishable key in portal-config.js is designed for browser use.
+- The service-role key must stay only in Netlify environment variables.
+- Row Level Security is enabled so homeowners can only read projects assigned to their user ID.
+- Storage buckets are private; normal project files are accessed using short-lived signed URLs.
+- The two sample image documents are included in the website package for demonstration. Upload final signed PDF copies into the private bucket before using the portal with a real customer.

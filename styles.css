@@ -418,3 +418,5 @@ img{max-width:100%;display:block}a{color:inherit;text-decoration:none}.container
 .project-rescue-page .story-result.visible{display:block}
 .project-rescue-page .form-divider{display:flex;align-items:center;gap:14px;margin:2.2rem 0;color:#666;font-weight:700}.project-rescue-page .form-divider:before,.project-rescue-page .form-divider:after{content:"";height:1px;background:#d7d7d0;flex:1}
 @media(max-width:700px){.project-rescue-page .choice-grid{grid-template-columns:1fr}}
+
+.portal-nav-link{display:inline-flex;align-items:center;justify-content:center;padding:.68rem .85rem;border:1px solid rgba(0,0,0,.18);border-radius:8px;font-size:.82rem;font-weight:800;text-decoration:none;color:#111;background:#fff;white-space:nowrap}.portal-nav-link:hover{background:#111;color:#fff}.photo-upload-group{border:1px solid #d8d8d8;border-radius:12px;padding:1rem;margin:1rem 0;background:#fafafa}.photo-upload-group legend{font-weight:800;padding:0 .45rem}.photo-upload-group input[type=file]{padding:.65rem;background:#fff;border:1px dashed #bbb;border-radius:8px}@media(max-width:1050px){.portal-nav-link{width:100%;margin:.35rem 0}}

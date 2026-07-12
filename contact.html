@@ -32,7 +32,7 @@
   <div class="nav-group has-dropdown flagship planner"><a class="top-link" href="interactive-project-planner.html">Project Planner</a><div class="dropdown-menu"><a href="interactive-project-planner.html">Open Project Planner</a><a href="remodel-budget-planner.html">Budget Planner</a><a href="remodel-timeline-guide.html">Timeline Guide</a><a href="downloads.html">Planning Downloads</a><a href="project-advisor.html">Project Advisor</a></div></div>
   <div class="nav-group has-dropdown flagship academy"><a class="top-link" href="academy.html">Remodel Academy</a><div class="dropdown-menu mega"><a href="academy.html">Browse the Academy</a><a href="academy.html#academy-library">Search All Articles</a><a href="kitchen-planning-guide.html">Kitchen Planning</a><a href="bathroom-planning-guide.html">Bathroom Planning</a><a href="san-diego-remodel-permit-guide.html">Permits & Inspections</a><a href="contractor-estimate-comparison-guide.html">Compare Estimates</a><a href="material-selection-guide.html">Materials</a><a href="remodeling-faq.html">Remodeling FAQ</a></div></div>
 </div>
-<a class="header-phone" href="tel:+18772335432">1-877-ADELIEC</a><a class="nav-cta" href="contact.html">Request a Consultation</a>
+<a class="portal-nav-link" href="portal-login.html" aria-label="Secure client portal">Client Portal 🔒</a><a class="header-phone" href="tel:+18772335432">1-877-ADELIEC</a><a class="nav-cta" href="contact.html">Request a Consultation</a>
 </nav>
 </div>
 </header>
@@ -50,7 +50,7 @@
 <p><strong>Hours</strong><br/>Monday–Saturday, 7:00 AM–5:00 PM</p>
 <p><strong>Service Areas</strong><br/>Vista, Carlsbad, Oceanside, San Marcos, Encinitas, Escondido, Rancho Bernardo, Del Mar, Fallbrook</p>
 </div>
-<form action="/thank-you.html" class="lead-form reveal" data-netlify="true" id="lead-form" method="POST" name="project-inquiry" netlify="" netlify-honeypot="bot-field"><input name="form-name" type="hidden" value="project-inquiry"/><p class="hidden-field"><label>Do not fill this out if you are human: <input name="bot-field"/></label></p>
+<form action="/thank-you.html" class="lead-form reveal" data-netlify="true" id="lead-form" method="POST" enctype="multipart/form-data" name="project-inquiry" netlify="" netlify-honeypot="bot-field"><input name="form-name" type="hidden" value="project-inquiry"/><p class="hidden-field"><label>Do not fill this out if you are human: <input name="bot-field"/></label></p>
 <label>Name<input autocomplete="name" name="name" required=""/></label>
 <label>Email<input autocomplete="email" name="email" required="" type="email"/></label>
 <label>Phone<input autocomplete="tel" name="phone" type="tel"/></label>
@@ -62,6 +62,7 @@
 </label>
 <label>Project city<input name="city"/></label>
 <label>Tell us about the project<textarea name="message" required="" rows="6"></textarea></label>
+<fieldset class="photo-upload-group"><legend>Project photos (optional)</legend><p class="form-note">Upload up to three photos of the existing space, plans, damage, or inspiration. Keep the combined submission under 8 MB for Netlify Forms.</p><label>Photo 1<input type="file" name="project_photo_1" accept="image/jpeg,image/png,image/webp,image/heic,image/heif"></label><label>Photo 2<input type="file" name="project_photo_2" accept="image/jpeg,image/png,image/webp,image/heic,image/heif"></label><label>Photo 3<input type="file" name="project_photo_3" accept="image/jpeg,image/png,image/webp,image/heic,image/heif"></label><label>Shared photo or plan folder link<input type="url" name="shared_folder_link" placeholder="Google Drive, Dropbox, iCloud, or OneDrive link"></label></fieldset>
 <button class="button primary" type="submit">Send Project Inquiry</button>
 <p class="form-note">Your project details will be delivered securely through the website.</p>
 </form>

@@ -1,0 +1,18 @@
+ADELIE Construction Website Version 7.0 — Secure Client Portal
+
+Added:
+- Supabase-authenticated homeowner portal
+- Row-Level Security database schema and private storage policies
+- Client dashboard with milestones, documents, photos, invoices, change orders, messages and warranty area
+- Secure admin dashboard for projects, client invitations, document/photo uploads and project updates
+- Netlify Function for invitation-only user creation without exposing the Supabase service-role key
+- Vista001 sample project for Agustin Vargas, dated July 17-August 1, 2026
+- Uploaded ADELIE change-order and invoice/receipt images included as sample project documents
+- Client Portal link across the main website navigation
+- Netlify-compatible photo uploads on consultation and Project Rescue lead forms
+
+Setup required before portal use:
+- Run supabase/portal-schema.sql
+- Create the admin Auth account and add its UUID to portal_admins
+- Add SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY to Netlify environment variables
+See PORTAL-SETUP.txt.

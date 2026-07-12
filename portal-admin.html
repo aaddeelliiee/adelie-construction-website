@@ -94,12 +94,14 @@
 </div>
 <div class="portal-card span-4">
 <p class="portal-kicker">Customer access</p>
-<h2>Invite Customer</h2>
-<p class="portal-muted">Send secure access to the selected project.</p>
+<h2>Create Customer Login</h2>
+<p class="portal-muted">Choose a username and temporary password for the selected project.</p>
 <form id="invite-form" class="portal-form">
-<label>Email<input type="email" id="invite-email" required>
+<label>Username<input type="text" id="invite-username" minlength="3" maxlength="32" pattern="[A-Za-z0-9._-]+" autocomplete="off" required placeholder="smith-family">
 </label>
-<button class="portal-btn primary" type="submit">Send Invitation</button>
+<label>Temporary password<input type="password" id="invite-password" minlength="10" autocomplete="new-password" required>
+</label>
+<button class="portal-btn primary" type="submit">Create Customer Login</button>
 </form>
 <details class="simple-details">
 <summary>Create another project</summary>

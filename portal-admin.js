@@ -123,8 +123,9 @@ await loadProjects()};
 
 $('invite-form').onsubmit=async e=>{e.preventDefault();
 const {data:{session}}=await sb.auth.getSession();
-const r=await fetch('/.netlify/functions/invite-client',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token},body:JSON.stringify({email:$('invite-email').value.trim(),projectId,redirectTo:location.origin+'/portal-login.html'})});
+const r=await fetch('/.netlify/functions/invite-client',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token},body:JSON.stringify({username:$('invite-username').value.trim(),password:$('invite-password').value,projectId})});
 const out=await r.json();
+if(r.ok)e.target.reset();
 show(out.message||out.error,r.ok?'success':'error')};
 
 $('schedule-form').onsubmit=async e=>{e.preventDefault();

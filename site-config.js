@@ -253,13 +253,28 @@ window.ADELIE_CONFIG = {
         white-space: nowrap;
       }
 
+      /* Match the Project Planner feature-tab treatment. */
+      .main-nav .academy-top-link,
+      .main-nav .planner-top-link {
+        font-weight: 700;
+        border-radius: 8px;
+        transition: background-color .2s ease, color .2s ease, transform .2s ease;
+      }
+
+      .main-nav .academy-top-link:hover,
+      .main-nav .academy-top-link:focus,
+      .main-nav .planner-top-link:hover,
+      .main-nav .planner-top-link:focus {
+        transform: translateY(-1px);
+      }
+
       .academy-top-link.active {
         color: #202020;
-        box-shadow: inset 0 -3px 0 #f5bf21;
       }
 
       @media (max-width: 980px) {
-        .main-nav .academy-top-link {
+        .main-nav .academy-top-link,
+        .main-nav .planner-top-link {
           display: block;
           width: 100%;
           padding: .9rem 1rem;
@@ -267,6 +282,7 @@ window.ADELIE_CONFIG = {
           border-radius: 8px;
           background: #fff8df;
           font-weight: 700;
+          text-align: center;
         }
       }
     `;
@@ -290,7 +306,7 @@ window.ADELIE_CONFIG = {
       const link = document.createElement("a");
       link.href = "academy.html";
       link.textContent = "Remodel Academy";
-      link.className = "top-link academy-top-link";
+      link.className = "top-link planner-top-link academy-top-link";
       link.dataset.adelieAcademyLink = "true";
 
       const currentPage =

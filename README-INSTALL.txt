@@ -1,12 +1,11 @@
-ADELIE v6.11.3 — REMODEL ACADEMY MENU
+ADELIE v6.11.4 — MATCHED FEATURE NAVIGATION
 
 WHAT CHANGED
-- Adds Remodel Academy as a main navigation option.
-- Places it immediately before Project Planner.
-- Highlights the menu option on Academy and homeowner-guide pages.
-- Makes it prominent and easy to tap in the mobile menu.
-- Avoids duplicate Academy links.
-- Preserves the current Ask ADELIE lead-capture fixes.
+- Remodel Academy now uses the same feature-tab styling as Project Planner.
+- Both features are presented as matching highlighted navigation items.
+- Desktop and mobile treatments are consistent.
+- The Academy active state remains visible on Academy and guide pages.
+- Existing Ask ADELIE lead-capture fixes remain intact.
 
 FILES TO REPLACE
 - site-config.js
@@ -18,7 +17,7 @@ INSTALL
 3. Select Repository > Show in Explorer.
 4. Copy both files into the repository root.
 5. Choose Replace files in the destination.
-6. Commit: Promote Remodel Academy to primary navigation
+6. Commit: Match Academy and Project Planner navigation
 7. Click Push origin.
 8. Wait for Netlify to publish.
-9. Test the desktop and mobile menus in an Incognito window.
+9. Test desktop and mobile menus in an Incognito window.

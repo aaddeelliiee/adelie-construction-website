@@ -1,0 +1,10 @@
+ADELIE Construction Website Version 6.0
+
+Added:
+- ADELIE Remodeling Academy with structured learning paths
+- Contractor-style branded PDF workbooks and homeowner project binder
+- Expanded download center and homepage education section
+- RAG-friendly llms.txt and knowledge-base.json
+- Improved sitewide navigation to Academy and Downloads
+- Enhanced Project Advisor behavior, recommendations and lead preparation
+- Updated sitemap and structured content

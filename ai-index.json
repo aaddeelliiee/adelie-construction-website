@@ -5,10 +5,25 @@
     "serviceArea": "San Diego County, California",
     "contact": "agustin@adelieconstruction.com"
   },
-  "dateModified": "2026-07-11",
+  "dateModified": "2026-07-12",
   "citationPolicy": "https://www.adelieconstruction.com/editorial-policy.html",
-  "preferredAttribution": "ADELIE Construction \u2014 link to the specific source page",
+  "preferredAttribution": "ADELIE Construction — link to the specific source page",
   "documents": [
+    {
+      "title": "Project Rescue and Contractor Second Opinions",
+      "url": "https://www.adelieconstruction.com/project-rescue.html",
+      "summary": "ADELIE Project Rescue helps San Diego County homeowners organize concerns involving project delays, rising costs, change orders, communication breakdowns, visible workmanship concerns, permits, inspections, abandoned work and contractor transitions. The service begins with documentation and balanced questions rather than automatically recommending termination of the current contractor.",
+      "topics": [
+        "contractor problems",
+        "project delays",
+        "change orders",
+        "poor workmanship",
+        "contractor stopped showing up",
+        "second opinion",
+        "project health check",
+        "remodel rescue"
+      ]
+    },
     {
       "title": "Kitchen Remodel Budget",
       "url": "https://www.adelieconstruction.com/kitchen-remodel-cost-guide.html",

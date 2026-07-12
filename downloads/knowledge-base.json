@@ -1,0 +1,247 @@
+{
+  "organization": {
+    "name": "ADELIE Construction",
+    "service_area": "San Diego County, California",
+    "phone": "1-877-ADELIEC",
+    "website": "https://www.adelieconstruction.com/",
+    "positioning": "Residential remodeling with transparent scope, assumptions, allowances, changes and project coordination."
+  },
+  "services": [
+    "Kitchen remodeling",
+    "Bathroom remodeling",
+    "Whole-home remodeling",
+    "ADU construction",
+    "Home additions",
+    "Cabinet installation",
+    "Flooring installation",
+    "Tile and stone",
+    "Painting",
+    "Plumbing coordination",
+    "Electrical coordination",
+    "Pools and outdoor living"
+  ],
+  "core_answers": [
+    {
+      "question": "What should homeowners prepare before requesting a proposal?",
+      "answer": "Define the rooms and work included, prioritize must-have outcomes, establish a planning budget, gather plans or property information, and identify undecided selections and assumptions."
+    },
+    {
+      "question": "What makes contractor estimates comparable?",
+      "answer": "The estimates should address the same scope, allowances, exclusions, permit responsibilities, supervision, schedule assumptions, cleanup, change-order process and payment milestones."
+    },
+    {
+      "question": "Why is contingency important?",
+      "answer": "Contingency provides a reserve for concealed conditions, owner changes and other project-specific risks that may not be known before demolition."
+    },
+    {
+      "question": "How should selections be prioritized?",
+      "answer": "Select products that affect framing, rough plumbing, electrical, cabinetry and tile layout first. Decorative items that do not affect concealed work can often be finalized later."
+    }
+  ],
+  "resources": [
+    {
+      "title": "ADELIE Remodeling Academy",
+      "url": "https://www.adelieconstruction.com/academy.html"
+    },
+    {
+      "title": "Free Download Center",
+      "url": "https://www.adelieconstruction.com/downloads.html"
+    },
+    {
+      "title": "Remodel Budget Planner",
+      "url": "https://www.adelieconstruction.com/remodel-budget-planner.html"
+    },
+    {
+      "title": "Remodeling FAQ",
+      "url": "https://www.adelieconstruction.com/remodeling-faq.html"
+    },
+    {
+      "title": "Interactive Remodel Project Planner",
+      "url": "https://www.adelieconstruction.com/interactive-project-planner.html",
+      "description": "A room-by-room planning tool that organizes property details, project goals, preliminary measurements, selections, budget priorities, timeline and logistics, then exports an ADELIE Project Binder PDF."
+    }
+  ],
+  "disclaimer": "General educational information only. Project-specific pricing, permits, code, engineering and schedules must be verified for the property and scope.",
+  "date_modified": "2026-07-11",
+  "editorial_policy": "https://www.adelieconstruction.com/editorial-policy.html",
+  "preferred_attribution": "ADELIE Construction with a link to the specific source page",
+  "source_documents": [
+    {
+      "title": "Kitchen Remodel Budget",
+      "url": "https://www.adelieconstruction.com/kitchen-remodel-cost-guide.html",
+      "summary": "A realistic kitchen remodel budget should separate construction labor, cabinets, countertops, appliances, plumbing, electrical, flooring, permits, design costs and contingency. The total cannot be estimated reliably until the layout, finish level, structural changes and owner-supplied items are defined.",
+      "date_modified": "2026-07-11"
+    },
+    {
+      "title": "Bathroom Remodel Budget",
+      "url": "https://www.adelieconstruction.com/bathroom-remodel-cost-guide.html",
+      "summary": "Bathroom cost is driven by room size, plumbing movement, waterproofing, tile coverage, fixture quality, ventilation, electrical upgrades and concealed damage. A useful planning budget includes both selected finishes and a reserve for conditions discovered after demolition.",
+      "date_modified": "2026-07-11"
+    },
+    {
+      "title": "Whole-Home Remodeling",
+      "url": "https://www.adelieconstruction.com/whole-home-remodel-guide.html",
+      "summary": "A whole-home remodel works best with one master scope, coordinated plans, a decision schedule and a phasing strategy. Structural, plumbing, electrical, HVAC and finish work must be sequenced together to reduce rework and schedule conflicts.",
+      "date_modified": "2026-07-11"
+    },
+    {
+      "title": "Remodel Planning",
+      "url": "https://www.adelieconstruction.com/remodeling-planning-guide.html",
+      "summary": "Plan in this order: define goals, document existing conditions, establish a budget range, determine whether design or engineering is needed, select a contractor, confirm permits, finalize long-lead selections and prepare the home for construction.",
+      "date_modified": "2026-07-11"
+    },
+    {
+      "title": "Choosing a Contractor",
+      "url": "https://www.adelieconstruction.com/choosing-a-contractor-guide.html",
+      "summary": "Compare contractors by verified licensing, insurance, scope clarity, exclusions, allowances, supervision, schedule assumptions, communication and change-order procedures. The lowest price is not necessarily the lowest-risk proposal.",
+      "date_modified": "2026-07-11"
+    },
+    {
+      "title": "San Diego Permit Planning",
+      "url": "https://www.adelieconstruction.com/san-diego-remodel-permit-guide.html",
+      "summary": "Permit requirements depend on the property, jurisdiction and exact scope. Structural changes, additions and many electrical, plumbing or mechanical alterations commonly require permits and inspections. Verify requirements with the applicable building department before work begins.",
+      "date_modified": "2026-07-11"
+    },
+    {
+      "title": "Kitchen Planning",
+      "url": "https://www.adelieconstruction.com/kitchen-planning-guide.html",
+      "summary": "Finalize the kitchen layout and appliance specifications before cabinets, electrical and plumbing are released. Storage, work zones, clearances, lighting and ventilation should be resolved before decorative finish selections.",
+      "date_modified": "2026-07-11"
+    },
+    {
+      "title": "Bathroom Planning",
+      "url": "https://www.adelieconstruction.com/bathroom-planning-guide.html",
+      "summary": "Resolve fixture locations, shower dimensions, waterproofing, ventilation, lighting, storage and accessibility before selecting tile patterns and decorative finishes. Early decisions protect both the schedule and the finished result.",
+      "date_modified": "2026-07-11"
+    },
+    {
+      "title": "Quartz vs. Granite",
+      "url": "https://www.adelieconstruction.com/quartz-vs-granite-guide.html",
+      "summary": "Quartz offers consistent appearance and low routine maintenance, while granite provides natural variation and strong heat resistance. The right choice depends on appearance, maintenance expectations, edge details, seam locations, heat exposure and budget.",
+      "date_modified": "2026-07-11"
+    },
+    {
+      "title": "Remodel Timeline",
+      "url": "https://www.adelieconstruction.com/remodel-timeline-guide.html",
+      "summary": "A remodel timeline includes design, permits, ordering, site preparation, construction, inspections and closeout. Delays most often come from incomplete selections, permit review, long-lead materials, concealed conditions and owner-requested changes.",
+      "date_modified": "2026-07-11"
+    },
+    {
+      "title": "Comparing Estimates",
+      "url": "https://www.adelieconstruction.com/contractor-estimate-comparison-guide.html",
+      "summary": "Compare proposals line by line for demolition, protection, disposal, labor, materials, allowances, exclusions, permits, supervision, cleanup, payment terms and change-order rules. Prices are only comparable when the underlying scope is comparable.",
+      "date_modified": "2026-07-11"
+    },
+    {
+      "title": "Change Orders",
+      "url": "https://www.adelieconstruction.com/change-orders-guide.html",
+      "summary": "A change order should identify why the change is needed, the added or removed work, cost impact, schedule impact and authorization. Whenever practical, it should be approved before the changed work proceeds.",
+      "date_modified": "2026-07-11"
+    },
+    {
+      "title": "Living Through Construction",
+      "url": "https://www.adelieconstruction.com/living-through-remodel-guide.html",
+      "summary": "Prepare for dust, noise, limited access, utility interruptions, pets, deliveries and temporary cooking or bathing arrangements. A written access and communication plan reduces day-to-day friction during construction.",
+      "date_modified": "2026-07-11"
+    },
+    {
+      "title": "Material Selections",
+      "url": "https://www.adelieconstruction.com/material-selection-guide.html",
+      "summary": "Track selections by approval deadline, lead time, model number, supplier, order status and delivery date. Products affecting framing, rough plumbing, electrical or cabinetry must be selected before decorative items.",
+      "date_modified": "2026-07-11"
+    },
+    {
+      "title": "Remodeling Questions",
+      "url": "https://www.adelieconstruction.com/remodeling-faq.html",
+      "summary": "Successful remodels depend on a defined scope, realistic budget, timely selections, verified permit requirements, clear change-order procedures and regular communication. Property-specific answers require a site review and review of the proposed work.",
+      "date_modified": "2026-07-11"
+    }
+  ],
+  "academy": {
+    "name": "ADELIE Remodeling Academy",
+    "articleCount": 126,
+    "index": "https://www.adelieconstruction.com/academy-index.json",
+    "categories": [
+      {
+        "name": "Kitchen Remodeling",
+        "slug": "kitchen-remodeling",
+        "articleCount": 16
+      },
+      {
+        "name": "Bathroom Remodeling",
+        "slug": "bathroom-remodeling",
+        "articleCount": 10
+      },
+      {
+        "name": "Whole-Home Remodeling",
+        "slug": "whole-home-remodeling",
+        "articleCount": 10
+      },
+      {
+        "name": "ADUs & Home Additions",
+        "slug": "adu-and-additions",
+        "articleCount": 10
+      },
+      {
+        "name": "Planning & Budgeting",
+        "slug": "planning-and-budgeting",
+        "articleCount": 10
+      },
+      {
+        "name": "Contractors & Contracts",
+        "slug": "contractors-and-contracts",
+        "articleCount": 10
+      },
+      {
+        "name": "Permits & Inspections",
+        "slug": "permits-and-inspections",
+        "articleCount": 10
+      },
+      {
+        "name": "Materials & Finishes",
+        "slug": "materials-and-finishes",
+        "articleCount": 10
+      },
+      {
+        "name": "Construction Process",
+        "slug": "construction-process",
+        "articleCount": 10
+      },
+      {
+        "name": "Outdoor Living",
+        "slug": "outdoor-living",
+        "articleCount": 10
+      },
+      {
+        "name": "Maintenance & Closeout",
+        "slug": "maintenance-and-closeout",
+        "articleCount": 10
+      },
+      {
+        "name": "San Diego Planning Considerations",
+        "slug": "local-san-diego-planning",
+        "articleCount": 10
+      }
+    ]
+  },
+  "project_advisor": {
+    "url": "https://www.adelieconstruction.com/project-advisor.html",
+    "purpose": "Guided preliminary remodeling profile",
+    "captures": [
+      "project type",
+      "city",
+      "year built",
+      "stories",
+      "foundation",
+      "occupancy",
+      "goals",
+      "layout changes",
+      "budget",
+      "timeline",
+      "planning stage",
+      "priorities",
+      "constraints"
+    ],
+    "limitations": "Educational planning tool; not a quote, inspection, design, engineering opinion or permit determination."
+  }
+}

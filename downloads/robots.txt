@@ -1,0 +1,38 @@
+# ADELIE Construction crawler policy
+# Public educational and service pages may be crawled, indexed, summarized and cited with attribution.
+
+User-agent: *
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://www.adelieconstruction.com/sitemap.xml
+
+# Structured public content indexes
+# https://www.adelieconstruction.com/academy-index.json
+# https://www.adelieconstruction.com/knowledge-base.json

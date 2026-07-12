@@ -1,14 +1,15 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Interactive Remodel Project Planner | ADELIE Construction</title>
-  <meta name="description" content="Build a room-by-room remodeling plan, save your progress, send your project information to ADELIE, and export a complete project binder.">
-  <link rel="canonical" href="https://www.adelieconstruction.com/interactive-project-planner.html">
-  <link rel="icon" href="assets/favicon-512.png" type="image/png">
-  <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="interactive-project-planner.css">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Interactive Remodel Project Planner | ADELIE Construction</title>
+<meta content="Build a room-by-room remodeling plan, save your progress, send your project information to ADELIE, and export a complete project binder." name="description"/>
+<link href="https://www.adelieconstruction.com/interactive-project-planner.html" rel="canonical"/>
+<link href="assets/favicon-512.png" rel="icon" type="image/png"/>
+<link href="styles.css" rel="stylesheet"/>
+<link href="interactive-project-planner.css" rel="stylesheet"/>
 <style>
   .planner-choice-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.75rem;margin:1.25rem 0 1.5rem}
   .planner-choice-button{display:flex;align-items:center;justify-content:center;min-height:64px;padding:.85rem;border:2px solid #e3e3e3;border-radius:12px;background:#fff;color:#202020;font:inherit;font-weight:700;cursor:pointer;text-align:center}
@@ -68,7 +69,6 @@
     .room-checkboxes label{min-height:42px}
   }
 </style>
-
 <style>
   .blueprint-summary-grid{
     display:grid;
@@ -266,513 +266,455 @@
     }
   }
 </style>
-
 </head>
 <body>
-  <a class="skip-link" href="#main-content">Skip to main content</a>
-
-  <header class="site-header">
-    <div class="container nav-wrap">
-      <a class="brand" href="index.html" aria-label="ADELIE Construction home">
-        <img src="assets/adelie-logo.png" alt="ADELIE Construction logo">
-      </a>
-      <button class="menu-toggle" type="button" aria-controls="main-nav" aria-expanded="false">Menu</button>
-      <nav class="main-nav" id="main-nav" aria-label="Primary navigation">
-        <a class="top-link" href="about.html">About</a>
-        <a class="top-link" href="services.html">Services</a>
-        <a class="top-link" href="projects.html">Projects</a>
-        <a class="top-link" href="academy.html">Academy</a>
-        <a class="top-link planner-top-link active" href="interactive-project-planner.html" aria-current="page">Project Planner</a>
-        <a class="top-link" href="areas.html">Service Areas</a>
-        <a class="header-phone" href="tel:+18772335432">1-877-ADELIEC</a>
-        <a class="nav-cta" href="contact.html">Request a Consultation</a>
-      </nav>
-    </div>
-  </header>
-
-  <main id="main-content">
-    <section class="planner-hero">
-      <div class="container planner-hero-grid">
-        <div>
-          <p class="eyebrow">ADELIE Interactive Project Planner</p>
-          <h1>Build your remodel room by room.</h1>
-          <p>Save your contact details, organize every room, document priorities, budget and timeline, then send the completed binder to ADELIE.</p>
-          <div class="planner-hero-actions">
-            <a class="button primary" href="#planner-app">Start Planning</a>
-            <a class="button secondary" href="academy.html">Browse Remodel Academy</a>
-          </div>
-        </div>
-        <aside class="planner-hero-card">
-          <span class="v6-badge">What You Will Create</span>
-          <h2>Your complete project binder</h2>
-          <ul>
-            <li>Contact and property information</li>
-            <li>Room-by-room project scope</li>
-            <li>Measurements and existing conditions</li>
-            <li>Finish and fixture selections</li>
-            <li>Budget priorities and timeline</li>
-            <li>Questions for your contractor</li>
-          </ul>
-        </aside>
-      </div>
-    </section>
-
-    <section class="section" id="planner-app">
-      <div class="container planner-shell">
-        <aside class="planner-sidebar">
-          <div class="planner-progress-card">
-            <p class="eyebrow dark">Project Binder</p>
-            <h2 id="planner-project-title">Untitled Remodel</h2>
-            <p id="planner-save-status">Saved locally on this device.</p>
-            <div class="planner-progress"><span id="planner-progress-bar"></span></div>
-            <small id="planner-progress-label">0% complete</small>
-          </div>
-          <nav class="planner-steps" aria-label="Planner sections">
-            <button class="active" data-section="overview" type="button">1. Project overview</button>
-            <button data-section="rooms" type="button">2. Rooms and spaces</button>
-            <button data-section="budget" type="button">3. Budget and priorities</button>
-            <button data-section="timeline" type="button">4. Timeline and logistics</button>
-            <button data-section="review" type="button">5. Review and send</button>
-          </nav>
-          <button class="button secondary planner-reset" type="button">Start a New Binder</button>
-        </aside>
-
-        <div class="planner-workspace">
-          <section class="planner-panel active" data-panel="overview">
-            <p class="eyebrow dark">Project Overview</p>
-            <h2>Start with your contact and property information.</h2>
-
-            <div class="planner-form-grid">
-              <label>Project name
-                <input name="project_name" placeholder="Example: Vargas Kitchen and Main Floor Remodel">
-              </label>
-
-              <label>Project type
+<a class="skip-link" href="#main-content">Skip to main content</a>
+<header class="site-header">
+<div class="container nav-wrap">
+<a aria-label="ADELIE Construction home" class="brand" href="index.html">
+<img alt="ADELIE Construction logo" src="assets/adelie-logo.png"/>
+</a>
+<button aria-controls="main-nav" aria-expanded="false" class="menu-toggle" type="button">Menu</button>
+<nav aria-label="Primary navigation" class="main-nav" id="main-nav">
+<a class="top-link" href="about.html">About</a>
+<a class="top-link" href="services.html">Services</a>
+<a class="top-link" href="projects.html">Projects</a>
+<a class="top-link" href="academy.html">Academy</a>
+<a class="top-link project-rescue-top-link" href="project-rescue.html">Project Rescue</a><a aria-current="page" class="top-link planner-top-link active" href="interactive-project-planner.html">Project Planner</a>
+<a class="top-link" href="areas.html">Service Areas</a>
+<a class="header-phone" href="tel:+18772335432">1-877-ADELIEC</a>
+<a class="nav-cta" href="contact.html">Request a Consultation</a>
+</nav>
+</div>
+</header>
+<main id="main-content">
+<section class="planner-hero">
+<div class="container planner-hero-grid">
+<div>
+<p class="eyebrow">ADELIE Interactive Project Planner</p>
+<h1>Build your remodel room by room.</h1>
+<p>Save your contact details, organize every room, document priorities, budget and timeline, then send the completed binder to ADELIE.</p>
+<div class="planner-hero-actions">
+<a class="button primary" href="#planner-app">Start Planning</a>
+<a class="button secondary" href="academy.html">Browse Remodel Academy</a>
+</div>
+</div>
+<aside class="planner-hero-card">
+<span class="v6-badge">What You Will Create</span>
+<h2>Your complete project binder</h2>
+<ul>
+<li>Contact and property information</li>
+<li>Room-by-room project scope</li>
+<li>Measurements and existing conditions</li>
+<li>Finish and fixture selections</li>
+<li>Budget priorities and timeline</li>
+<li>Questions for your contractor</li>
+</ul>
+</aside>
+</div>
+</section>
+<section class="section" id="planner-app">
+<div class="container planner-shell">
+<aside class="planner-sidebar">
+<div class="planner-progress-card">
+<p class="eyebrow dark">Project Binder</p>
+<h2 id="planner-project-title">Untitled Remodel</h2>
+<p id="planner-save-status">Saved locally on this device.</p>
+<div class="planner-progress"><span id="planner-progress-bar"></span></div>
+<small id="planner-progress-label">0% complete</small>
+</div>
+<nav aria-label="Planner sections" class="planner-steps">
+<button class="active" data-section="overview" type="button">1. Project overview</button>
+<button data-section="rooms" type="button">2. Rooms and spaces</button>
+<button data-section="budget" type="button">3. Budget and priorities</button>
+<button data-section="timeline" type="button">4. Timeline and logistics</button>
+<button data-section="review" type="button">5. Review and send</button>
+</nav>
+<button class="button secondary planner-reset" type="button">Start a New Binder</button>
+</aside>
+<div class="planner-workspace">
+<section class="planner-panel active" data-panel="overview">
+<p class="eyebrow dark">Project Overview</p>
+<h2>Start with your contact and property information.</h2>
+<div class="planner-form-grid">
+<label>Project name
+                <input name="project_name" placeholder="Example: Vargas Kitchen and Main Floor Remodel"/>
+</label>
+<label>Project type
                 <select name="project_type">
-                  <option value="">Choose one</option>
-                  <option>Kitchen remodel</option>
-                  <option>Bathroom remodel</option>
-                  <option>Whole-home remodel</option>
-                  <option>ADU</option>
-                  <option>Home addition</option>
-                  <option>Outdoor living</option>
-                  <option>Multiple areas</option>
-                </select>
-              </label>
-
-              <label>Full name
-                <input name="name" autocomplete="name" required>
-              </label>
-
-              <label>Phone
-                <input name="phone" type="tel" autocomplete="tel" required>
-              </label>
-
-              <label>Email
-                <input name="email" type="email" autocomplete="email" required>
-              </label>
-
-              <label>Approximate age of home
+<option value="">Choose one</option>
+<option>Kitchen remodel</option>
+<option>Bathroom remodel</option>
+<option>Whole-home remodel</option>
+<option>ADU</option>
+<option>Home addition</option>
+<option>Outdoor living</option>
+<option>Multiple areas</option>
+</select>
+</label>
+<label>Full name
+                <input autocomplete="name" name="name" required=""/>
+</label>
+<label>Phone
+                <input autocomplete="tel" name="phone" required="" type="tel"/>
+</label>
+<label>Email
+                <input autocomplete="email" name="email" required="" type="email"/>
+</label>
+<label>Approximate age of home
                 <select name="year_built">
-                  <option value="">Choose one</option>
-                  <option>Built before 1940</option>
-                  <option>Built 1940-1959</option>
-                  <option>Built 1960-1979</option>
-                  <option>Built 1980-1999</option>
-                  <option>Built 2000-2014</option>
-                  <option>Built 2015 or newer</option>
-                  <option>Not sure</option>
-                </select>
-              </label>
-
-              <label class="full">Property address
-                <input name="property_address" autocomplete="street-address" required>
-              </label>
-
-              <label>Stories
+<option value="">Choose one</option>
+<option>Built before 1940</option>
+<option>Built 1940-1959</option>
+<option>Built 1960-1979</option>
+<option>Built 1980-1999</option>
+<option>Built 2000-2014</option>
+<option>Built 2015 or newer</option>
+<option>Not sure</option>
+</select>
+</label>
+<label class="full">Property address
+                <input autocomplete="street-address" name="property_address" required=""/>
+</label>
+<label>Stories
                 <select name="stories">
-                  <option value="">Choose one</option>
-                  <option>Single story</option>
-                  <option>Two story</option>
-                  <option>Three or more stories</option>
-                  <option>Condo / townhouse</option>
-                </select>
-              </label>
-
-              <label>Foundation
+<option value="">Choose one</option>
+<option>Single story</option>
+<option>Two story</option>
+<option>Three or more stories</option>
+<option>Condo / townhouse</option>
+</select>
+</label>
+<label>Foundation
                 <select name="foundation">
-                  <option value="">Choose one</option>
-                  <option>Slab on grade</option>
-                  <option>Raised foundation / crawlspace</option>
-                  <option>Basement</option>
-                  <option>Unknown</option>
-                </select>
-              </label>
-
-              <label>Primary project goal
+<option value="">Choose one</option>
+<option>Slab on grade</option>
+<option>Raised foundation / crawlspace</option>
+<option>Basement</option>
+<option>Unknown</option>
+</select>
+</label>
+<label>Primary project goal
                 <select name="primary_goal">
-                  <option value="">Choose one</option>
-                  <option>Improve layout and function</option>
-                  <option>Update the appearance</option>
-                  <option>Add storage</option>
-                  <option>Create more living space</option>
-                  <option>Improve accessibility</option>
-                  <option>Repair damage or outdated systems</option>
-                  <option>Prepare for resale</option>
-                  <option>Multiple goals</option>
-                </select>
-              </label>
-              <label>Finish level
+<option value="">Choose one</option>
+<option>Improve layout and function</option>
+<option>Update the appearance</option>
+<option>Add storage</option>
+<option>Create more living space</option>
+<option>Improve accessibility</option>
+<option>Repair damage or outdated systems</option>
+<option>Prepare for resale</option>
+<option>Multiple goals</option>
+</select>
+</label>
+<label>Finish level
                 <select name="finish_level">
-                  <option value="">Choose one</option>
-                  <option>Practical / value focused</option>
-                  <option>Mid-range</option>
-                  <option>Premium</option>
-                  <option>Luxury / custom</option>
-                  <option>Not sure</option>
-                </select>
-              </label>
-
-              <label>Decision-making status
+<option value="">Choose one</option>
+<option>Practical / value focused</option>
+<option>Mid-range</option>
+<option>Premium</option>
+<option>Luxury / custom</option>
+<option>Not sure</option>
+</select>
+</label>
+<label>Decision-making status
                 <select name="decision_status">
-                  <option value="">Choose one</option>
-                  <option>Planning by myself</option>
-                  <option>Planning with spouse or family</option>
-                  <option>Working with a designer</option>
-                  <option>Working with an architect</option>
-                  <option>All decision-makers are ready</option>
-                </select>
-              </label>
-
-              <label>How finalized is your vision?
+<option value="">Choose one</option>
+<option>Planning by myself</option>
+<option>Planning with spouse or family</option>
+<option>Working with a designer</option>
+<option>Working with an architect</option>
+<option>All decision-makers are ready</option>
+</select>
+</label>
+<label>How finalized is your vision?
                 <select name="design_readiness">
-                  <option value="">Choose one</option>
-                  <option>Just exploring ideas</option>
-                  <option>I know the general direction</option>
-                  <option>I have inspiration photos</option>
-                  <option>I have selections or plans</option>
-                  <option>I am ready for pricing</option>
-                </select>
-              </label>
-              <label class="full">Additional goals or details <span class="optional-note">(optional)</span>
-                <textarea name="overall_goals" rows="3" placeholder="Only add details that were not covered above."></textarea>
-              </label>
-
-              <label class="full planner-consent">
-                <input name="contact_consent" type="checkbox" required>
+<option value="">Choose one</option>
+<option>Just exploring ideas</option>
+<option>I know the general direction</option>
+<option>I have inspiration photos</option>
+<option>I have selections or plans</option>
+<option>I am ready for pricing</option>
+</select>
+</label>
+<label class="full">Additional goals or details <span class="optional-note">(optional)</span>
+<textarea name="overall_goals" placeholder="Only add details that were not covered above." rows="3"></textarea>
+</label>
+<label class="full planner-consent">
+<input name="contact_consent" required="" type="checkbox"/>
                 I agree that ADELIE Construction may contact me about this project.
               </label>
-
-              <div class="full planner-capture-note" id="planner-capture-note" role="status" aria-live="polite">
+<div aria-live="polite" class="full planner-capture-note" id="planner-capture-note" role="status">
                 Your binder is saved locally. Your contact details are sent after you continue.
               </div>
-            </div>
-
-            <div class="planner-nav-actions">
-              <button class="button primary" id="continue-to-rooms" type="button">Continue to Rooms</button>
-            </div>
-          </section>
-
-          <section class="planner-panel" data-panel="rooms">
-            <div>
-              <p class="eyebrow dark">Rooms and Spaces</p>
-              <h2>Which areas are included?</h2>
-              <p>Tap a room below to add it instantly. You can add as many areas as needed.</p>
-            </div>
-
-            <div class="planner-add-panel">
-              <h3>Quick add a room or space</h3>
-              <p>Select the next area you want to plan.</p>
-              <div class="planner-choice-grid" id="room-type-choices">
-                <button class="planner-choice-button" data-add-room-type="Kitchen" type="button">Kitchen</button>
-                <button class="planner-choice-button" data-add-room-type="Primary bathroom" type="button">Primary Bath</button>
-                <button class="planner-choice-button" data-add-room-type="Guest bathroom" type="button">Guest Bath</button>
-                <button class="planner-choice-button" data-add-room-type="Living room" type="button">Living Room</button>
-                <button class="planner-choice-button" data-add-room-type="Bedroom" type="button">Bedroom</button>
-                <button class="planner-choice-button" data-add-room-type="Laundry room" type="button">Laundry</button>
-                <button class="planner-choice-button" data-add-room-type="Home addition" type="button">Addition</button>
-                <button class="planner-choice-button" data-add-room-type="Exterior / outdoor" type="button">Outdoor</button>
-              </div>
-              <button class="button secondary" id="add-custom-room" type="button">Add a Different Space</button>
-            </div>
-
-            <div class="room-list" id="room-list"></div>
-
-            <div class="planner-empty" id="room-empty">
-              <h3>No rooms added yet</h3>
-              <p>Choose one of the room buttons above to begin.</p>
-            </div>
-
-            <div class="planner-add-another" id="add-another-wrap" hidden>
-              <button class="button primary" id="add-another-room" type="button">+ Add Another Room</button>
-            </div>
-
-            <div class="planner-nav-actions">
-              <button class="button secondary" data-back="overview" type="button">Back</button>
-              <button class="button primary" data-next="budget" type="button">Continue to Budget</button>
-            </div>
-          </section>
-
-          <section class="planner-panel" data-panel="budget">
-            <p class="eyebrow dark">Budget and Priorities</p>
-            <h2>Separate the must-haves from the options.</h2>
-
-            <div class="planner-form-grid">
-              <label>Target construction budget
+</div>
+<div class="planner-nav-actions">
+<button class="button primary" id="continue-to-rooms" type="button">Continue to Rooms</button>
+</div>
+</section>
+<section class="planner-panel" data-panel="rooms">
+<div>
+<p class="eyebrow dark">Rooms and Spaces</p>
+<h2>Which areas are included?</h2>
+<p>Tap a room below to add it instantly. You can add as many areas as needed.</p>
+</div>
+<div class="planner-add-panel">
+<h3>Quick add a room or space</h3>
+<p>Select the next area you want to plan.</p>
+<div class="planner-choice-grid" id="room-type-choices">
+<button class="planner-choice-button" data-add-room-type="Kitchen" type="button">Kitchen</button>
+<button class="planner-choice-button" data-add-room-type="Primary bathroom" type="button">Primary Bath</button>
+<button class="planner-choice-button" data-add-room-type="Guest bathroom" type="button">Guest Bath</button>
+<button class="planner-choice-button" data-add-room-type="Living room" type="button">Living Room</button>
+<button class="planner-choice-button" data-add-room-type="Bedroom" type="button">Bedroom</button>
+<button class="planner-choice-button" data-add-room-type="Laundry room" type="button">Laundry</button>
+<button class="planner-choice-button" data-add-room-type="Home addition" type="button">Addition</button>
+<button class="planner-choice-button" data-add-room-type="Exterior / outdoor" type="button">Outdoor</button>
+</div>
+<button class="button secondary" id="add-custom-room" type="button">Add a Different Space</button>
+</div>
+<div class="room-list" id="room-list"></div>
+<div class="planner-empty" id="room-empty">
+<h3>No rooms added yet</h3>
+<p>Choose one of the room buttons above to begin.</p>
+</div>
+<div class="planner-add-another" hidden="" id="add-another-wrap">
+<button class="button primary" id="add-another-room" type="button">+ Add Another Room</button>
+</div>
+<div class="planner-nav-actions">
+<button class="button secondary" data-back="overview" type="button">Back</button>
+<button class="button primary" data-next="budget" type="button">Continue to Budget</button>
+</div>
+</section>
+<section class="planner-panel" data-panel="budget">
+<p class="eyebrow dark">Budget and Priorities</p>
+<h2>Separate the must-haves from the options.</h2>
+<div class="planner-form-grid">
+<label>Target construction budget
                 <select name="budget_range">
-                  <option value="">Choose one</option>
-                  <option>Under $50,000</option>
-                  <option>$50,000-$100,000</option>
-                  <option>$100,000-$200,000</option>
-                  <option>$200,000-$350,000</option>
-                  <option>$350,000-$500,000</option>
-                  <option>$500,000+</option>
-                  <option>Not established</option>
-                </select>
-              </label>
-
-              <label>Contingency target
+<option value="">Choose one</option>
+<option>Under $50,000</option>
+<option>$50,000-$100,000</option>
+<option>$100,000-$200,000</option>
+<option>$200,000-$350,000</option>
+<option>$350,000-$500,000</option>
+<option>$500,000+</option>
+<option>Not established</option>
+</select>
+</label>
+<label>Contingency target
                 <select name="contingency">
-                  <option value="">Choose one</option>
-                  <option>5%</option>
-                  <option>10%</option>
-                  <option>15%</option>
-                  <option>20%+</option>
-                  <option>Not established</option>
-                </select>
-              </label>
-
-              <label>Budget flexibility
+<option value="">Choose one</option>
+<option>5%</option>
+<option>10%</option>
+<option>15%</option>
+<option>20%+</option>
+<option>Not established</option>
+</select>
+</label>
+<label>Budget flexibility
                 <select name="budget_flexibility">
-                  <option value="">Choose one</option>
-                  <option>Firm maximum budget</option>
-                  <option>Some flexibility for important upgrades</option>
-                  <option>Scope matters more than exact budget</option>
-                  <option>Budget has not been established</option>
-                </select>
-              </label>
-
-              <label>Preferred approach
+<option value="">Choose one</option>
+<option>Firm maximum budget</option>
+<option>Some flexibility for important upgrades</option>
+<option>Scope matters more than exact budget</option>
+<option>Budget has not been established</option>
+</select>
+</label>
+<label>Preferred approach
                 <select name="project_approach">
-                  <option value="">Choose one</option>
-                  <option>Complete everything at once</option>
-                  <option>Phase the project if needed</option>
-                  <option>Prioritize essentials first</option>
-                  <option>Not sure yet</option>
-                </select>
-              </label>
-
-              <label class="full">Highest priority
+<option value="">Choose one</option>
+<option>Complete everything at once</option>
+<option>Phase the project if needed</option>
+<option>Prioritize essentials first</option>
+<option>Not sure yet</option>
+</select>
+</label>
+<label class="full">Highest priority
                 <select name="must_haves">
-                  <option value="">Choose one</option>
-                  <option>Quality and long-term durability</option>
-                  <option>Stay within budget</option>
-                  <option>Finish as quickly as practical</option>
-                  <option>Improve layout and function</option>
-                  <option>Premium finishes</option>
-                  <option>Accessibility and ease of use</option>
-                  <option>Multiple priorities</option>
-                </select>
-              </label>
-
-              <label class="full">Optional upgrades or owner-supplied products <span class="optional-note">(optional)</span>
-                <textarea name="nice_to_haves" rows="3" placeholder="List only items that need explanation."></textarea>
-              </label>
-            </div>
-
-            <div class="planner-nav-actions">
-              <button class="button secondary" data-back="rooms" type="button">Back</button>
-              <button class="button primary" data-next="timeline" type="button">Continue to Timeline</button>
-            </div>
-          </section>
-
-          <section class="planner-panel" data-panel="timeline">
-            <p class="eyebrow dark">Timeline and Logistics</p>
-            <h2>Plan around real household and site constraints.</h2>
-
-            <div class="planner-form-grid">
-              <label>Desired construction start
+<option value="">Choose one</option>
+<option>Quality and long-term durability</option>
+<option>Stay within budget</option>
+<option>Finish as quickly as practical</option>
+<option>Improve layout and function</option>
+<option>Premium finishes</option>
+<option>Accessibility and ease of use</option>
+<option>Multiple priorities</option>
+</select>
+</label>
+<label class="full">Optional upgrades or owner-supplied products <span class="optional-note">(optional)</span>
+<textarea name="nice_to_haves" placeholder="List only items that need explanation." rows="3"></textarea>
+</label>
+</div>
+<div class="planner-nav-actions">
+<button class="button secondary" data-back="rooms" type="button">Back</button>
+<button class="button primary" data-next="timeline" type="button">Continue to Timeline</button>
+</div>
+</section>
+<section class="planner-panel" data-panel="timeline">
+<p class="eyebrow dark">Timeline and Logistics</p>
+<h2>Plan around real household and site constraints.</h2>
+<div class="planner-form-grid">
+<label>Desired construction start
                 <select name="desired_start">
-                  <option value="">Choose one</option>
-                  <option>As soon as practical</option>
-                  <option>1-3 months</option>
-                  <option>3-6 months</option>
-                  <option>6-12 months</option>
-                  <option>More than 12 months</option>
-                </select>
-              </label>
-
-              <label>Target completion date
-                <input name="target_completion" type="date">
-              </label>
-
-              <label>Will the home remain occupied?
+<option value="">Choose one</option>
+<option>As soon as practical</option>
+<option>1-3 months</option>
+<option>3-6 months</option>
+<option>6-12 months</option>
+<option>More than 12 months</option>
+</select>
+</label>
+<label>Target completion date
+                <input name="target_completion" type="date"/>
+</label>
+<label>Will the home remain occupied?
                 <select name="occupied">
-                  <option value="">Choose one</option>
-                  <option>Yes, full time</option>
-                  <option>Part time</option>
-                  <option>No, home will be vacant</option>
-                  <option>Undecided</option>
-                </select>
-              </label>
-
-              <label>Plans and permits
+<option value="">Choose one</option>
+<option>Yes, full time</option>
+<option>Part time</option>
+<option>No, home will be vacant</option>
+<option>Undecided</option>
+</select>
+</label>
+<label>Plans and permits
                 <select name="plans_status">
-                  <option value="">Choose one</option>
-                  <option>No plans yet</option>
-                  <option>Concept drawings started</option>
-                  <option>Architectural plans in progress</option>
-                  <option>Engineering in progress</option>
-                  <option>Plans ready for permit</option>
-                  <option>Permit submitted</option>
-                  <option>Permit approved</option>
-                </select>
-              </label>
-
-              <label>Home access
+<option value="">Choose one</option>
+<option>No plans yet</option>
+<option>Concept drawings started</option>
+<option>Architectural plans in progress</option>
+<option>Engineering in progress</option>
+<option>Plans ready for permit</option>
+<option>Permit submitted</option>
+<option>Permit approved</option>
+</select>
+</label>
+<label>Home access
                 <select name="access_status">
-                  <option value="">Choose one</option>
-                  <option>Easy driveway and street access</option>
-                  <option>Limited parking or narrow access</option>
-                  <option>Gated community</option>
-                  <option>Condo or HOA access rules</option>
-                  <option>Not sure</option>
-                </select>
-              </label>
-
-              <label>Household considerations
+<option value="">Choose one</option>
+<option>Easy driveway and street access</option>
+<option>Limited parking or narrow access</option>
+<option>Gated community</option>
+<option>Condo or HOA access rules</option>
+<option>Not sure</option>
+</select>
+</label>
+<label>Household considerations
                 <select name="household_status">
-                  <option value="">Choose one</option>
-                  <option>No major constraints</option>
-                  <option>Children in the home</option>
-                  <option>Pets in the home</option>
-                  <option>Work from home</option>
-                  <option>Children, pets, or work-from-home needs</option>
-                </select>
-              </label>
-
-              <label class="full">Other constraints or questions <span class="optional-note">(optional)</span>
-                <textarea name="constraints" rows="3" placeholder="Add only details not covered by the menus."></textarea>
-              </label>
-            </div>
-
-            
-            <div class="readiness-card">
-              <h3>Your preliminary project timeline</h3>
-              <p class="planner-help-text">This adjusts automatically based on your answers. It is a planning reference, not a guaranteed schedule.</p>
-              <div class="stage-timeline" id="stage-timeline"></div>
-            </div>
-
-            <div class="planner-nav-actions">
-              <button class="button secondary" data-back="budget" type="button">Back</button>
-              <button class="button primary" data-next="review" type="button">Review Project Binder</button>
-            </div>
-          </section>
-
-          <section class="planner-panel" data-panel="review">
-            <div id="print-binder-cover" hidden>
-              <div class="professional-binder-header">
-                <img src="assets/adelie-logo.png" alt="ADELIE Construction" style="max-width:220px">
-                <h1>ADELIE PROJECT BINDER</h1>
-                <p id="print-project-name"></p>
-                <p id="print-property-address"></p>
-                <p id="print-prepared-date"></p>
-              </div>
-            </div>
-            <p class="eyebrow dark">Review and Send</p>
-            <h2>Your ADELIE Project Binder</h2>
-            <p>Review your complete project information below.</p>
-
-            
-            <div class="readiness-card">
-              <h3>Project Readiness Score</h3>
-              <div class="readiness-bar"><span id="readiness-bar"></span></div>
-              <strong id="readiness-score">0%</strong>
-              <p id="readiness-message">Complete the planner to improve your readiness score.</p>
-              <div class="lead-score-grid" id="lead-score-grid"></div>
-            </div>
-
-            <div class="estimate-card">
-              <span>Preliminary planning range</span>
-              <strong id="estimated-range">Complete the room details</strong>
-              <small id="estimate-confidence">Confidence: Low</small>
-              <div class="estimate-breakdown" id="estimate-breakdown"></div>
-              <p class="planner-help-text" style="color:#ddd">This is not a quote. Existing conditions, design, permits, engineering, selections, labor availability, and site access can materially change cost.</p>
-            </div>
-
-            <div class="advisor-summary">
-              <h3>ADELIE Project Summary</h3>
-              <p id="generated-project-summary"></p>
-            </div>
-
-            <div class="binder-review" id="binder-review"></div>
-
-            <div class="binder-export-actions">
-              <button class="button primary" id="send-binder-lead" type="button">Send Complete Binder to ADELIE</button>
-              <button class="button secondary" id="print-binder" type="button">Export Professional Binder</button>
-              <a class="button secondary" href="contact.html">Open Consultation Form</a>
-            </div>
-
-            <p class="binder-export-status" id="binder-export-status" role="status" aria-live="polite"></p>
-
-            <div class="planner-nav-actions">
-              <button class="button secondary" data-back="timeline" type="button">Back and Edit</button>
-            </div>
-          </section>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <!-- Netlify detects these forms at deploy time. -->
-  <form name="interactive-project-planner-start" method="POST" data-netlify="true" netlify-honeypot="bot-field" hidden>
-    <input type="hidden" name="form-name" value="interactive-project-planner-start">
-    <input name="bot-field">
-    <input name="name">
-    <input name="phone">
-    <input name="email">
-    <input name="property_address">
-    <input name="project_type">
-    <input name="project_name">
-    <input name="lead_stage">
-    <input name="contact_consent">
-    <input name="page_url">
-    <input name="started_at">
-  </form>
-
-  <form name="interactive-project-planner-complete" method="POST" data-netlify="true" netlify-honeypot="bot-field" hidden>
-    <input type="hidden" name="form-name" value="interactive-project-planner-complete">
-    <input name="bot-field">
-    <input name="name">
-    <input name="phone">
-    <input name="email">
-    <input name="property_address">
-    <input name="project_name">
-    <input name="project_type">
-    <input name="budget_range">
-    <input name="desired_start">
-    <input name="room_count">
-    <input name="room_names">
-    <textarea name="project_summary"></textarea>
-    <textarea name="binder_json"></textarea>
-    <input name="contact_consent">
-    <input name="lead_stage">
-    <input name="submitted_at">
-    <input name="readiness_score">
-    <input name="lead_quality_score">
-    <input name="estimated_cost_range">
-    <textarea name="generated_summary"></textarea>
-    <input name="uploaded_file_names">
-  </form>
-
-  <footer class="site-footer">
-    <div class="container footer-bottom">
-      <span>© <span id="year"></span> ADELIE Construction</span>
-      <a href="contact.html">Request a Consultation</a>
-    </div>
-  </footer>
-
-  <script src="script.js"></script>
-  <script src="interactive-project-planner.js?v=6.11"></script>
+<option value="">Choose one</option>
+<option>No major constraints</option>
+<option>Children in the home</option>
+<option>Pets in the home</option>
+<option>Work from home</option>
+<option>Children, pets, or work-from-home needs</option>
+</select>
+</label>
+<label class="full">Other constraints or questions <span class="optional-note">(optional)</span>
+<textarea name="constraints" placeholder="Add only details not covered by the menus." rows="3"></textarea>
+</label>
+</div>
+<div class="readiness-card">
+<h3>Your preliminary project timeline</h3>
+<p class="planner-help-text">This adjusts automatically based on your answers. It is a planning reference, not a guaranteed schedule.</p>
+<div class="stage-timeline" id="stage-timeline"></div>
+</div>
+<div class="planner-nav-actions">
+<button class="button secondary" data-back="budget" type="button">Back</button>
+<button class="button primary" data-next="review" type="button">Review Project Binder</button>
+</div>
+</section>
+<section class="planner-panel" data-panel="review">
+<div hidden="" id="print-binder-cover">
+<div class="professional-binder-header">
+<img alt="ADELIE Construction" src="assets/adelie-logo.png" style="max-width:220px"/>
+<h1>ADELIE PROJECT BINDER</h1>
+<p id="print-project-name"></p>
+<p id="print-property-address"></p>
+<p id="print-prepared-date"></p>
+</div>
+</div>
+<p class="eyebrow dark">Review and Send</p>
+<h2>Your ADELIE Project Binder</h2>
+<p>Review your complete project information below.</p>
+<div class="readiness-card">
+<h3>Project Readiness Score</h3>
+<div class="readiness-bar"><span id="readiness-bar"></span></div>
+<strong id="readiness-score">0%</strong>
+<p id="readiness-message">Complete the planner to improve your readiness score.</p>
+<div class="lead-score-grid" id="lead-score-grid"></div>
+</div>
+<div class="estimate-card">
+<span>Preliminary planning range</span>
+<strong id="estimated-range">Complete the room details</strong>
+<small id="estimate-confidence">Confidence: Low</small>
+<div class="estimate-breakdown" id="estimate-breakdown"></div>
+<p class="planner-help-text" style="color:#ddd">This is not a quote. Existing conditions, design, permits, engineering, selections, labor availability, and site access can materially change cost.</p>
+</div>
+<div class="advisor-summary">
+<h3>ADELIE Project Summary</h3>
+<p id="generated-project-summary"></p>
+</div>
+<div class="binder-review" id="binder-review"></div>
+<div class="binder-export-actions">
+<button class="button primary" id="send-binder-lead" type="button">Send Complete Binder to ADELIE</button>
+<button class="button secondary" id="print-binder" type="button">Export Professional Binder</button>
+<a class="button secondary" href="contact.html">Open Consultation Form</a>
+</div>
+<p aria-live="polite" class="binder-export-status" id="binder-export-status" role="status"></p>
+<div class="planner-nav-actions">
+<button class="button secondary" data-back="timeline" type="button">Back and Edit</button>
+</div>
+</section>
+</div>
+</div>
+</section>
+</main>
+<!-- Netlify detects these forms at deploy time. -->
+<form data-netlify="true" hidden="" method="POST" name="interactive-project-planner-start" netlify-honeypot="bot-field">
+<input name="form-name" type="hidden" value="interactive-project-planner-start"/>
+<input name="bot-field"/>
+<input name="name"/>
+<input name="phone"/>
+<input name="email"/>
+<input name="property_address"/>
+<input name="project_type"/>
+<input name="project_name"/>
+<input name="lead_stage"/>
+<input name="contact_consent"/>
+<input name="page_url"/>
+<input name="started_at"/>
+</form>
+<form data-netlify="true" hidden="" method="POST" name="interactive-project-planner-complete" netlify-honeypot="bot-field">
+<input name="form-name" type="hidden" value="interactive-project-planner-complete"/>
+<input name="bot-field"/>
+<input name="name"/>
+<input name="phone"/>
+<input name="email"/>
+<input name="property_address"/>
+<input name="project_name"/>
+<input name="project_type"/>
+<input name="budget_range"/>
+<input name="desired_start"/>
+<input name="room_count"/>
+<input name="room_names"/>
+<textarea name="project_summary"></textarea>
+<textarea name="binder_json"></textarea>
+<input name="contact_consent"/>
+<input name="lead_stage"/>
+<input name="submitted_at"/>
+<input name="readiness_score"/>
+<input name="lead_quality_score"/>
+<input name="estimated_cost_range"/>
+<textarea name="generated_summary"></textarea>
+<input name="uploaded_file_names"/>
+</form>
+<footer class="site-footer">
+<div class="container footer-bottom">
+<span>© <span id="year"></span> ADELIE Construction</span>
+<a href="contact.html">Request a Consultation</a>
+</div>
+</footer>
+<script src="script.js"></script>
+<script src="interactive-project-planner.js?v=6.11"></script>
 </body>
 </html>

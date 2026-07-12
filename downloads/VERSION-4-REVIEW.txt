@@ -1,0 +1,27 @@
+ADELIE Construction Website Version 4.0
+
+CORE BRAND MESSAGE
+Transparent remodeling from the first conversation to the final walkthrough.
+
+COMPLETED
+- Fixed trust-strip spacing and concatenated words.
+- Rewrote the homepage headline around transparency.
+- Added The ADELIE Difference page.
+- Added the new page to navigation and sitemap.
+- Standardized major button labels and CTA language.
+- Standardized whole-home, homeowner, walkthrough, and San Diego County wording.
+- Improved footer phone and email hierarchy.
+- Added global typography and spacing consistency rules.
+- Preserved service pages, city pages, interactive service map, lead assistant, forms, schema, and uploaded imagery.
+- Performed automated local-link and asset QA.
+
+QA STATUS
+Errors: 0
+Warnings for manual visual review: 0
+
+MANUAL CHECK AFTER DEPLOYMENT
+- Open the homepage on desktop and mobile.
+- Verify the four trust-strip blocks have separate heading and description lines.
+- Test the service-area map.
+- Submit a test AI lead form.
+- Verify Netlify form notification delivery to agustin@adelieconstruction.com.

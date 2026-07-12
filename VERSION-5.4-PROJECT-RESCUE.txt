@@ -1,0 +1,14 @@
+ADELIE Construction VERSION 5.4 — Project Rescue Integration
+Date: July 12, 2026
+
+Changes:
+- Added Project Rescue to standard desktop and mobile navigation across the site.
+- Added a prominent Project Rescue feature immediately below the homepage hero.
+- Rebuilt project-rescue.html with the site-wide header, footer, fonts, tracking and navigation.
+- Retained the Netlify Project Health Check form and thank-you page.
+- Added Project Rescue links to site footers where applicable.
+- Added Project Rescue to sitemap.xml and ai-index.json.
+- Added responsive homepage and navigation styling.
+
+Deployment:
+Upload the contents of this ZIP to the same Netlify site. Netlify should publish index.html from the root of the package.

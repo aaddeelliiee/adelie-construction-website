@@ -1,0 +1,28 @@
+ADELIE AI LEAD ASSISTANT — EMAIL DELIVERY
+
+The website form is named: ai-lead
+Lead destination requested: agustin@adelieconstruction.com
+
+To send every lead to this email:
+1. Deploy this website to Netlify.
+2. Open the Netlify project.
+3. Open Forms and confirm the form named ai-lead appears.
+4. Open Project configuration > Notifications > Emails and webhooks.
+5. Add an Email notification for form submissions.
+6. Select the ai-lead form.
+7. Enter agustin@adelieconstruction.com.
+8. Submit a test lead from the website and confirm delivery.
+
+Netlify Forms stores the full submission in the dashboard, including:
+- Name
+- Email
+- Phone
+- City
+- Project type
+- Budget range
+- Timeline
+- Project details
+- Contact consent
+
+IMPORTANT
+Static browser code cannot securely send email by itself. Netlify's form notification must be enabled once in the dashboard. After that, new leads are automatically emailed to agustin@adelieconstruction.com.

@@ -1,0 +1,7 @@
+ADELIE Construction Website v4.1
+
+- Replaced the external Leaflet map with a self-contained service-area visual.
+- Added crawlable city links for all service areas.
+- Removed external map dependencies that caused the blank page area.
+- Preserved the Ask ADELIE button fix and Netlify redirect fix.
+- Updated page heading to reflect San Diego County coverage.

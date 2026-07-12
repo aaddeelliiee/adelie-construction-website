@@ -1,0 +1,12 @@
+ADELIE Construction — Netlify Forms Setup
+
+1. In Netlify, open Forms and click ENABLE FORM DETECTION.
+2. Upload this ZIP with Netlify Drop. Do not extract it.
+3. After the deploy is Published, return to Forms. Two forms should appear:
+   - project-inquiry
+   - ai-lead
+4. Open each form and add an Email notification using the email address where you want leads delivered.
+5. Submit one test lead from the Contact page and one from Ask ADELIE.
+6. Confirm both appear in Netlify Forms and arrive by email.
+
+Important: Email routing is controlled in the Netlify dashboard, not by an email address embedded in the website code.

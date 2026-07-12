@@ -379,3 +379,17 @@ img{max-width:100%;display:block}a{color:inherit;text-decoration:none}.container
 .answer-summary h2{font-size:1.25rem;margin:0 0 .45rem}.answer-summary p{margin:0;color:#34312b}
 .source-note{font-size:.88rem;color:#666;margin-top:.8rem}.trust-principles article{border-top:4px solid var(--gold)}
 .ai-citation-panel{background:#171819;color:#fff;border-radius:12px;padding:1.5rem}.ai-citation-panel a{color:var(--gold)}
+
+
+/* ADELIE PROJECT RESCUE INTEGRATION v5.4 */
+.project-rescue-top-link{position:relative;font-weight:800!important;color:#1b1b1b!important}
+.project-rescue-top-link::after{content:"HELP NOW";position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-size:8px;letter-spacing:.08em;background:#f5bf21;color:#111;padding:2px 5px;border-radius:999px;white-space:nowrap}
+.project-rescue-home{background:linear-gradient(135deg,#fff 0%,#fff9e8 100%);border-top:1px solid #eadca8;border-bottom:1px solid #eadca8}
+.rescue-home-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(300px,.75fr);gap:52px;align-items:center}
+.rescue-home-copy h2{max-width:760px}.rescue-home-copy .lead-copy{max-width:760px;font-size:1.08rem;line-height:1.75}
+.rescue-home-note{margin-top:18px;font-size:.92rem;color:#5c5542;max-width:680px}
+.rescue-home-panel{background:#171717;color:#fff;border-radius:18px;padding:30px;box-shadow:0 24px 60px rgba(0,0,0,.14)}
+.rescue-home-panel .eyebrow{color:#f5bf21}.rescue-home-issues{display:grid;gap:10px;margin-top:18px}
+.rescue-home-issues a{display:block;color:#fff;text-decoration:none;padding:13px 15px;border:1px solid rgba(255,255,255,.16);border-radius:10px;background:rgba(255,255,255,.04);transition:.2s ease}
+.rescue-home-issues a:hover{border-color:#f5bf21;transform:translateX(3px)}
+@media(max-width:980px){.rescue-home-grid{grid-template-columns:1fr;gap:28px}.project-rescue-top-link::after{display:none}.project-rescue-top-link{color:inherit!important}}

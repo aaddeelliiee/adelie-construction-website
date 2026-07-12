@@ -1,0 +1,14 @@
+ADELIE Construction Website Version 6.1
+
+- Removed review-page development placeholders
+- Added answer-first summaries to cornerstone guides
+- Added Article schema, authorship and update metadata
+- Added editorial and AI citation policy
+- Added llms.txt, llms-full.txt, ai-index.json and enriched knowledge-base.json
+- Explicitly allowed major search and AI crawlers in robots.txt
+- Rebuilt sitemap with last-modified dates
+- Added preferred attribution guidance
+
+AI citation cannot be guaranteed; these changes improve crawlability, clarity, source attribution and retrieval quality.
+
+Quality scan issues: []

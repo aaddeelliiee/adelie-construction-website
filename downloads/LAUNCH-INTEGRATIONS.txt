@@ -1,0 +1,54 @@
+ADELIE Construction Website v2.1 — Integration Setup
+
+PRIMARY CONTACT
+Toll-free primary number: 1-877-ADELIEC
+Local secondary number: (760) 705-0418
+Business email: hello@adelieconstruction.com
+
+GOOGLE ANALYTICS 4
+1. Create a GA4 web data stream for https://adelieconstruction.com.
+2. Copy the Measurement ID, which starts with G-.
+3. Open site-config.js.
+4. Add the ID to googleAnalyticsId.
+5. Redeploy the site.
+
+MICROSOFT CLARITY
+1. Create a project at Microsoft Clarity.
+2. Copy the project ID.
+3. Add it to microsoftClarityId in site-config.js.
+4. Redeploy.
+
+GOOGLE SEARCH CONSOLE
+1. Add adelieconstruction.com as a Domain property.
+2. Verify it through a DNS TXT record in Netlify DNS.
+3. Submit https://adelieconstruction.com/sitemap.xml.
+4. The optional HTML verification value can also be added to googleSiteVerification in site-config.js.
+
+BING WEBMASTER TOOLS
+1. Add the website or import it from Search Console.
+2. Add the verification value to bingSiteVerification if using the meta-tag method.
+3. Submit the sitemap.
+
+GOOGLE REVIEWS
+No reviews were fabricated. To create a live review feed:
+1. Confirm the Google Business Profile.
+2. Obtain the Google Place ID.
+3. Add it to googlePlaceId.
+4. Connect an approved reviews widget/service or a small serverless function.
+
+ADELIE ASSISTANT
+The current on-site assistant is a privacy-safe, rule-based helper trained on the published site information and includes Netlify lead capture.
+A genuinely generative AI assistant requires:
+- an AI API account and key,
+- a secure serverless function (never place API keys in browser code),
+- usage limits and privacy disclosures.
+The widget is structured so this can be added later without redesigning the site.
+
+FINANCING
+The financing page is educational and does not claim ADELIE is a lender or currently offers in-house financing.
+
+CONTACT FORM
+Verify Netlify Forms detects:
+- project-inquiry
+- assistant-lead
+Set email notifications to hello@adelieconstruction.com.

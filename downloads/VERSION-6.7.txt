@@ -1,0 +1,7 @@
+ADELIE Construction Website v6.7
+
+- Promoted Interactive Project Planner to its own primary navigation tab
+- Removed duplicate Project Planner link from the Guides dropdown
+- Added a highlighted planner tab on desktop and mobile
+- Added active state on the planner page
+- Preserved planner lead capture, PDF binder export, Academy, forms, and SEO/RAG files

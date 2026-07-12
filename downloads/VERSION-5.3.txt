@@ -1,0 +1,13 @@
+ADELIE Construction Website Version 5.3
+
+Added:
+- Interactive Remodel Budget Planner
+- Remodeling FAQ hub with structured FAQ data
+- Contractor estimate comparison guide
+- Change orders guide
+- Living through a remodel guide
+- Material selection guide
+- Updated Resource Center and homepage links
+- Updated sitemap, robots.txt and navigation
+
+The budget planner is an educational worksheet and does not provide market pricing or a construction quote.

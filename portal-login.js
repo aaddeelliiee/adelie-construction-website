@@ -1,1 +1,16 @@
-const cfg=window.ADELIE_PORTAL_CONFIG;const sb=supabase.createClient(cfg.supabaseUrl,cfg.supabaseAnonKey);const msg=document.getElementById('login-message');function show(t,type=''){msg.textContent=t;msg.className='notice '+type}async function route(){const {data}=await sb.auth.getSession();if(!data.session)return;const {data:isAdmin}=await sb.rpc('is_portal_admin');location.href=isAdmin?'portal-admin.html':'portal.html'}route();document.getElementById('login-form').addEventListener('submit',async e=>{e.preventDefault();show('Signing in…');const {error}=await sb.auth.signInWithPassword({email:email.value.trim(),password:password.value});if(error)return show(error.message,'error');route()});document.getElementById('magic-link').onclick=async()=>{if(!email.value)return show('Enter your email first.','error');const {error}=await sb.auth.signInWithOtp({email:email.value.trim(),options:{emailRedirectTo:location.origin+'/portal.html'}});show(error?error.message:'Check your email for a secure sign-in link.',error?'error':'success')};document.getElementById('forgot-password').onclick=async()=>{if(!email.value)return show('Enter your email first.','error');const {error}=await sb.auth.resetPasswordForEmail(email.value.trim(),{redirectTo:location.origin+'/portal-login.html'});show(error?error.message:'Password reset instructions were sent.',error?'error':'success')};
+const cfg=window.ADELIE_PORTAL_CONFIG;
+const sb=supabase.createClient(cfg.supabaseUrl,cfg.supabaseAnonKey);
+const msg=document.getElementById('login-message');
+function show(text,type=''){msg.textContent=text;msg.className='notice '+type}
+async function route(){const {data}=await sb.auth.getSession();if(!data.session)return;const {data:isAdmin}=await sb.rpc('is_portal_admin');location.href=isAdmin?'portal-admin.html':'portal.html'}
+route();
+document.getElementById('login-form').addEventListener('submit',async event=>{
+  event.preventDefault();
+  show('Signing in…');
+  const loginId=document.getElementById('login-id').value.trim().toLowerCase();
+  const authEmail=loginId.includes('@')?loginId:`${loginId}@portal.adelieconstruction.com`;
+  const password=document.getElementById('password').value;
+  const {error}=await sb.auth.signInWithPassword({email:authEmail,password});
+  if(error)return show('Username or password is incorrect.','error');
+  route();
+});

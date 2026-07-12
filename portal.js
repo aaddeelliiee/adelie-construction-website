@@ -1,9 +1,10 @@
 const cfg=window.ADELIE_PORTAL_CONFIG,sb=supabase.createClient(cfg.supabaseUrl,cfg.supabaseAnonKey),$=id=>document.getElementById(id);
-let projectId=null;
+let projectId=null,currentUserId=null;
 const safe=s=>String(s??'').replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c])),fmt=d=>d?new Date(d+'T12:00:00').toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'}):'—',empty=t=>`<div class="empty">${t}</div>`;
 
 async function init(){const {data:{session}}=await sb.auth.getSession();
 if(!session)return location.href='portal-login.html';
+currentUserId=session.user.id;
 $('user-email').textContent=session.user.email;
 const {data:isAdmin}=await sb.rpc('is_portal_admin');
 if(isAdmin)return location.href='portal-admin.html';
@@ -33,9 +34,27 @@ return data?.signedUrl}
 async function loadSchedule(){const data=await rows('milestones','target_date',true);
 $('schedule-list').innerHTML=data.length?`<div class="schedule-stack">${data.map(x=>`<article class="schedule-item"><div><strong>${safe(x.title)}</strong><span>${fmt(x.target_date)} · ${safe(x.status)}</span><p>${safe(x.description)}</p></div></article>`).join('')}</div>`:empty('No schedule has been shared yet.')}
 async function loadPhotos(){const data=await rows('project_photos','taken_at',false),items=await Promise.all(data.map(async x=>({...x,url:await signed(x.bucket||'project-photos',x.storage_path)})));
-$('photos-list').innerHTML=items.length?`<div class="photo-grid">${items.map(x=>`<figure>${x.url?`<a href="${x.url}" target="_blank" rel="noopener"><img src="${x.url}" alt="${safe(x.caption||'Project photo')}"></a>`:''}<figcaption>${safe(x.caption||'Progress photo')}</figcaption></figure>`).join('')}</div>`:empty('No photos have been shared yet.')}
+$('photos-list').innerHTML=items.length?`<div class="photo-grid">${items.map(x=>`<figure>${x.url?`<a href="${x.url}" target="_blank" rel="noopener"><img src="${x.url}" alt="${safe(x.caption||'Project photo')}"></a>`:''}<figcaption>${safe(x.caption||'Progress photo')}</figcaption>${x.uploaded_role==='client'&&x.uploaded_by===currentUserId?`<button class="portal-btn danger customer-photo-delete" data-id="${x.id}" data-path="${safe(x.storage_path)}">Delete Photo &amp; Note</button>`:''}</figure>`).join('')}</div>`:empty('No photos have been shared yet.');
+document.querySelectorAll('.customer-photo-delete').forEach(button=>button.onclick=()=>deleteCustomerPhoto(button.dataset.id,button.dataset.path))}
 async function loadDocuments(){const data=await rows('documents'),items=await Promise.all(data.map(async x=>({...x,url:await signed(x.bucket||'project-files',x.storage_path)})));
-$('documents-list').innerHTML=items.length?`<ul class="portal-list">${items.map(x=>`<li><strong>${safe(x.title)}</strong><span class="portal-muted"> · ${safe(x.category)}</span>${x.notes?`<p>${safe(x.notes)}</p>`:''}${x.url?`<a href="${x.url}" target="_blank" rel="noopener">Open document</a>`:'File unavailable'}</li>`).join('')}</ul>`:empty('No documents have been shared yet.')}
+$('documents-list').innerHTML=items.length?`<ul class="portal-list">${items.map(x=>`<li class="managed-row"><div><strong>${safe(x.title)}</strong><span class="portal-muted"> · ${safe(x.category)}</span>${x.notes?`<p>${safe(x.notes)}</p>`:''}${x.url?`<a href="${x.url}" target="_blank" rel="noopener">Open document</a>`:'File unavailable'}</div>${x.uploaded_role==='client'&&x.uploaded_by===currentUserId?`<button class="portal-btn danger customer-document-delete" data-id="${x.id}" data-path="${safe(x.storage_path)}">Delete</button>`:''}</li>`).join('')}</ul>`:empty('No documents have been shared yet.');
+document.querySelectorAll('.customer-document-delete').forEach(button=>button.onclick=()=>deleteCustomerDocument(button.dataset.id,button.dataset.path))}
+async function deleteCustomerPhoto(id,path){
+  if(!confirm('Delete this photo and note? This cannot be undone.'))return;
+  const {error:storageError}=await sb.storage.from('project-photos').remove([path]);
+  if(storageError)return alert(storageError.message);
+  const {error}=await sb.from('project_photos').delete().eq('id',id).eq('uploaded_by',currentUserId);
+  if(error)return alert(error.message);
+  loadPhotos();
+}
+async function deleteCustomerDocument(id,path){
+  if(!confirm('Delete this document and note? This cannot be undone.'))return;
+  const {error:storageError}=await sb.storage.from('project-files').remove([path]);
+  if(storageError)return alert(storageError.message);
+  const {error}=await sb.from('documents').delete().eq('id',id).eq('uploaded_by',currentUserId);
+  if(error)return alert(error.message);
+  loadDocuments();
+}
 async function loadMessages(){const data=await rows('messages');
 $('messages-list').innerHTML=data.length?`<ul class="portal-list">${data.map(x=>`<li class="${String(x.body).startsWith('IMPORTANT:')?'important-message':''}"><strong>${x.sender_role==='admin'?'ADELIE Construction':'You'}</strong><span class="portal-muted"> · ${new Date(x.created_at).toLocaleString()}</span><p>${safe(x.body)}</p></li>`).join('')}</ul>`:empty('No messages yet.')}
 $('message-form').onsubmit=async e=>{e.preventDefault();

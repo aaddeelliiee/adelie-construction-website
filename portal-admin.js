@@ -42,7 +42,7 @@ $('project-progress').value=p.progress_percent||0;
 $('progress-value').textContent=(p.progress_percent||0)+'%';
 $('project-start').value=p.start_date||'';
 $('project-end').value=p.target_completion_date||'';
-await Promise.all([loadSchedule(),loadPhotos(),loadDocuments(),loadMessages()])}
+await Promise.all([loadSchedule(),loadPhotos(),loadDocuments(),loadMessages(),loadCustomerAccounts()])}
 async function rows(table,order='created_at',ascending=false){const {data=[],error}=await sb.from(table).select('*').eq('project_id',projectId).order(order,{ascending});
 if(error){show(error.message,'error');
 return[]}return data}
@@ -121,11 +121,39 @@ e.target.reset();
 show('Project created.');
 await loadProjects()};
 
+async function loadCustomerAccounts(){
+  const {data:{session}}=await sb.auth.getSession();
+  const response=await fetch(`/.netlify/functions/invite-client?projectId=${encodeURIComponent(projectId)}`,{headers:{'Authorization':'Bearer '+session.access_token}});
+  const out=await response.json();
+  if(!response.ok){$('customer-accounts-list').innerHTML=empty(out.error||'Customer accounts could not be loaded.');return}
+  $('customer-accounts-list').innerHTML=out.accounts.length?`<ul class="portal-list">${out.accounts.map(account=>`<li class="managed-row"><div><strong>${safe(account.username)}</strong><br><span class="portal-muted">Password is protected and cannot be viewed.</span></div><button class="portal-btn light customer-account-edit" data-id="${account.id}" data-username="${safe(account.username)}">Manage</button></li>`).join('')}</ul>`:empty('No customer login is linked to this project.');
+  document.querySelectorAll('.customer-account-edit').forEach(button=>button.onclick=()=>editCustomerAccount(button.dataset.id,button.dataset.username));
+}
+function editCustomerAccount(userId,username){
+  $('invite-user-id').value=userId;
+  $('invite-username').value=username;
+  $('invite-password').value='';
+  $('invite-password').required=false;
+  $('invite-password').placeholder='Leave blank to keep current password';
+  $('customer-login-submit').textContent='Save Customer Login';
+  $('customer-login-cancel').classList.remove('hidden');
+  $('invite-username').focus();
+}
+function clearCustomerAccountForm(){
+  $('invite-form').reset();
+  $('invite-user-id').value='';
+  $('invite-password').required=true;
+  $('invite-password').placeholder='';
+  $('customer-login-submit').textContent='Create Customer Login';
+  $('customer-login-cancel').classList.add('hidden');
+}
+$('customer-login-cancel').onclick=clearCustomerAccountForm;
+
 $('invite-form').onsubmit=async e=>{e.preventDefault();
 const {data:{session}}=await sb.auth.getSession();
-const r=await fetch('/.netlify/functions/invite-client',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token},body:JSON.stringify({username:$('invite-username').value.trim(),password:$('invite-password').value,projectId})});
+const r=await fetch('/.netlify/functions/invite-client',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token},body:JSON.stringify({userId:$('invite-user-id').value,username:$('invite-username').value.trim(),password:$('invite-password').value,projectId})});
 const out=await r.json();
-if(r.ok)e.target.reset();
+if(r.ok){clearCustomerAccountForm();loadCustomerAccounts()}
 show(out.message||out.error,r.ok?'success':'error')};
 
 $('schedule-form').onsubmit=async e=>{e.preventDefault();

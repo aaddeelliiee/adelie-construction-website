@@ -1,1 +1,217 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>ADELIE Project Manager</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet"><link rel="stylesheet" href="portal.css"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="portal-config.js"></script></head><body class="portal-body"><div class="portal-shell"><header class="portal-topbar"><a class="portal-brand" href="portal-admin.html"><img src="assets/adelie-logo.png" alt="ADELIE Construction"><strong>Project Manager</strong></a><div class="portal-top-actions"><button id="logout" class="portal-btn light">Sign Out</button></div></header><div class="portal-layout"><nav class="portal-sidebar"><a href="#dashboard" class="active">Overview</a><a href="#project">Project Info</a><a href="#schedule">Weekly Schedule</a><a href="#photos">Photos</a><a href="#documents">Documents</a><a href="#messages">Messages</a></nav><main class="portal-main"><div id="admin-message" class="notice hidden"></div><section id="dashboard" class="portal-grid"><div class="portal-card span-12 dashboard-welcome"><p class="portal-kicker">Overview</p><h1 class="portal-title">Your projects at a glance</h1><p class="portal-muted">Select a project once, then manage everything from the six simple sections below.</p><label class="project-picker">Current project<select id="current-project"></select></label></div><div class="portal-card span-4 stat-card"><span>Active projects</span><strong id="active-count">0</strong></div><div class="portal-card span-4 stat-card"><span>Schedule items</span><strong id="schedule-count">0</strong></div><div class="portal-card span-4 stat-card"><span>Unread priorities</span><strong id="message-count">0</strong></div></section><section id="project" class="portal-grid section-gap"><div class="portal-card span-8"><p class="portal-kicker">Project details</p><h2>Project Information</h2><form id="project-details-form" class="portal-form"><label>Project name<input id="project-name" required></label><label>Address<input id="project-address"></label><div class="two-col"><label>Current phase<input id="project-phase"></label><label>Status<select id="project-status"><option>Active</option><option>On Hold</option><option>Complete</option></select></label></div><label>Overall progress <strong id="progress-value">0%</strong><input id="project-progress" type="range" min="0" max="100" step="1"></label><div class="two-col"><label>Start date<input id="project-start" type="date"></label><label>Target completion<input id="project-end" type="date"></label></div><button class="portal-btn primary" type="submit">Save Project Info</button></form></div><div class="portal-card span-4"><p class="portal-kicker">Customer access</p><h2>Invite Customer</h2><p class="portal-muted">Send secure access to the selected project.</p><form id="invite-form" class="portal-form"><label>Email<input type="email" id="invite-email" required></label><button class="portal-btn primary" type="submit">Send Invitation</button></form><details class="simple-details"><summary>Create another project</summary><form id="new-project-form" class="portal-form form-body"><label>Project name<input id="new-project-name" required></label><label>Address<input id="new-project-address"></label><button class="portal-btn light" type="submit">Create Project</button></form></details></div></section><section id="schedule" class="portal-grid section-gap"><div class="portal-card span-7"><p class="portal-kicker">Customer-visible</p><h2>This Week</h2><div id="schedule-list"></div></div><div class="portal-card span-5"><p class="portal-kicker">Add or update</p><h2>Schedule Item</h2><form id="schedule-form" class="portal-form"><input type="hidden" id="schedule-id"><label>Day / title<input id="schedule-title" required placeholder="Monday — Electrical rough-in"></label><label>Notes<textarea id="schedule-description" placeholder="What the customer should expect"></textarea></label><label>Date<input id="schedule-date" type="date"></label><label>Status<select id="schedule-status"><option>Scheduled</option><option>In Progress</option><option>Complete</option><option>Delayed</option></select></label><div class="button-row"><button class="portal-btn primary" type="submit">Save Schedule</button><button class="portal-btn light" id="schedule-cancel" type="button">Clear</button></div></form></div></section><section id="photos" class="portal-grid section-gap"><div class="portal-card span-8"><p class="portal-kicker">Progress gallery</p><h2>Photos &amp; Notes</h2><div id="photos-list"></div></div><div class="portal-card span-4"><h2>Upload Photo</h2><form id="photo-form" class="portal-form"><label>Photo<input type="file" id="photo-file" accept="image/*" required></label><label>Note<textarea id="photo-caption" required placeholder="Describe what changed or what the customer should notice."></textarea></label><button class="portal-btn primary" type="submit">Upload Photo</button></form></div></section><section id="documents" class="portal-grid section-gap"><div class="portal-card span-8"><p class="portal-kicker">Shared files</p><h2>Documents</h2><div id="documents-list"></div></div><div class="portal-card span-4"><h2>Share Document</h2><form id="document-form" class="portal-form"><label>Title<input id="document-title" required></label><label>Category<select id="document-category"><option>Contract</option><option>Invoice</option><option>Change Order</option><option>Permit</option><option>Warranty</option><option>Other</option></select></label><label>File<input type="file" id="document-file" required></label><button class="portal-btn primary" type="submit">Upload Document</button></form></div></section><section id="messages" class="portal-grid section-gap"><div class="portal-card span-12"><p class="portal-kicker">Important communication</p><h2>Messages</h2><div id="messages-list" class="message-thread"></div><form id="message-form" class="portal-form message-compose"><label>New message<textarea id="message-body" required placeholder="Share an important update or answer a customer question."></textarea></label><label class="checkline"><input id="message-important" type="checkbox" checked> Mark as important</label><button class="portal-btn primary" type="submit">Send Message</button></form></div></section></main></div></div><script src="portal-admin.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>ADELIE Project Manager</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="portal.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+</script>
+<script src="portal-config.js">
+</script>
+</head>
+<body class="portal-body">
+<div class="portal-shell">
+<header class="portal-topbar">
+<a class="portal-brand" href="portal-admin.html">
+<img src="assets/adelie-logo.png" alt="ADELIE Construction">
+<strong>Project Manager</strong>
+</a>
+<div class="portal-top-actions">
+<button id="logout" class="portal-btn light">Sign Out</button>
+</div>
+</header>
+<div class="portal-layout">
+<nav class="portal-sidebar">
+<a href="#dashboard" class="active">Overview</a>
+<a href="#project">Project Info</a>
+<a href="#schedule">Weekly Schedule</a>
+<a href="#photos">Photos</a>
+<a href="#documents">Documents</a>
+<a href="#messages">Messages</a>
+</nav>
+<main class="portal-main">
+<div id="admin-message" class="notice hidden">
+</div>
+<section id="dashboard" class="portal-grid">
+<div class="portal-card span-12 dashboard-welcome">
+<p class="portal-kicker">Overview</p>
+<h1 class="portal-title">Your projects at a glance</h1>
+<p class="portal-muted">Select a project once, then manage everything from the six simple sections below.</p>
+<label class="project-picker">Current project<select id="current-project">
+</select>
+</label>
+</div>
+<div class="portal-card span-4 stat-card">
+<span>Active projects</span>
+<strong id="active-count">0</strong>
+</div>
+<div class="portal-card span-4 stat-card">
+<span>Schedule items</span>
+<strong id="schedule-count">0</strong>
+</div>
+<div class="portal-card span-4 stat-card">
+<span>Unread priorities</span>
+<strong id="message-count">0</strong>
+</div>
+</section>
+<section id="project" class="portal-grid section-gap">
+<div class="portal-card span-8">
+<p class="portal-kicker">Project details</p>
+<h2>Project Information</h2>
+<form id="project-details-form" class="portal-form">
+<label>Project name<input id="project-name" required>
+</label>
+<label>Address<input id="project-address">
+</label>
+<div class="two-col">
+<label>Current phase<input id="project-phase">
+</label>
+<label>Status<select id="project-status">
+<option>Active</option>
+<option>On Hold</option>
+<option>Complete</option>
+<option>Archived</option>
+</select>
+</label>
+</div>
+<label>Overall progress <strong id="progress-value">0%</strong>
+<input id="project-progress" type="range" min="0" max="100" step="1">
+</label>
+<div class="two-col">
+<label>Start date<input id="project-start" type="date">
+</label>
+<label>Target completion<input id="project-end" type="date">
+</label>
+</div>
+<button class="portal-btn primary" type="submit">Save Project Info</button>
+<div class="project-actions"><button class="portal-btn light" id="archive-project" type="button">Archive Project</button><button class="portal-btn danger" id="delete-project" type="button">Delete Project</button></div>
+</form>
+</div>
+<div class="portal-card span-4">
+<p class="portal-kicker">Customer access</p>
+<h2>Invite Customer</h2>
+<p class="portal-muted">Send secure access to the selected project.</p>
+<form id="invite-form" class="portal-form">
+<label>Email<input type="email" id="invite-email" required>
+</label>
+<button class="portal-btn primary" type="submit">Send Invitation</button>
+</form>
+<details class="simple-details">
+<summary>Create another project</summary>
+<form id="new-project-form" class="portal-form form-body">
+<label>Project name<input id="new-project-name" required>
+</label>
+<label>Address<input id="new-project-address">
+</label>
+<button class="portal-btn light" type="submit">Create Project</button>
+</form>
+</details>
+</div>
+</section>
+<section id="schedule" class="portal-grid section-gap">
+<div class="portal-card span-7">
+<p class="portal-kicker">Customer-visible</p>
+<h2>This Week</h2>
+<div id="schedule-list">
+</div>
+</div>
+<div class="portal-card span-5">
+<p class="portal-kicker">Add or update</p>
+<h2>Schedule Item</h2>
+<form id="schedule-form" class="portal-form">
+<input type="hidden" id="schedule-id">
+<label>Day / title<input id="schedule-title" required placeholder="Monday — Electrical rough-in">
+</label>
+<label>Notes<textarea id="schedule-description" placeholder="What the customer should expect">
+</textarea>
+</label>
+<label>Date<input id="schedule-date" type="date">
+</label>
+<label>Status<select id="schedule-status">
+<option>Scheduled</option>
+<option>In Progress</option>
+<option>Complete</option>
+<option>Delayed</option>
+</select>
+</label>
+<div class="button-row">
+<button class="portal-btn primary" type="submit">Save Schedule</button>
+<button class="portal-btn light" id="schedule-cancel" type="button">Clear</button>
+</div>
+</form>
+</div>
+</section>
+<section id="photos" class="portal-grid section-gap">
+<div class="portal-card span-8">
+<p class="portal-kicker">Progress gallery</p>
+<h2>Photos &amp; Notes</h2>
+<div id="photos-list">
+</div>
+</div>
+<div class="portal-card span-4">
+<h2>Upload Photo</h2>
+<form id="photo-form" class="portal-form">
+<label>Photo<input type="file" id="photo-file" accept="image/*" required>
+</label>
+<label>Note<textarea id="photo-caption" required placeholder="Describe what changed or what the customer should notice.">
+</textarea>
+</label>
+<button class="portal-btn primary" type="submit">Upload Photo</button>
+</form>
+</div>
+</section>
+<section id="documents" class="portal-grid section-gap">
+<div class="portal-card span-8">
+<p class="portal-kicker">Shared files</p>
+<h2>Documents</h2>
+<div id="documents-list">
+</div>
+</div>
+<div class="portal-card span-4">
+<h2>Share Document</h2>
+<form id="document-form" class="portal-form">
+<label>Title<input id="document-title" required>
+</label>
+<label>Category<select id="document-category">
+<option>Contract</option>
+<option>Invoice</option>
+<option>Change Order</option>
+<option>Permit</option>
+<option>Warranty</option>
+<option>Other</option>
+</select>
+</label>
+<label>File<input type="file" id="document-file" required>
+</label>
+<button class="portal-btn primary" type="submit">Upload Document</button>
+</form>
+</div>
+</section>
+<section id="messages" class="portal-grid section-gap">
+<div class="portal-card span-12">
+<p class="portal-kicker">Important communication</p>
+<h2>Messages</h2>
+<div id="messages-list" class="message-thread">
+</div>
+<form id="message-form" class="portal-form message-compose">
+<label>New message<textarea id="message-body" required placeholder="Share an important update or answer a customer question.">
+</textarea>
+</label>
+<label class="checkline">
+<input id="message-important" type="checkbox" checked> Mark as important</label>
+<button class="portal-btn primary" type="submit">Send Message</button>
+</form>
+</div>
+</section>
+</main>
+</div>
+</div>
+<script src="portal-admin.js">
+</script>
+</body>
+</html>

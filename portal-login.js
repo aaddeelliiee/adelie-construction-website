@@ -11,6 +11,6 @@ document.getElementById('login-form').addEventListener('submit',async event=>{
   const authEmail=loginId.includes('@')?loginId:`${loginId}@portal.adelieconstruction.com`;
   const password=document.getElementById('password').value;
   const {error}=await sb.auth.signInWithPassword({email:authEmail,password});
-  if(error)return show('Username or password is incorrect.','error');
+  if(error)return show('Username or password is incorrect. Ask ADELIE to confirm the username or assign a new password.','error');
   route();
 });

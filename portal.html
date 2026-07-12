@@ -1,1 +1,121 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>My ADELIE Project</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet"><link rel="stylesheet" href="portal.css"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="portal-config.js"></script></head><body class="portal-body customer-portal"><div class="portal-shell"><header class="portal-topbar"><a class="portal-brand" href="portal.html"><img src="assets/adelie-logo.png" alt="ADELIE Construction"><strong>My Project</strong></a><div class="portal-top-actions"><span id="user-email"></span><button id="logout" class="portal-btn light">Sign Out</button></div></header><div class="portal-layout"><nav class="portal-sidebar"><a href="#overview" class="active">Overview</a><a href="#schedule">Schedule</a><a href="#photos">Photos</a><a href="#documents">Documents</a><a href="#messages">Messages</a></nav><main class="portal-main"><div id="loading" class="portal-card">Loading your project…</div><div id="app" class="hidden"><section id="overview" class="portal-grid"><div class="portal-card span-12 project-hero"><p class="portal-kicker">Your project</p><h1 id="project-name" class="portal-title"></h1><p id="project-address" class="portal-muted"></p><span id="project-status" class="status-pill"></span><div class="progress" style="margin-top:22px"><span id="progress-bar"></span></div><p id="progress-label" class="portal-muted"></p></div><div class="portal-card span-4"><strong>Current phase</strong><div id="current-phase" class="metric"></div></div><div class="portal-card span-4"><strong>Project started</strong><div id="start-date" class="metric date-metric"></div></div><div class="portal-card span-4"><strong>Target completion</strong><div id="completion-date" class="metric date-metric"></div></div></section><section id="schedule" class="portal-grid section-gap"><div class="portal-card span-12"><p class="portal-kicker">This week</p><h2>Weekly Schedule</h2><p class="portal-muted">Your latest plan from the ADELIE team.</p><div id="schedule-list"></div></div></section><section id="photos" class="portal-grid section-gap"><div class="portal-card span-12"><p class="portal-kicker">Progress gallery</p><h2>Photos &amp; Notes</h2><div id="photos-list"></div></div></section><section id="documents" class="portal-grid section-gap"><div class="portal-card span-12"><p class="portal-kicker">Shared files</p><h2>Documents</h2><div id="documents-list"></div></div></section><section id="messages" class="portal-grid section-gap"><div class="portal-card span-12"><p class="portal-kicker">Important communication</p><h2>Messages</h2><div id="messages-list" class="message-thread"></div><form id="message-form" class="portal-form message-compose"><label>Reply to ADELIE<textarea id="message-body" required placeholder="Ask a question or send us a note."></textarea></label><button class="portal-btn primary" type="submit">Send Message</button></form></div></section></div></main></div></div><script src="portal.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>My ADELIE Project</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="portal.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+</script>
+<script src="portal-config.js">
+</script>
+</head>
+<body class="portal-body customer-portal">
+<div class="portal-shell">
+<header class="portal-topbar">
+<a class="portal-brand" href="portal.html">
+<img src="assets/adelie-logo.png" alt="ADELIE Construction">
+<strong>My Project</strong>
+</a>
+<div class="portal-top-actions">
+<span id="user-email">
+</span>
+<button id="logout" class="portal-btn light">Sign Out</button>
+</div>
+</header>
+<div class="portal-layout">
+<nav class="portal-sidebar">
+<a href="#overview" class="active">Overview</a>
+<a href="#schedule">Schedule</a>
+<a href="#photos">Photos</a>
+<a href="#documents">Documents</a>
+<a href="#messages">Messages</a>
+</nav>
+<main class="portal-main">
+<div id="loading" class="portal-card">Loading your project…</div>
+<div id="app" class="hidden">
+<section id="overview" class="portal-grid">
+<div class="portal-card span-12 project-hero">
+<p class="portal-kicker">Your project</p>
+<h1 id="project-name" class="portal-title">
+</h1>
+<p id="project-address" class="portal-muted">
+</p>
+<span id="project-status" class="status-pill">
+</span>
+<div class="progress" style="margin-top:22px">
+<span id="progress-bar">
+</span>
+</div>
+<p id="progress-label" class="portal-muted">
+</p>
+</div>
+<div class="portal-card span-4">
+<strong>Current phase</strong>
+<div id="current-phase" class="metric">
+</div>
+</div>
+<div class="portal-card span-4">
+<strong>Project started</strong>
+<div id="start-date" class="metric date-metric">
+</div>
+</div>
+<div class="portal-card span-4">
+<strong>Target completion</strong>
+<div id="completion-date" class="metric date-metric">
+</div>
+</div>
+</section>
+<section id="schedule" class="portal-grid section-gap">
+<div class="portal-card span-12">
+<p class="portal-kicker">This week</p>
+<h2>Weekly Schedule</h2>
+<p class="portal-muted">Your latest plan from the ADELIE team.</p>
+<div id="schedule-list">
+</div>
+</div>
+</section>
+<section id="photos" class="portal-grid section-gap">
+<div class="portal-card span-12">
+<p class="portal-kicker">Progress gallery</p>
+<h2>Photos &amp; Notes</h2>
+<div id="photos-list">
+</div>
+</div>
+</section>
+<section id="documents" class="portal-grid section-gap">
+<div class="portal-card span-12">
+<p class="portal-kicker">Shared files</p>
+<h2>Documents</h2>
+<div id="documents-list">
+</div>
+</div>
+</section>
+<section id="messages" class="portal-grid section-gap">
+<div class="portal-card span-12">
+<p class="portal-kicker">Important communication</p>
+<h2>Messages</h2>
+<div id="messages-list" class="message-thread">
+</div>
+<form id="message-form" class="portal-form message-compose">
+<label>Reply to ADELIE<textarea id="message-body" required placeholder="Ask a question or send us a note.">
+</textarea>
+</label>
+<button class="portal-btn primary" type="submit">Send Message</button>
+</form>
+</div>
+</section>
+</div>
+</main>
+</div>
+</div>
+<script src="portal.js">
+</script>
+<script src="portal-sync.js">
+</script>
+</body>
+</html>

@@ -18,8 +18,19 @@ if(error)return show(error.message,'error');
 projects=data||[];
 $('active-count').textContent=projects.filter(p=>p.status==='Active').length;
 $('current-project').innerHTML=projects.map(p=>`<option value="${p.id}">${safe(p.name)}</option>`).join('');
-if(!projectId&&projects.length)projectId=projects[0].id;
+if(!projects.some(p=>p.id===projectId))projectId=projects[0]?.id||null;
 if(projectId)$('current-project').value=projectId;
+if(!projectId){
+  $('project-details-form').reset();
+  $('progress-value').textContent='0%';
+  $('schedule-count').textContent='0';
+  $('message-count').textContent='0';
+  $('schedule-list').innerHTML=empty('Create a project to add a schedule.');
+  $('photos-list').innerHTML=empty('Create a project to share photos.');
+  $('documents-list').innerHTML=empty('Create a project to share documents.');
+  $('messages-list').innerHTML=empty('Create a project to send messages.');
+  return;
+}
 await loadProject()}
 async function loadProject(){const p=projects.find(x=>x.id===projectId);
 if(!p)return;

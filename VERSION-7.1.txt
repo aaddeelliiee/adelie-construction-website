@@ -1,0 +1,2 @@
+ADELIE Construction Version 7.1
+Expanded secure portal, one-run RLS migration, operations, permits, inspections, selections, payments, daily logs, tasks, private files, and detailed setup guide.

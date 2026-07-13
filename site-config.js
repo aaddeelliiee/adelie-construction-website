@@ -289,74 +289,25 @@ window.ADELIE_CONFIG = {
     document.head.appendChild(style);
   };
 
-  const addAcademyLink = () => {
+  const cleanAcademyLinks = () => {
     document.querySelectorAll(".main-nav").forEach(nav => {
-      const fileName = value => (value || "")
-        .split(/[?#]/, 1)[0]
-        .replace(/\\/g, "/")
-        .split("/")
-        .filter(Boolean)
-        .pop()
-        ?.toLowerCase() || "";
-
       const academyLinks = [...nav.querySelectorAll("a.top-link")]
-        .filter(link => fileName(link.getAttribute("href")) === "academy.html");
-      const existingTopLink = academyLinks.find(link => link.closest(".flagship.academy"))
+        .filter(link => {
+          const pathname = new URL(link.getAttribute("href") || "", document.baseURI).pathname;
+          return pathname.toLowerCase().endsWith("/academy.html");
+        });
+      const academyLinkToKeep = academyLinks.find(link => link.closest(".flagship.academy"))
         || academyLinks[0];
 
       academyLinks.forEach(link => {
-        if (link !== existingTopLink) link.remove();
+        if (link !== academyLinkToKeep) link.remove();
       });
-
-      if (existingTopLink) {
-        existingTopLink.dataset.adelieAcademyLink = "true";
-        return;
-      }
-
-      if (nav.querySelector('[data-adelie-academy-link="true"]')) return;
-
-      const link = document.createElement("a");
-      link.href = "academy.html";
-      link.textContent = "Remodel Academy";
-      link.className = "top-link planner-top-link academy-top-link";
-      link.dataset.adelieAcademyLink = "true";
-
-      const currentPage =
-        (window.location.pathname.split("/").pop() || "index.html").toLowerCase();
-
-      if (academyPages.has(currentPage)) {
-        link.classList.add("active");
-        link.setAttribute("aria-current", "page");
-      }
-
-      const plannerLink = [...nav.querySelectorAll("a")].find(item => {
-        return fileName(item.getAttribute("href")) === "interactive-project-planner.html";
-      });
-
-      if (plannerLink) {
-        nav.insertBefore(link, plannerLink);
-        return;
-      }
-
-      const areasLink = [...nav.querySelectorAll("a")].find(item => {
-        return fileName(item.getAttribute("href")) === "areas.html";
-      });
-
-      const areasItem = areasLink?.closest(".nav-group") || areasLink;
-      if (areasItem) nav.insertBefore(link, areasItem);
-      else nav.appendChild(link);
     });
   };
 
   const start = () => {
     installStyle();
-    addAcademyLink();
-
-    const observer = new MutationObserver(addAcademyLink);
-    observer.observe(document.documentElement, {
-      childList: true,
-      subtree: true
-    });
+    cleanAcademyLinks();
   };
 
   if (document.readyState === "loading") {

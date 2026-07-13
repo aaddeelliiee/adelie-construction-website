@@ -289,64 +289,25 @@ window.ADELIE_CONFIG = {
     document.head.appendChild(style);
   };
 
-  const addAcademyLink = () => {
+  const cleanAcademyLinks = () => {
     document.querySelectorAll(".main-nav").forEach(nav => {
-      const existingTopLink = [...nav.querySelectorAll("a")].find(link => {
-        const href = (link.getAttribute("href") || "").replace(/^\//, "");
-        return href === "academy.html" && link.classList.contains("top-link");
+      const academyLinks = [...nav.querySelectorAll("a.top-link")]
+        .filter(link => {
+          const pathname = new URL(link.getAttribute("href") || "", document.baseURI).pathname;
+          return pathname.toLowerCase().endsWith("/academy.html");
+        });
+      const academyLinkToKeep = academyLinks.find(link => link.closest(".flagship.academy"))
+        || academyLinks[0];
+
+      academyLinks.forEach(link => {
+        if (link !== academyLinkToKeep) link.remove();
       });
-
-      if (existingTopLink) {
-        existingTopLink.dataset.adelieAcademyLink = "true";
-        return;
-      }
-
-      if (nav.querySelector('[data-adelie-academy-link="true"]')) return;
-
-      const link = document.createElement("a");
-      link.href = "academy.html";
-      link.textContent = "Remodel Academy";
-      link.className = "top-link planner-top-link academy-top-link";
-      link.dataset.adelieAcademyLink = "true";
-
-      const currentPage =
-        (window.location.pathname.split("/").pop() || "index.html").toLowerCase();
-
-      if (academyPages.has(currentPage)) {
-        link.classList.add("active");
-        link.setAttribute("aria-current", "page");
-      }
-
-      const plannerLink = [...nav.querySelectorAll("a")].find(item => {
-        const href = (item.getAttribute("href") || "").replace(/^\//, "");
-        return href === "interactive-project-planner.html";
-      });
-
-      if (plannerLink) {
-        nav.insertBefore(link, plannerLink);
-        return;
-      }
-
-      const areasLink = [...nav.querySelectorAll("a")].find(item => {
-        const href = (item.getAttribute("href") || "").replace(/^\//, "");
-        return href === "areas.html";
-      });
-
-      const areasItem = areasLink?.closest(".nav-group") || areasLink;
-      if (areasItem) nav.insertBefore(link, areasItem);
-      else nav.appendChild(link);
     });
   };
 
   const start = () => {
     installStyle();
-    addAcademyLink();
-
-    const observer = new MutationObserver(addAcademyLink);
-    observer.observe(document.documentElement, {
-      childList: true,
-      subtree: true
-    });
+    cleanAcademyLinks();
   };
 
   if (document.readyState === "loading") {

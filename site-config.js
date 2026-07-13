@@ -291,9 +291,21 @@ window.ADELIE_CONFIG = {
 
   const addAcademyLink = () => {
     document.querySelectorAll(".main-nav").forEach(nav => {
-      const existingTopLink = [...nav.querySelectorAll("a")].find(link => {
-        const href = (link.getAttribute("href") || "").replace(/^\//, "");
-        return href === "academy.html" && link.classList.contains("top-link");
+      const fileName = value => (value || "")
+        .split(/[?#]/, 1)[0]
+        .replace(/\\/g, "/")
+        .split("/")
+        .filter(Boolean)
+        .pop()
+        ?.toLowerCase() || "";
+
+      const academyLinks = [...nav.querySelectorAll("a.top-link")]
+        .filter(link => fileName(link.getAttribute("href")) === "academy.html");
+      const existingTopLink = academyLinks.find(link => link.closest(".flagship.academy"))
+        || academyLinks[0];
+
+      academyLinks.forEach(link => {
+        if (link !== existingTopLink) link.remove();
       });
 
       if (existingTopLink) {
@@ -318,8 +330,7 @@ window.ADELIE_CONFIG = {
       }
 
       const plannerLink = [...nav.querySelectorAll("a")].find(item => {
-        const href = (item.getAttribute("href") || "").replace(/^\//, "");
-        return href === "interactive-project-planner.html";
+        return fileName(item.getAttribute("href")) === "interactive-project-planner.html";
       });
 
       if (plannerLink) {
@@ -328,8 +339,7 @@ window.ADELIE_CONFIG = {
       }
 
       const areasLink = [...nav.querySelectorAll("a")].find(item => {
-        const href = (item.getAttribute("href") || "").replace(/^\//, "");
-        return href === "areas.html";
+        return fileName(item.getAttribute("href")) === "areas.html";
       });
 
       const areasItem = areasLink?.closest(".nav-group") || areasLink;

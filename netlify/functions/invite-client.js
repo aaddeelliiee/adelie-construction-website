@@ -5,7 +5,7 @@ const customerEmail = username => `${username}@${DOMAIN}`;
 const response = (statusCode, body) => ({ statusCode, body: JSON.stringify(body) });
 
 exports.handler = async event => {
-  if (!['GET','POST'].includes(event.httpMethod)) return response(405,{error:'Method not allowed.'});
+  if (!['GET','POST','DELETE'].includes(event.httpMethod)) return response(405,{error:'Method not allowed.'});
   const url=process.env.SUPABASE_URL,serviceKey=process.env.SUPABASE_SERVICE_ROLE_KEY;
   if(!url||!serviceKey)return response(500,{error:'Portal access is not configured on Netlify.'});
   const admin=createClient(url,serviceKey,{auth:{autoRefreshToken:false,persistSession:false,detectSessionInUrl:false}});
@@ -33,6 +33,20 @@ exports.handler = async event => {
 
   let payload;
   try{payload=JSON.parse(event.body||'{}')}catch{return response(400,{error:'Invalid request.'})}
+  if(event.httpMethod==='DELETE'){
+    const userId=String(payload.userId||'');
+    const projectId=String(payload.projectId||'');
+    if(!userId||!projectId)return response(400,{error:'Choose a customer login to delete.'});
+    const {data:membership,error:membershipError}=await admin.from('project_members').select('user_id').eq('project_id',projectId).eq('user_id',userId).eq('role','client').maybeSingle();
+    if(membershipError)return response(400,{error:membershipError.message});
+    if(!membership)return response(403,{error:'That customer is not linked to this project.'});
+    const customer=userList.users.find(user=>user.id===userId);
+    if(!customer)return response(404,{error:'Customer account not found.'});
+    const {error}=await admin.auth.admin.deleteUser(userId);
+    if(error)return response(400,{error:error.message});
+    return response(200,{message:'Customer login deleted.'});
+  }
+
   const username=String(payload.username||'').trim().toLowerCase();
   const password=String(payload.password||'');
   const projectId=String(payload.projectId||'');

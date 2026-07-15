@@ -66,25 +66,31 @@ if(!error){e.target.reset();
 loadMessages()}};
 $('customer-photo-form').onsubmit=async event=>{
   event.preventDefault();
-  const button=event.submitter,file=$('customer-photo-file').files[0],note=$('customer-photo-note').value.trim();
-  button.disabled=true;button.textContent='Uploading…';
+  const form=event.currentTarget,button=form.querySelector('[type="submit"]'),file=$('customer-photo-file').files[0],note=$('customer-photo-note').value.trim();
+  if(form.dataset.uploading==='true'||!file)return;
+  if(!confirm(`Share "${file.name}" with ADELIE?`))return;
+  form.dataset.uploading='true';button.disabled=true;button.textContent='Uploading...';
+  try{
   const {data:{user}}=await sb.auth.getUser();
   const path=`${projectId}/customer/${user.id}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g,'-')}`;
   let {error}=await sb.storage.from('project-photos').upload(path,file);
   if(!error)({error}=await sb.from('project_photos').insert({project_id:projectId,caption:note,bucket:'project-photos',storage_path:path,taken_at:new Date().toISOString(),uploaded_by:user.id,uploaded_role:'client'}));
   if(error){await sb.storage.from('project-photos').remove([path]);alert(error.message)}else{event.target.reset();await loadPhotos();alert('Photo shared with ADELIE.')}
-  button.disabled=false;button.textContent='Share Photo';
+  }finally{form.dataset.uploading='false';button.disabled=false;button.textContent='Share Photo'}
 };
 $('customer-document-form').onsubmit=async event=>{
   event.preventDefault();
-  const button=event.submitter,file=$('customer-document-file').files[0],title=$('customer-document-title').value.trim(),notes=$('customer-document-note').value.trim();
-  button.disabled=true;button.textContent='Uploading…';
+  const form=event.currentTarget,button=form.querySelector('[type="submit"]'),file=$('customer-document-file').files[0],title=$('customer-document-title').value.trim(),notes=$('customer-document-note').value.trim();
+  if(form.dataset.uploading==='true'||!file)return;
+  if(!confirm(`Share "${file.name}" with ADELIE?`))return;
+  form.dataset.uploading='true';button.disabled=true;button.textContent='Uploading...';
+  try{
   const {data:{user}}=await sb.auth.getUser();
   const path=`${projectId}/customer/${user.id}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g,'-')}`;
   let {error}=await sb.storage.from('project-files').upload(path,file);
   if(!error)({error}=await sb.from('documents').insert({project_id:projectId,title,category:'Customer Upload',notes,bucket:'project-files',storage_path:path,file_name:file.name,uploaded_by:user.id,uploaded_role:'client'}));
   if(error){await sb.storage.from('project-files').remove([path]);alert(error.message)}else{event.target.reset();await loadDocuments();alert('Document shared with ADELIE.')}
-  button.disabled=false;button.textContent='Share Document';
+  }finally{form.dataset.uploading='false';button.disabled=false;button.textContent='Share Document'}
 };
 $('logout').onclick=async()=>{await sb.auth.signOut();
 location.href='portal-login.html'};

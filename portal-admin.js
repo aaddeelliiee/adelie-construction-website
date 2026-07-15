@@ -137,8 +137,17 @@ async function loadCustomerAccounts(){
   const response=await fetch(`/.netlify/functions/invite-client?projectId=${encodeURIComponent(projectId)}`,{headers:{'Authorization':'Bearer '+session.access_token}});
   const out=await response.json();
   if(!response.ok){$('customer-accounts-list').innerHTML=empty(out.error||'Customer accounts could not be loaded.');return}
-  $('customer-accounts-list').innerHTML=out.accounts.length?`<ul class="portal-list">${out.accounts.map(account=>`<li class="managed-row"><div><strong>${safe(account.username)}</strong><br><span class="portal-muted">Password is protected and cannot be viewed.</span></div><button class="portal-btn light customer-account-edit" data-id="${account.id}" data-username="${safe(account.username)}">Manage</button></li>`).join('')}</ul>`:empty('No customer login is linked to this project.');
+  $('customer-accounts-list').innerHTML=out.accounts.length?`<ul class="portal-list">${out.accounts.map(account=>`<li class="managed-row"><div><strong>${safe(account.username)}</strong><br><span class="portal-muted">Password is protected and cannot be viewed.</span></div><div class="item-actions"><button class="portal-btn light customer-account-edit" data-id="${account.id}" data-username="${safe(account.username)}">Manage</button><button class="portal-btn danger customer-account-delete" data-id="${account.id}" data-username="${safe(account.username)}">Delete</button></div></li>`).join('')}</ul>`:empty('No customer login is linked to this project.');
   document.querySelectorAll('.customer-account-edit').forEach(button=>button.onclick=()=>editCustomerAccount(button.dataset.id,button.dataset.username));
+  document.querySelectorAll('.customer-account-delete').forEach(button=>button.onclick=()=>deleteCustomerAccount(button.dataset.id,button.dataset.username));
+}
+async function deleteCustomerAccount(userId,username){
+  if(!confirm(`Permanently delete the customer login "${username}"? They will no longer be able to sign in. Project information and uploads will not be deleted.`))return;
+  const {data:{session}}=await sb.auth.getSession();
+  const r=await fetch('/.netlify/functions/invite-client',{method:'DELETE',headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token},body:JSON.stringify({userId,projectId})});
+  const out=await r.json();
+  if(r.ok){if($('invite-user-id').value===userId)clearCustomerAccountForm();await loadCustomerAccounts()}
+  show(out.message||out.error,r.ok?'success':'error');
 }
 function editCustomerAccount(userId,username){
   $('invite-user-id').value=userId;
@@ -177,24 +186,32 @@ loadSchedule()};
 $('schedule-cancel').onclick=clearSchedule;
 
 $('photo-form').onsubmit=async e=>{e.preventDefault();
-const f=$('photo-file').files[0],path=`${projectId}/${Date.now()}-${f.name.replace(/[^a-zA-Z0-9._-]/g,'-')}`;
+const form=e.currentTarget,button=form.querySelector('[type="submit"]'),f=$('photo-file').files[0];
+if(form.dataset.uploading==='true'||!f)return;
+if(!confirm(`Upload "${f.name}" to this project?`))return;
+form.dataset.uploading='true';button.disabled=true;button.textContent='Uploading...';
+const path=`${projectId}/${Date.now()}-${f.name.replace(/[^a-zA-Z0-9._-]/g,'-')}`;
+try{
 let {error}=await sb.storage.from('project-photos').upload(path,f);
-if(error)return show(error.message,'error');
+if(error){show(error.message,'error');return}
 ({error}=await sb.from('project_photos').insert({project_id:projectId,caption:$('photo-caption').value,bucket:'project-photos',storage_path:path,taken_at:new Date().toISOString()}));
-if(error)return show(error.message,'error');
-e.target.reset();
-show('Photo and note shared.');
-loadPhotos()};
+if(error){await sb.storage.from('project-photos').remove([path]);show(error.message,'error');return}
+form.reset();show('Photo uploaded successfully.');await loadPhotos()
+}finally{form.dataset.uploading='false';button.disabled=false;button.textContent='Upload Photo'}};
 
 $('document-form').onsubmit=async e=>{e.preventDefault();
-const f=$('document-file').files[0],path=`${projectId}/${Date.now()}-${f.name.replace(/[^a-zA-Z0-9._-]/g,'-')}`;
+const form=e.currentTarget,button=form.querySelector('[type="submit"]'),f=$('document-file').files[0];
+if(form.dataset.uploading==='true'||!f)return;
+if(!confirm(`Upload "${f.name}" to this project?`))return;
+form.dataset.uploading='true';button.disabled=true;button.textContent='Uploading...';
+const path=`${projectId}/${Date.now()}-${f.name.replace(/[^a-zA-Z0-9._-]/g,'-')}`;
+try{
 let {error}=await sb.storage.from('project-files').upload(path,f);
-if(error)return show(error.message,'error');
+if(error){show(error.message,'error');return}
 ({error}=await sb.from('documents').insert({project_id:projectId,title:$('document-title').value,category:$('document-category').value,bucket:'project-files',storage_path:path,file_name:f.name}));
-if(error)return show(error.message,'error');
-e.target.reset();
-show('Document shared.');
-loadDocuments()};
+if(error){await sb.storage.from('project-files').remove([path]);show(error.message,'error');return}
+form.reset();show('Document uploaded successfully.');await loadDocuments()
+}finally{form.dataset.uploading='false';button.disabled=false;button.textContent='Upload Document'}};
 
 $('message-form').onsubmit=async e=>{e.preventDefault();
 const {data:{user}}=await sb.auth.getUser();

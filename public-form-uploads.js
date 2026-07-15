@@ -22,7 +22,11 @@ document.addEventListener('DOMContentLoaded',()=>{
         links.push(`${file.name}: ${download.url}`);
       }
       status.textContent='Sending your project details...';
-      const data=new FormData(form);files.forEach(input=>data.delete(input.name));data.append('supabase_upload_links',links.join('\n'));
+      const data=new FormData(form);files.forEach(input=>data.delete(input.name));
+      if(links.length){
+        const messageField=data.has('message')?'message':'help-request',current=String(data.get(messageField)||'');
+        data.set(messageField,`${current}\n\nSecure photo links (available for 7 days):\n${links.join('\n')}`);
+      }
       const response=await fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams(data).toString()});
       if(!response.ok)throw new Error('Your details could not be submitted. Please try again.');
       location.href=form.getAttribute('action')||'/thank-you.html';

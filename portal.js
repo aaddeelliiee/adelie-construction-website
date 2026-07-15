@@ -1,5 +1,5 @@
 const cfg=window.ADELIE_PORTAL_CONFIG,sb=supabase.createClient(cfg.supabaseUrl,cfg.supabaseAnonKey),$=id=>document.getElementById(id);
-let projectId=null,currentUserId=null;
+let projectId=null,projectName='',currentUserId=null;
 const safe=s=>String(s??'').replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c])),fmt=d=>d?new Date(d+'T12:00:00').toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'}):'—',empty=t=>`<div class="empty">${t}</div>`;
 
 async function init(){const {data:{session}}=await sb.auth.getSession();
@@ -15,6 +15,7 @@ $('loading').classList.remove('hidden');
 $('loading').innerHTML=empty('Your account is active, but a project has not been assigned yet. Please contact ADELIE.');
 return}const p=members[0].projects;
 projectId=p.id;
+projectName=p.name||'Customer project';
 $('project-name').textContent=p.name;
 $('project-address').textContent=p.address;
 $('project-status').textContent=p.status;
@@ -31,6 +32,11 @@ return error?[]:data}async function signed(bucket,path){if(!path)return null;
 if(path.startsWith('http')||path.startsWith('assets/'))return path;
 const {data}=await sb.storage.from(bucket).createSignedUrl(path,3600);
 return data?.signedUrl}
+async function notifyCustomerUpload({type,fileName,note,customer}){
+const body=new URLSearchParams({'form-name':'customer-portal-upload',project:projectName,customer:customer||'Customer portal user',upload_type:type,file_name:fileName,note:note||'',uploaded_at:new Date().toLocaleString(),portal_url:new URL('portal-admin.html',location.href).href});
+const response=await fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:body.toString()});
+if(!response.ok)throw new Error('Upload saved, but the email notification could not be sent.');
+}
 async function loadSchedule(){const data=await rows('milestones','target_date',true);
 $('schedule-list').innerHTML=data.length?`<div class="schedule-stack">${data.map(x=>`<article class="schedule-item"><div><strong>${safe(x.title)}</strong><span>${fmt(x.target_date)} · ${safe(x.status)}</span><p>${safe(x.description)}</p></div></article>`).join('')}</div>`:empty('No schedule has been shared yet.')}
 async function loadPhotos(){const data=await rows('project_photos','taken_at',false),items=await Promise.all(data.map(async x=>({...x,url:await signed(x.bucket||'project-photos',x.storage_path)})));
@@ -75,7 +81,7 @@ $('customer-photo-form').onsubmit=async event=>{
   const path=`${projectId}/customer/${user.id}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g,'-')}`;
   let {error}=await sb.storage.from('project-photos').upload(path,file);
   if(!error)({error}=await sb.from('project_photos').insert({project_id:projectId,caption:note,bucket:'project-photos',storage_path:path,taken_at:new Date().toISOString(),uploaded_by:user.id,uploaded_role:'client'}));
-  if(error){await sb.storage.from('project-photos').remove([path]);alert(error.message)}else{event.target.reset();await loadPhotos();alert('Photo shared with ADELIE.')}
+  if(error){await sb.storage.from('project-photos').remove([path]);alert(error.message)}else{event.target.reset();await Promise.all([loadPhotos(),notifyCustomerUpload({type:'Photo',fileName:file.name,note,customer:user.email}).catch(()=>{})]);alert('Photo shared with ADELIE.')}
   }finally{form.dataset.uploading='false';button.disabled=false;button.textContent='Share Photo'}
 };
 $('customer-document-form').onsubmit=async event=>{
@@ -89,7 +95,7 @@ $('customer-document-form').onsubmit=async event=>{
   const path=`${projectId}/customer/${user.id}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g,'-')}`;
   let {error}=await sb.storage.from('project-files').upload(path,file);
   if(!error)({error}=await sb.from('documents').insert({project_id:projectId,title,category:'Customer Upload',notes,bucket:'project-files',storage_path:path,file_name:file.name,uploaded_by:user.id,uploaded_role:'client'}));
-  if(error){await sb.storage.from('project-files').remove([path]);alert(error.message)}else{event.target.reset();await loadDocuments();alert('Document shared with ADELIE.')}
+  if(error){await sb.storage.from('project-files').remove([path]);alert(error.message)}else{event.target.reset();await Promise.all([loadDocuments(),notifyCustomerUpload({type:'Document',fileName:file.name,note:notes,customer:user.email}).catch(()=>{})]);alert('Document shared with ADELIE.')}
   }finally{form.dataset.uploading='false';button.disabled=false;button.textContent='Share Document'}
 };
 $('logout').onclick=async()=>{await sb.auth.signOut();

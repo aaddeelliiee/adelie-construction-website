@@ -26,3 +26,18 @@ Netlify Forms stores the full submission in the dashboard, including:
 
 IMPORTANT
 Static browser code cannot securely send email by itself. Netlify's form notification must be enabled once in the dashboard. After that, new leads are automatically emailed to agustin@adelieconstruction.com.
+
+CUSTOMER PORTAL UPLOAD NOTIFICATIONS
+
+The customer portal submits a notification only after a photo or document is successfully saved in Supabase.
+The notification form is named: customer-portal-upload
+
+To email each upload notification to agustin@adelieconstruction.com:
+1. Open the Netlify project after deploying this update.
+2. Open Forms and confirm customer-portal-upload appears.
+3. Open Project configuration > Notifications > Emails and webhooks.
+4. Add an Email notification for the customer-portal-upload form.
+5. Enter agustin@adelieconstruction.com.
+6. Upload a test file from a customer portal and confirm delivery.
+
+The notification includes the project, customer login, upload type, filename, note, upload time, and an administrator portal link. The private file remains in Supabase and is not attached to the email.

@@ -1,6 +1,18 @@
 [build]
   publish = "."
 
+# Keep the public URL format aligned with the canonical tags and sitemap.
+# Netlify's Pretty URLs processing otherwise exposes both /page and /page.html,
+# and rewrites /page.html/ to the non-canonical extensionless version.
+[build.processing.html]
+  pretty_urls = false
+
+[[redirects]]
+  from = "/index.html"
+  to = "/"
+  status = 301
+  force = true
+
 [[headers]]
   for = "/*"
   [headers.values]

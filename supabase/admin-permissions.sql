@@ -27,9 +27,9 @@ returns boolean language sql stable security definer set search_path=public
 as $$ select exists(select 1 from public.portal_admins where user_id=check_user); $$;
 
 -- Kept for legacy policies: only the protected owner passes unrestricted admin checks.
-create or replace function public.is_portal_admin(check_user uuid default auth.uid())
+create or replace function public.is_portal_admin(uid uuid default auth.uid())
 returns boolean language sql stable security definer set search_path=public
-as $$ select exists(select 1 from public.portal_admins where user_id=check_user and is_owner); $$;
+as $$ select exists(select 1 from public.portal_admins where user_id=uid and is_owner); $$;
 
 create or replace function public.admin_has_permission(required_permission text, check_user uuid default auth.uid())
 returns boolean language sql stable security definer set search_path=public

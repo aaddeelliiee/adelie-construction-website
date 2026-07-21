@@ -17,6 +17,7 @@ body.portal-body{margin:0;font-family:Manrope,Arial,sans-serif;background:var(--
 .portal-sidebar{background:#fff;border-right:1px solid var(--line);padding:22px 14px;position:sticky;top:78px;height:calc(100vh - 78px)}
 .portal-sidebar a{display:block;color:#3b3b3b;text-decoration:none;padding:12px 14px;border-radius:10px;font-weight:700;margin:3px 0}
 .portal-sidebar a:hover,.portal-sidebar a.active{background:var(--gold-soft);color:#111}
+.portal-nav-group{display:block;padding:16px 14px 6px;color:#7a7f87;font-size:.68rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase}.portal-nav-group:first-child{padding-top:4px}.portal-sidebar a.active{box-shadow:inset 3px 0 0 var(--gold)}
 .portal-main{padding:32px;min-width:0;max-width:1440px;width:100%;margin:0 auto}
 .portal-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:18px}
 .portal-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px;box-shadow:0 4px 18px rgba(16,24,40,.04)}
@@ -58,6 +59,7 @@ body.portal-body{margin:0;font-family:Manrope,Arial,sans-serif;background:var(--
 .photo-grid figcaption{padding:8px 2px;color:var(--muted)}
 .empty{padding:28px;text-align:center;color:var(--muted);border:1px dashed #cfd4dc;border-radius:10px}
 .section-gap{margin-top:22px}
+.portal-section-mode .portal-section-panel{animation:portal-section-in .2s ease}.portal-section-mode .portal-section-panel.section-gap{margin-top:0}@keyframes portal-section-in{from{opacity:.35;transform:translateY(6px)}to{opacity:1;transform:none}}
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .checkline{display:flex!important;align-items:center;gap:10px}
 .checkline input{width:auto!important}
@@ -84,6 +86,7 @@ body.portal-body{margin:0;font-family:Manrope,Arial,sans-serif;background:var(--
 @media(max-width:900px){html{scroll-padding-top:145px}
 .portal-layout{grid-template-columns:1fr}
 .portal-sidebar{display:flex;overflow:auto;border-right:0;border-bottom:1px solid var(--line);position:sticky;top:74px;z-index:10;height:auto;padding:9px 10px}
+.portal-nav-group{display:none}
 .portal-sidebar a{white-space:nowrap;padding:10px 13px}
 .portal-main{padding:20px}
 .span-8,.span-7,.span-6,.span-5,.span-4{grid-column:span 12}

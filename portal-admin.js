@@ -17,9 +17,12 @@ async function loadProjects(){const {data,error}=await sb.from('projects').selec
 if(error)return show(error.message,'error');
 projects=data||[];
 $('active-count').textContent=projects.filter(p=>p.status==='Active').length;
-$('current-project').innerHTML=projects.map(p=>`<option value="${p.id}">${safe(p.name)}</option>`).join('');
+const projectOptions=projects.map(p=>`<option value="${p.id}">${safe(p.name)}</option>`).join('');
+$('current-project').innerHTML=projectOptions;
+$('customer-project-select').innerHTML=projectOptions;
 if(!projects.some(p=>p.id===projectId))projectId=projects[0]?.id||null;
-if(projectId)$('current-project').value=projectId;
+if(projectId){$('current-project').value=projectId;$('customer-project-select').value=projectId}
+setProjectSetupAvailability();
 if(!projectId){
   $('project-details-form').reset();
   $('progress-value').textContent='0%';
@@ -36,6 +39,9 @@ if(!projectId){
 await loadProject()}
 async function loadProject(){const p=projects.find(x=>x.id===projectId);
 if(!p)return;
+$('current-project').value=projectId;
+$('customer-project-select').value=projectId;
+$('customer-project-confirmation').innerHTML=`Customer access will be linked to <strong>${safe(p.name)}</strong>${p.address?` at ${safe(p.address)}`:''}.`;
 $('project-name').value=p.name||'';
 $('project-address').value=p.address||'';
 $('project-phase').value=p.current_phase||'';
@@ -45,6 +51,12 @@ $('progress-value').textContent=(p.progress_percent||0)+'%';
 $('project-start').value=p.start_date||'';
 $('project-end').value=p.target_completion_date||'';
 await Promise.all([loadSchedule(),loadPhotos(),loadDocuments(),loadMessages(),loadCustomerAccounts(),loadCustomerUploads(),loadEmployeeApprovals()])}
+function setProjectSetupAvailability(){
+  const hasProject=Boolean(projectId);
+  [...$('invite-form').elements,...$('project-details-form').elements].forEach(control=>control.disabled=!hasProject);
+  $('customer-project-select').disabled=!hasProject;
+  if(!hasProject)$('customer-project-confirmation').textContent='Create a project in Step 1 before creating a customer login.';
+}
 async function rows(table,order='created_at',ascending=false){const {data=[],error}=await sb.from(table).select('*').eq('project_id',projectId).order(order,{ascending});
 if(error){show(error.message,'error');
 return[]}return data}
@@ -112,8 +124,9 @@ async function reviewEmployeePhoto(id,status){
 async function loadMessages(){const data=await rows('messages');
 $('message-count').textContent=data.filter(x=>x.sender_role==='client').length;
 $('messages-list').innerHTML=data.length?`<ul class="portal-list">${data.map(x=>`<li><strong>${x.sender_role==='admin'?'ADELIE':'Customer'}</strong><span class="portal-muted"> · ${new Date(x.created_at).toLocaleString()}</span><p>${safe(x.body)}</p></li>`).join('')}</ul>`:empty('No messages yet.')}
-$('current-project').onchange=async e=>{projectId=e.target.value;
-await loadProject()};
+async function selectProject(id){projectId=id;$('current-project').value=id;$('customer-project-select').value=id;clearCustomerAccountForm();await loadProject()}
+$('current-project').onchange=e=>selectProject(e.target.value);
+$('customer-project-select').onchange=e=>selectProject(e.target.value);
 $('project-progress').oninput=e=>$('progress-value').textContent=e.target.value+'%';
 
 $('project-details-form').onsubmit=async e=>{e.preventDefault();
@@ -145,14 +158,17 @@ if(error)return show(error.message,'error');
 projectId=data.id;
 e.target.reset();
 show('Project created.');
-await loadProjects()};
+await loadProjects();
+$('customer-project-confirmation').scrollIntoView({behavior:'smooth',block:'center'});
+$('invite-username').focus();
+show('Project created and selected. Complete Step 2 to create its customer login.')};
 
 async function loadCustomerAccounts(){
   const {data:{session}}=await sb.auth.getSession();
   const response=await fetch(`/.netlify/functions/invite-client?projectId=${encodeURIComponent(projectId)}`,{headers:{'Authorization':'Bearer '+session.access_token}});
   const out=await response.json();
   if(!response.ok){$('customer-accounts-list').innerHTML=empty(out.error||'Customer accounts could not be loaded.');return}
-  $('customer-accounts-list').innerHTML=out.accounts.length?`<ul class="portal-list">${out.accounts.map(account=>`<li class="managed-row"><div><strong>${safe(account.username)}</strong><br><span class="portal-muted">Password is protected and cannot be viewed.</span></div><div class="item-actions"><button class="portal-btn light customer-account-edit" data-id="${account.id}" data-username="${safe(account.username)}">Manage</button><button class="portal-btn danger customer-account-delete" data-id="${account.id}" data-username="${safe(account.username)}">Delete</button></div></li>`).join('')}</ul>`:empty('No customer login is linked to this project.');
+  $('customer-accounts-list').innerHTML=out.accounts.length?`<p class="portal-muted"><strong>Logins linked to this project</strong></p><ul class="portal-list">${out.accounts.map(account=>`<li class="managed-row"><div><strong>${safe(account.username)}</strong><br><span class="portal-muted">Password is protected and cannot be viewed.</span></div><div class="item-actions"><button class="portal-btn light customer-account-edit" data-id="${account.id}" data-username="${safe(account.username)}">Manage</button><button class="portal-btn danger customer-account-delete" data-id="${account.id}" data-username="${safe(account.username)}">Delete</button></div></li>`).join('')}</ul>`:empty('No customer login is linked to this project yet.');
   document.querySelectorAll('.customer-account-edit').forEach(button=>button.onclick=()=>editCustomerAccount(button.dataset.id,button.dataset.username));
   document.querySelectorAll('.customer-account-delete').forEach(button=>button.onclick=()=>deleteCustomerAccount(button.dataset.id,button.dataset.username));
 }
@@ -170,7 +186,7 @@ function editCustomerAccount(userId,username){
   $('invite-password').value='';
   $('invite-password').required=false;
   $('invite-password').placeholder='Leave blank to keep current password';
-  $('customer-login-submit').textContent='Save Customer Login';
+  $('customer-login-submit').textContent='Save Login for Selected Project';
   $('customer-login-cancel').classList.remove('hidden');
   $('invite-username').focus();
 }
@@ -179,12 +195,13 @@ function clearCustomerAccountForm(){
   $('invite-user-id').value='';
   $('invite-password').required=true;
   $('invite-password').placeholder='';
-  $('customer-login-submit').textContent='Create Customer Login';
+  $('customer-login-submit').textContent='Create Login for Selected Project';
   $('customer-login-cancel').classList.add('hidden');
 }
 $('customer-login-cancel').onclick=clearCustomerAccountForm;
 
 $('invite-form').onsubmit=async e=>{e.preventDefault();
+if(!projectId)return show('Create or select a project before creating a customer login.','error');
 const {data:{session}}=await sb.auth.getSession();
 const r=await fetch('/.netlify/functions/invite-client',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token},body:JSON.stringify({userId:$('invite-user-id').value,username:$('invite-username').value.trim(),password:$('invite-password').value,projectId})});
 const out=await r.json();

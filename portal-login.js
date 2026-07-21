@@ -2,7 +2,7 @@ const cfg=window.ADELIE_PORTAL_CONFIG;
 const sb=supabase.createClient(cfg.supabaseUrl,cfg.supabaseAnonKey);
 const msg=document.getElementById('login-message');
 function show(text,type=''){msg.textContent=text;msg.className='notice '+type}
-async function route(){const {data}=await sb.auth.getSession();if(!data.session)return;const {data:isAdmin}=await sb.rpc('is_portal_admin');if(isAdmin)return location.href='portal-admin.html';const {data:isEmployee}=await sb.rpc('is_employee');location.href=isEmployee?'portal-employee.html':'portal.html'}
+async function route(){const {data}=await sb.auth.getSession();if(!data.session)return;const {data:isAdmin}=await sb.rpc('is_portal_user');if(isAdmin)return location.href='portal-admin.html';const {data:isEmployee}=await sb.rpc('is_employee');location.href=isEmployee?'portal-employee.html':'portal.html'}
 route();
 document.getElementById('login-form').addEventListener('submit',async event=>{
   event.preventDefault();

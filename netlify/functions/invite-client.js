@@ -12,8 +12,8 @@ exports.handler = async event => {
   const token=(event.headers.authorization||'').replace(/^Bearer\s+/i,'');
   const {data:authData,error:authError}=await admin.auth.getUser(token);
   if(authError||!authData?.user)return response(401,{error:'Please sign in again.'});
-  const {data:allowed}=await admin.from('portal_admins').select('user_id').eq('user_id',authData.user.id).maybeSingle();
-  if(!allowed)return response(403,{error:'Administrator access required.'});
+  const {data:allowed}=await admin.from('portal_admins').select('is_owner,permissions').eq('user_id',authData.user.id).maybeSingle();
+  if(!allowed||(allowed.is_owner!==true&&!allowed.permissions?.includes('*')&&!allowed.permissions?.includes('customers')))return response(403,{error:'Customer-account permission required.'});
 
   const {data:userList,error:listError}=await admin.auth.admin.listUsers({page:1,perPage:1000});
   if(listError)return response(400,{error:listError.message});

@@ -27,16 +27,20 @@
 </header>
 <div class="portal-layout">
 <nav class="portal-sidebar">
+<span class="portal-nav-group">Project</span>
 <a href="#dashboard" class="active">Overview</a>
-<a href="#project">Project Info</a>
-<a href="#schedule">Weekly Schedule</a>
-<a href="#photos">Photos</a>
-<a href="#documents">Documents</a>
-<a href="#customer-uploads">Customer Uploads</a>
-<a href="#messages">Messages</a>
-<a href="#employees">Employees</a>
-<a href="#employee-schedule">Employee Schedule</a>
-<a href="#team-chat">Team Chat</a>
+<a href="#project">Project Setup</a>
+<a href="#schedule" data-requires-permission="content">Weekly Schedule</a>
+<a href="#photos" data-requires-permission="content">Photos</a>
+<a href="#documents" data-requires-permission="content">Documents</a>
+<span class="portal-nav-group">People &amp; Communication</span>
+<a href="#customer-uploads" data-requires-permission="content">Customer Uploads</a>
+<a href="#employee-approvals" data-requires-permission="content">Employee Approvals</a>
+<a href="#messages" data-requires-permission="content">Messages</a>
+<a href="#employees" data-requires-permission="employees">Employees</a>
+<a href="#employee-schedule" data-requires-permission="employees">Employee Schedule</a>
+<a href="#team-chat" data-requires-permission="employees">Team Chat</a>
+<a href="#administrators" data-owner-only>Administrator Accounts</a>
 </nav>
 <main class="portal-main">
 <div id="admin-message" class="notice hidden">
@@ -64,9 +68,45 @@
 </div>
 </section>
 <section id="project" class="portal-grid section-gap">
-<div class="portal-card span-8">
-<p class="portal-kicker">Project details</p>
-<h2>Project Information</h2>
+<div class="portal-card span-12 project-setup-intro">
+<p class="portal-kicker">Simple project onboarding</p>
+<h1 class="portal-title">Create a project and connect its customer</h1>
+<p class="portal-muted">Complete Step 1 first. The new project is selected automatically, so the customer login created in Step 2 is linked to the correct project.</p>
+<div class="setup-steps"><span><strong>1</strong>Create project</span><span><strong>2</strong>Create customer login</span><span><strong>3</strong>Manage project</span></div>
+</div>
+<div class="portal-card span-6 setup-card" data-requires-permission="projects">
+<p class="portal-kicker">Step 1</p>
+<h2>Create a New Project</h2>
+<p class="portal-muted">Enter the project name and property address. After creation, it becomes the selected project.</p>
+<form id="new-project-form" class="portal-form">
+<label>Project name<input id="new-project-name" required placeholder="Smith Kitchen Remodel">
+</label>
+<label>Project address<input id="new-project-address" placeholder="123 Main Street, San Diego, CA">
+</label>
+<button class="portal-btn primary" type="submit">Create Project &amp; Continue</button>
+</form>
+</div>
+<div class="portal-card span-6 setup-card" data-requires-permission="customers">
+<p class="portal-kicker">Step 2</p>
+<h2>Create or Manage Customer Login</h2>
+<p class="portal-muted">The login below will only have access to the project selected here.</p>
+<label class="project-picker setup-project-picker">Customer login project<select id="customer-project-select"></select></label>
+<div id="customer-project-confirmation" class="project-link-confirmation"></div>
+<div id="customer-accounts-list" class="customer-accounts"></div>
+<form id="invite-form" class="portal-form">
+<input type="hidden" id="invite-user-id">
+<label>Customer username<input type="text" id="invite-username" minlength="3" maxlength="32" pattern="[A-Za-z0-9._-]+" autocomplete="off" required placeholder="smith-family">
+</label>
+<label>Temporary password<input type="password" id="invite-password" minlength="10" autocomplete="new-password" required placeholder="At least 10 characters">
+</label>
+<button class="portal-btn primary" id="customer-login-submit" type="submit">Create Login for Selected Project</button>
+<button class="portal-btn light hidden" id="customer-login-cancel" type="button">Cancel Editing</button>
+</form>
+<p class="portal-muted">Give the username and temporary password to the customer securely. Passwords cannot be viewed later.</p>
+</div>
+<div class="portal-card span-12" data-requires-permission="projects">
+<p class="portal-kicker">Step 3 · Selected project</p>
+<h2>Review and Manage Project Information</h2>
 <form id="project-details-form" class="portal-form">
 <label>Project name<input id="project-name" required>
 </label>
@@ -95,31 +135,6 @@
 <button class="portal-btn primary" type="submit">Save Project Info</button>
 <div class="project-actions"><button class="portal-btn light" id="archive-project" type="button">Archive Project</button><button class="portal-btn danger" id="delete-project" type="button">Delete Project</button></div>
 </form>
-</div>
-<div class="portal-card span-4">
-<p class="portal-kicker">Customer access</p>
-<h2>Create Customer Login</h2>
-<p class="portal-muted">Choose a username and temporary password for the selected project.</p>
-<div id="customer-accounts-list" class="customer-accounts"></div>
-<form id="invite-form" class="portal-form">
-<input type="hidden" id="invite-user-id">
-<label>Username<input type="text" id="invite-username" minlength="3" maxlength="32" pattern="[A-Za-z0-9._-]+" autocomplete="off" required placeholder="smith-family">
-</label>
-<label>New password<input type="password" id="invite-password" minlength="10" autocomplete="new-password" required>
-</label>
-<button class="portal-btn primary" id="customer-login-submit" type="submit">Create Customer Login</button>
-<button class="portal-btn light hidden" id="customer-login-cancel" type="button">Cancel Editing</button>
-</form>
-<details class="simple-details">
-<summary>Create another project</summary>
-<form id="new-project-form" class="portal-form form-body">
-<label>Project name<input id="new-project-name" required>
-</label>
-<label>Address<input id="new-project-address">
-</label>
-<button class="portal-btn light" type="submit">Create Project</button>
-</form>
-</details>
 </div>
 </section>
 <section id="schedule" class="portal-grid section-gap">
@@ -209,6 +224,9 @@
 <div id="customer-uploads-list"></div>
 </div>
 </section>
+<section id="employee-approvals" class="portal-grid section-gap">
+<div class="portal-card span-12"><p class="portal-kicker">Review queue</p><h2>Employee Photo &amp; Note Approvals</h2><p class="portal-muted">Approve an update to publish it in the selected customer project, or reject it with optional feedback for the employee.</p><div id="employee-approval-list"></div></div>
+</section>
 <section id="messages" class="portal-grid section-gap">
 <div class="portal-card span-12">
 <p class="portal-kicker">Important communication</p>
@@ -232,10 +250,18 @@
 </section>
 <section id="employee-schedule" class="portal-grid section-gap"><div class="portal-card span-7"><p class="portal-kicker">Work assignments</p><h2>Employee Schedule</h2><div id="employee-schedule-list"></div></div><div class="portal-card span-5"><h2>Add Schedule Item</h2><form id="employee-schedule-form" class="portal-form"><label>Employee<select id="schedule-employee" required></select></label><label>Project<select id="schedule-project"><option value="">No project</option></select></label><label>Title<input id="employee-schedule-title" required></label><label>Details<textarea id="employee-schedule-details"></textarea></label><div class="two-col"><label>Starts<input id="employee-schedule-start" type="datetime-local" required></label><label>Ends<input id="employee-schedule-end" type="datetime-local"></label></div><label>Status<select id="employee-schedule-status"><option>Scheduled</option><option>In Progress</option><option>Complete</option><option>Cancelled</option></select></label><button class="portal-btn primary">Add to Schedule</button></form></div></section>
 <section id="team-chat" class="portal-grid section-gap"><div class="portal-card span-7"><p class="portal-kicker">Internal only</p><h2>Team Chat &amp; Private Messages</h2><div id="admin-internal-thread"></div></div><div class="portal-card span-5"><h2>New Internal Message</h2><form id="admin-internal-form" class="portal-form"><label>Channel<select id="admin-internal-recipient"><option value="">Team Chat — everyone</option></select></label><label>Message<textarea id="admin-internal-body" maxlength="5000" required></textarea></label><button class="portal-btn primary">Send Internal Message</button></form><p class="portal-muted">This channel is isolated from all customer messages.</p></div></section>
+<section id="administrators" class="portal-grid section-gap" data-owner-only>
+<div class="portal-card span-7"><p class="portal-kicker">Protected owner controls</p><h2>Administrator Accounts</h2><p class="portal-muted">Only your protected owner account can create, edit, or remove administrators. Other administrators cannot change your account.</p><div id="administrators-list"></div></div>
+<div class="portal-card span-5"><p class="portal-kicker">New or existing administrator</p><h2>Account &amp; Permissions</h2><form id="administrator-form" class="portal-form"><input type="hidden" id="administrator-id"><label>Full name<input id="administrator-full-name" required></label><label>Email address<input id="administrator-email" type="email" autocomplete="off" required></label><label>Temporary/new password<input id="administrator-password" type="password" minlength="12" autocomplete="new-password" placeholder="At least 12 characters" required></label><fieldset class="permission-fieldset"><legend>Allowed abilities</legend><label class="permission-option"><input type="checkbox" name="administrator-permission" value="projects"><span><strong>Projects</strong><small>Create and edit projects and internal project operations.</small></span></label><label class="permission-option"><input type="checkbox" name="administrator-permission" value="customers"><span><strong>Customer Accounts</strong><small>Create, update, and remove customer logins.</small></span></label><label class="permission-option"><input type="checkbox" name="administrator-permission" value="content"><span><strong>Customer-Facing Content</strong><small>Schedules, photos, documents, approvals, and customer messages.</small></span></label><label class="permission-option"><input type="checkbox" name="administrator-permission" value="employees"><span><strong>Employees</strong><small>Employee accounts, assignments, schedules, notes, and team chat.</small></span></label></fieldset><div class="button-row"><button class="portal-btn primary" id="administrator-submit">Create Administrator</button><button class="portal-btn light" id="administrator-cancel" type="button">Clear</button></div></form><p class="portal-muted">Administrator accounts sign in using their complete email address.</p></div>
+</section>
 </main>
 </div>
 </div>
 <script src="portal-admin.js">
+</script>
+<script src="portal-account.js">
+</script>
+<script src="portal-navigation.js">
 </script>
 <script src="portal-sync.js">
 </script>

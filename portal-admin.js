@@ -1,5 +1,5 @@
 const cfg=window.ADELIE_PORTAL_CONFIG,sb=supabase.createClient(cfg.supabaseUrl,cfg.supabaseAnonKey),$=id=>document.getElementById(id);
-let projects=[],projectId=null,schedule=[];
+let projects=[],projectId=null,schedule=[],adminAccess={is_owner:false,permissions:[]};
 
 const safe=s=>String(s??'').replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c])),fmt=d=>d?new Date(d+'T12:00:00').toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'}):'Date TBD',empty=t=>`<div class="empty">${t}</div>`;
 
@@ -10,16 +10,30 @@ scrollTo({top:0,behavior:'smooth'});
 setTimeout(()=>box.classList.add('hidden'),5000)}
 async function guard(){const {data:{session}}=await sb.auth.getSession();
 if(!session)return location.href='portal-login.html';
-const {data:isAdmin}=await sb.rpc('is_portal_admin');
+const {data:isAdmin}=await sb.rpc('is_portal_user');
 if(!isAdmin)return location.href='portal.html';
-await loadProjects();await loadEmployeeAdmin()}
+const {data:access,error}=await sb.from('portal_admins').select('is_owner,permissions').eq('user_id',session.user.id).single();
+if(error)return show(error.message,'error');
+adminAccess=access||adminAccess;applyAdminAccess();
+await loadProjects();
+if(hasPermission('employees'))await loadEmployeeAdmin();
+if(adminAccess.is_owner)await loadAdministratorAccounts()}
+function hasPermission(permission){return adminAccess.is_owner||adminAccess.permissions?.includes('*')||adminAccess.permissions?.includes(permission)}
+function applyAdminAccess(){
+  document.querySelectorAll('[data-requires-permission]').forEach(element=>element.classList.toggle('hidden',!hasPermission(element.dataset.requiresPermission)));
+  document.querySelectorAll('[data-owner-only]').forEach(element=>element.classList.toggle('hidden',!adminAccess.is_owner));
+  window.dispatchEvent(new Event('portalpermissionschange'));
+}
 async function loadProjects(){const {data,error}=await sb.from('projects').select('*').order('created_at',{ascending:false});
 if(error)return show(error.message,'error');
 projects=data||[];
 $('active-count').textContent=projects.filter(p=>p.status==='Active').length;
-$('current-project').innerHTML=projects.map(p=>`<option value="${p.id}">${safe(p.name)}</option>`).join('');
+const projectOptions=projects.map(p=>`<option value="${p.id}">${safe(p.name)}</option>`).join('');
+$('current-project').innerHTML=projectOptions;
+$('customer-project-select').innerHTML=projectOptions;
 if(!projects.some(p=>p.id===projectId))projectId=projects[0]?.id||null;
-if(projectId)$('current-project').value=projectId;
+if(projectId){$('current-project').value=projectId;$('customer-project-select').value=projectId}
+setProjectSetupAvailability();
 if(!projectId){
   $('project-details-form').reset();
   $('progress-value').textContent='0%';
@@ -30,11 +44,15 @@ if(!projectId){
   $('documents-list').innerHTML=empty('Create a project to share documents.');
   $('messages-list').innerHTML=empty('Create a project to send messages.');
   $('customer-uploads-list').innerHTML=empty('Create a project to receive customer uploads.');
+  $('employee-approval-list').innerHTML=empty('Create a project to receive employee updates.');
   return;
 }
 await loadProject()}
 async function loadProject(){const p=projects.find(x=>x.id===projectId);
 if(!p)return;
+$('current-project').value=projectId;
+$('customer-project-select').value=projectId;
+$('customer-project-confirmation').innerHTML=`Customer access will be linked to <strong>${safe(p.name)}</strong>${p.address?` at ${safe(p.address)}`:''}.`;
 $('project-name').value=p.name||'';
 $('project-address').value=p.address||'';
 $('project-phase').value=p.current_phase||'';
@@ -43,7 +61,16 @@ $('project-progress').value=p.progress_percent||0;
 $('progress-value').textContent=(p.progress_percent||0)+'%';
 $('project-start').value=p.start_date||'';
 $('project-end').value=p.target_completion_date||'';
-await Promise.all([loadSchedule(),loadPhotos(),loadDocuments(),loadMessages(),loadCustomerAccounts(),loadCustomerUploads()])}
+const tasks=[];
+if(hasPermission('content'))tasks.push(loadSchedule(),loadPhotos(),loadDocuments(),loadMessages(),loadCustomerUploads(),loadEmployeeApprovals());
+if(hasPermission('customers'))tasks.push(loadCustomerAccounts());
+await Promise.all(tasks)}
+function setProjectSetupAvailability(){
+  const hasProject=Boolean(projectId);
+  [...$('invite-form').elements,...$('project-details-form').elements].forEach(control=>control.disabled=!hasProject);
+  $('customer-project-select').disabled=!hasProject;
+  if(!hasProject)$('customer-project-confirmation').textContent='Create a project in Step 1 before creating a customer login.';
+}
 async function rows(table,order='created_at',ascending=false){const {data=[],error}=await sb.from(table).select('*').eq('project_id',projectId).order(order,{ascending});
 if(error){show(error.message,'error');
 return[]}return data}
@@ -70,8 +97,8 @@ $('schedule-status').value=x.status||'Scheduled';
 $('schedule-form').scrollIntoView({behavior:'smooth',block:'center'})}
 function clearSchedule(){$('schedule-form').reset();
 $('schedule-id').value=''}
-async function loadPhotos(){const data=await rows('project_photos','taken_at',false),items=await Promise.all(data.map(async x=>({...x,url:await signed(x.bucket||'project-photos',x.storage_path)})));
-$('photos-list').innerHTML=items.length?`<div class="photo-grid">${items.map(x=>`<figure>${x.url?`<a href="${x.url}" target="_blank" rel="noopener"><img src="${x.url}" alt="${safe(x.caption||'Project photo')}"></a>`:''}<figcaption>${safe(x.caption||'Progress photo')}</figcaption><button class="portal-btn danger photo-delete" data-id="${x.id}" data-path="${safe(x.storage_path||'')}">Delete Photo &amp; Note</button></figure>`).join('')}</div>`:empty('No photos uploaded yet.');
+async function loadPhotos(){const data=(await rows('project_photos','taken_at',false)).filter(x=>x.uploaded_role!=='employee'||x.approval_status==='approved'),items=await Promise.all(data.map(async x=>({...x,url:await signed(x.bucket||'project-photos',x.storage_path)})));
+$('photos-list').innerHTML=items.length?`<div class="photo-grid">${items.map(x=>`<figure>${x.url?`<a href="${x.url}" target="_blank" rel="noopener"><img src="${x.url}" alt="${safe(x.caption||'Project photo')}"></a>`:''}<figcaption><span class="status-pill status-approved">Visible to customer</span><p>${safe(x.caption||'Progress photo')}</p></figcaption><button class="portal-btn danger photo-delete" data-id="${x.id}" data-path="${safe(x.storage_path||'')}">Delete Photo &amp; Note</button></figure>`).join('')}</div>`:empty('No customer-visible photos have been published yet.');
 document.querySelectorAll('.photo-delete').forEach(b=>b.onclick=()=>deletePhoto(b.dataset.id,b.dataset.path))}
 async function deletePhoto(id,path){if(!confirm('Delete this photo and its note? This cannot be undone.'))return;
 if(path){const {error:storageError}=await sb.storage.from('project-photos').remove([path]);if(storageError)return show(storageError.message,'error')}
@@ -94,11 +121,30 @@ async function loadCustomerUploads(){
   document.querySelectorAll('.customer-upload-photo-delete').forEach(button=>button.onclick=()=>deletePhoto(button.dataset.id,button.dataset.path));
   document.querySelectorAll('.customer-upload-document-delete').forEach(button=>button.onclick=()=>deleteDocument(button.dataset.id,button.dataset.path));
 }
+async function loadEmployeeApprovals(){
+  const data=await rows('project_photos','created_at',false);
+  const submissions=await Promise.all(data.filter(item=>item.uploaded_role==='employee').map(async item=>({...item,url:await signed(item.bucket||'project-photos',item.storage_path)})));
+  const pending=submissions.filter(item=>(item.approval_status||'pending')==='pending');
+  const reviewed=submissions.filter(item=>item.approval_status&&item.approval_status!=='pending');
+  const pendingHtml=pending.length?`<div class="approval-grid">${pending.map(item=>`<article class="approval-card"><div>${item.url?`<a href="${item.url}" target="_blank" rel="noopener"><img src="${item.url}" alt="${safe(item.caption||'Employee project update')}"></a>`:''}</div><div><span class="status-pill status-pending">Pending · Not visible to customer</span><h3>${safe(item.caption||'No note provided')}</h3><p class="portal-muted">Submitted ${new Date(item.created_at).toLocaleString()}</p><label>Feedback to employee<textarea class="approval-note" data-id="${item.id}" maxlength="1000" placeholder="Optional feedback"></textarea></label><div class="item-actions"><button class="portal-btn primary employee-photo-approve" data-id="${item.id}">Approve &amp; Publish</button><button class="portal-btn danger employee-photo-reject" data-id="${item.id}">Reject</button></div></div></article>`).join('')}</div>`:empty('No updates are waiting for approval.');
+  const reviewedHtml=reviewed.length?`<details class="review-history"><summary>Reviewed employee updates (${reviewed.length})</summary><div class="approval-grid">${reviewed.map(item=>`<article class="approval-card compact"><div>${item.url?`<a href="${item.url}" target="_blank" rel="noopener"><img src="${item.url}" alt="${safe(item.caption||'Employee project update')}"></a>`:''}</div><div><span class="status-pill status-${safe(item.approval_status)}">${item.approval_status==='approved'?'Approved · Visible to customer':'Rejected · Not visible to customer'}</span><h3>${safe(item.caption||'No note provided')}</h3>${item.review_note?`<p><strong>Review note:</strong> ${safe(item.review_note)}</p>`:''}</div></article>`).join('')}</div></details>`:'';
+  $('employee-approval-list').innerHTML=pendingHtml+reviewedHtml;
+  document.querySelectorAll('.employee-photo-approve').forEach(button=>button.onclick=()=>reviewEmployeePhoto(button.dataset.id,'approved'));
+  document.querySelectorAll('.employee-photo-reject').forEach(button=>button.onclick=()=>reviewEmployeePhoto(button.dataset.id,'rejected'));
+}
+async function reviewEmployeePhoto(id,status){
+  const note=document.querySelector(`.approval-note[data-id="${id}"]`)?.value.trim()||null;
+  if(!confirm(status==='approved'?'Approve and publish this update to the customer?':'Reject this update?'))return;
+  const {data:{user}}=await sb.auth.getUser();
+  const {error}=await sb.from('project_photos').update({approval_status:status,review_note:note,reviewed_by:user.id,reviewed_at:new Date().toISOString()}).eq('id',id);
+  if(error)return show(error.message,'error');show(status==='approved'?'Update approved and published to the customer.':'Update rejected.');await Promise.all([loadEmployeeApprovals(),loadPhotos()])
+}
 async function loadMessages(){const data=await rows('messages');
 $('message-count').textContent=data.filter(x=>x.sender_role==='client').length;
 $('messages-list').innerHTML=data.length?`<ul class="portal-list">${data.map(x=>`<li><strong>${x.sender_role==='admin'?'ADELIE':'Customer'}</strong><span class="portal-muted"> · ${new Date(x.created_at).toLocaleString()}</span><p>${safe(x.body)}</p></li>`).join('')}</ul>`:empty('No messages yet.')}
-$('current-project').onchange=async e=>{projectId=e.target.value;
-await loadProject()};
+async function selectProject(id){projectId=id;$('current-project').value=id;$('customer-project-select').value=id;clearCustomerAccountForm();await loadProject()}
+$('current-project').onchange=e=>selectProject(e.target.value);
+$('customer-project-select').onchange=e=>selectProject(e.target.value);
 $('project-progress').oninput=e=>$('progress-value').textContent=e.target.value+'%';
 
 $('project-details-form').onsubmit=async e=>{e.preventDefault();
@@ -130,14 +176,17 @@ if(error)return show(error.message,'error');
 projectId=data.id;
 e.target.reset();
 show('Project created.');
-await loadProjects()};
+await loadProjects();
+$('customer-project-confirmation').scrollIntoView({behavior:'smooth',block:'center'});
+$('invite-username').focus();
+show('Project created and selected. Complete Step 2 to create its customer login.')};
 
 async function loadCustomerAccounts(){
   const {data:{session}}=await sb.auth.getSession();
   const response=await fetch(`/.netlify/functions/invite-client?projectId=${encodeURIComponent(projectId)}`,{headers:{'Authorization':'Bearer '+session.access_token}});
   const out=await response.json();
   if(!response.ok){$('customer-accounts-list').innerHTML=empty(out.error||'Customer accounts could not be loaded.');return}
-  $('customer-accounts-list').innerHTML=out.accounts.length?`<ul class="portal-list">${out.accounts.map(account=>`<li class="managed-row"><div><strong>${safe(account.username)}</strong><br><span class="portal-muted">Password is protected and cannot be viewed.</span></div><div class="item-actions"><button class="portal-btn light customer-account-edit" data-id="${account.id}" data-username="${safe(account.username)}">Manage</button><button class="portal-btn danger customer-account-delete" data-id="${account.id}" data-username="${safe(account.username)}">Delete</button></div></li>`).join('')}</ul>`:empty('No customer login is linked to this project.');
+  $('customer-accounts-list').innerHTML=out.accounts.length?`<p class="portal-muted"><strong>Logins linked to this project</strong></p><ul class="portal-list">${out.accounts.map(account=>`<li class="managed-row"><div><strong>${safe(account.username)}</strong><br><span class="portal-muted">Password is protected and cannot be viewed.</span></div><div class="item-actions"><button class="portal-btn light customer-account-edit" data-id="${account.id}" data-username="${safe(account.username)}">Manage</button><button class="portal-btn danger customer-account-delete" data-id="${account.id}" data-username="${safe(account.username)}">Delete</button></div></li>`).join('')}</ul>`:empty('No customer login is linked to this project yet.');
   document.querySelectorAll('.customer-account-edit').forEach(button=>button.onclick=()=>editCustomerAccount(button.dataset.id,button.dataset.username));
   document.querySelectorAll('.customer-account-delete').forEach(button=>button.onclick=()=>deleteCustomerAccount(button.dataset.id,button.dataset.username));
 }
@@ -155,7 +204,7 @@ function editCustomerAccount(userId,username){
   $('invite-password').value='';
   $('invite-password').required=false;
   $('invite-password').placeholder='Leave blank to keep current password';
-  $('customer-login-submit').textContent='Save Customer Login';
+  $('customer-login-submit').textContent='Save Login for Selected Project';
   $('customer-login-cancel').classList.remove('hidden');
   $('invite-username').focus();
 }
@@ -164,12 +213,13 @@ function clearCustomerAccountForm(){
   $('invite-user-id').value='';
   $('invite-password').required=true;
   $('invite-password').placeholder='';
-  $('customer-login-submit').textContent='Create Customer Login';
+  $('customer-login-submit').textContent='Create Login for Selected Project';
   $('customer-login-cancel').classList.add('hidden');
 }
 $('customer-login-cancel').onclick=clearCustomerAccountForm;
 
 $('invite-form').onsubmit=async e=>{e.preventDefault();
+if(!projectId)return show('Create or select a project before creating a customer login.','error');
 const {data:{session}}=await sb.auth.getSession();
 const r=await fetch('/.netlify/functions/invite-client',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token},body:JSON.stringify({userId:$('invite-user-id').value,username:$('invite-username').value.trim(),password:$('invite-password').value,projectId})});
 const out=await r.json();
@@ -241,4 +291,37 @@ async function loadEmployeeScheduleAdmin(){const {data=[]}=await sb.from('employ
 $('employee-schedule-form').onsubmit=async e=>{e.preventDefault();const {data:{user}}=await sb.auth.getUser();const {error}=await sb.from('employee_schedule').insert({employee_id:$('schedule-employee').value,project_id:$('schedule-project').value||null,title:$('employee-schedule-title').value.trim(),details:$('employee-schedule-details').value.trim(),starts_at:new Date($('employee-schedule-start').value).toISOString(),ends_at:$('employee-schedule-end').value?new Date($('employee-schedule-end').value).toISOString():null,status:$('employee-schedule-status').value,created_by:user.id});if(error)return show(error.message,'error');e.target.reset();show('Employee schedule updated.');loadEmployeeScheduleAdmin()};
 async function loadAdminInternal(){const {data=[]}=await sb.from('internal_messages').select('*').order('created_at',{ascending:false}).limit(100);$('admin-internal-thread').innerHTML=data.length?`<ul class="portal-list">${data.map(x=>`<li><span class="status-pill">${x.recipient_id?'Private':'Team Chat'}</span><span class="portal-muted"> · ${new Date(x.created_at).toLocaleString()}</span><p>${safe(x.body)}</p></li>`).join('')}</ul>`:empty('No internal messages.')}
 $('admin-internal-form').onsubmit=async e=>{e.preventDefault();const {data:{user}}=await sb.auth.getUser();const {error}=await sb.from('internal_messages').insert({sender_id:user.id,recipient_id:$('admin-internal-recipient').value||null,project_id:projectId,body:$('admin-internal-body').value.trim()});if(error)return show(error.message,'error');e.target.reset();show('Internal message sent.');loadAdminInternal()};
+
+let administrators=[];
+const permissionLabels={projects:'Projects',customers:'Customer Accounts',content:'Customer-Facing Content',employees:'Employees'};
+async function loadAdministratorAccounts(){
+  try{
+    const out=await adminFetch('/.netlify/functions/manage-admins');administrators=out.administrators||[];
+    $('administrators-list').innerHTML=administrators.length?`<ul class="portal-list">${administrators.map(account=>`<li class="managed-row"><div><strong>${safe(account.full_name||account.email)}</strong>${account.is_owner?'<span class="owner-badge">Protected Owner</span>':''}<br><span class="portal-muted">${safe(account.email)}</span><div class="permission-tags">${account.is_owner||account.permissions?.includes('*')?'<span>Full access</span>':(account.permissions||[]).map(permission=>`<span>${safe(permissionLabels[permission]||permission)}</span>`).join('')}</div></div>${account.is_owner?'':`<div class="item-actions"><button class="portal-btn light administrator-edit" data-id="${account.user_id}">Manage</button><button class="portal-btn danger administrator-delete" data-id="${account.user_id}">Delete</button></div>`}</li>`).join('')}</ul>`:empty('No administrator accounts found.');
+    document.querySelectorAll('.administrator-edit').forEach(button=>button.onclick=()=>editAdministrator(button.dataset.id));
+    document.querySelectorAll('.administrator-delete').forEach(button=>button.onclick=()=>deleteAdministrator(button.dataset.id));
+  }catch(error){show(error.message,'error')}
+}
+function editAdministrator(id){
+  const account=administrators.find(item=>item.user_id===id);if(!account||account.is_owner)return;
+  $('administrator-id').value=account.user_id;$('administrator-full-name').value=account.full_name||'';$('administrator-email').value=account.email||'';$('administrator-password').value='';$('administrator-password').required=false;
+  document.querySelectorAll('[name="administrator-permission"]').forEach(input=>input.checked=(account.permissions||[]).includes(input.value)||account.permissions?.includes('*'));
+  $('administrator-submit').textContent='Save Administrator';$('administrator-form').scrollIntoView({behavior:'smooth',block:'center'});
+}
+function clearAdministratorForm(){$('administrator-form').reset();$('administrator-id').value='';$('administrator-password').required=true;$('administrator-submit').textContent='Create Administrator'}
+$('administrator-cancel').onclick=clearAdministratorForm;
+$('administrator-form').onsubmit=async event=>{
+  event.preventDefault();
+  const permissions=[...document.querySelectorAll('[name="administrator-permission"]:checked')].map(input=>input.value);
+  if(!permissions.length)return show('Select at least one administrator ability.','error');
+  try{
+    await adminFetch('/.netlify/functions/manage-admins',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userId:$('administrator-id').value,fullName:$('administrator-full-name').value.trim(),email:$('administrator-email').value.trim(),password:$('administrator-password').value,permissions})});
+    clearAdministratorForm();show('Administrator account saved.');await loadAdministratorAccounts();
+  }catch(error){show(error.message,'error')}
+};
+async function deleteAdministrator(id){
+  const account=administrators.find(item=>item.user_id===id);if(!account||account.is_owner)return;
+  if(!confirm(`Permanently delete administrator "${account.email}"? They will immediately lose access.`))return;
+  try{await adminFetch('/.netlify/functions/manage-admins',{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({userId:id})});show('Administrator account deleted.');await loadAdministratorAccounts()}catch(error){show(error.message,'error')}
+}
 guard();

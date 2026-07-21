@@ -11,8 +11,8 @@ exports.handler=async event=>{
   const token=(event.headers.authorization||'').replace(/^Bearer\s+/i,'');
   const {data:{user},error:authError}=await db.auth.getUser(token);
   if(authError||!user)return reply(401,{error:'Please sign in again.'});
-  const {data:admin}=await db.from('portal_admins').select('user_id').eq('user_id',user.id).maybeSingle();
-  if(!admin)return reply(403,{error:'Administrator access required.'});
+  const {data:admin}=await db.from('portal_admins').select('is_owner,permissions').eq('user_id',user.id).maybeSingle();
+  if(!admin||(admin.is_owner!==true&&!admin.permissions?.includes('*')&&!admin.permissions?.includes('employees')))return reply(403,{error:'Employee-management permission required.'});
 
   if(event.httpMethod==='GET'){
     const [{data:employees,error},{data:assignments},{data:projects}]=await Promise.all([

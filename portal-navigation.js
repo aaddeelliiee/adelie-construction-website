@@ -12,7 +12,9 @@
 
   function showSection({scroll=false}={}){
     const requested=location.hash;
-    const activeLink=links.find(link=>link.hash===requested)||links[0];
+    const availableLinks=links.filter(link=>!link.classList.contains('hidden'));
+    if(!availableLinks.length)return;
+    const activeLink=availableLinks.find(link=>link.hash===requested)||availableLinks[0];
     const activePanel=document.getElementById(activeLink.hash.slice(1));
 
     panels.forEach(panel=>{panel.hidden=panel!==activePanel});
@@ -30,5 +32,6 @@
     if(location.hash===link.hash)showSection({scroll:true});
   }));
   window.addEventListener('hashchange',()=>showSection({scroll:true}));
+  window.addEventListener('portalpermissionschange',()=>showSection());
   showSection();
 })();

@@ -59,7 +59,7 @@ body.portal-body{margin:0;font-family:Manrope,Arial,sans-serif;background:var(--
 .photo-grid figcaption{padding:8px 2px;color:var(--muted)}
 .empty{padding:28px;text-align:center;color:var(--muted);border:1px dashed #cfd4dc;border-radius:10px}
 .section-gap{margin-top:22px}
-.portal-section-mode .portal-section-panel{animation:portal-section-in .2s ease}.portal-section-mode .portal-section-panel.section-gap{margin-top:0}@keyframes portal-section-in{from{opacity:.35;transform:translateY(6px)}to{opacity:1;transform:none}}
+.portal-section-mode .portal-section-panel[hidden]{display:none!important}.portal-section-mode .portal-section-panel:not([hidden]){animation:portal-section-in .2s ease}.portal-section-mode .portal-section-panel.section-gap{margin-top:0}@keyframes portal-section-in{from{opacity:.35;transform:translateY(6px)}to{opacity:1;transform:none}}
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .checkline{display:flex!important;align-items:center;gap:10px}
 .checkline input{width:auto!important}

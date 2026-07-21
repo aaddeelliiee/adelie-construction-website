@@ -71,7 +71,9 @@ async function loadInternal(){
 $('employee-update-form').onsubmit=async event=>{
   event.preventDefault();
   const form=event.currentTarget,button=form.querySelector('[type="submit"]'),file=$('employee-update-photo').files[0],note=$('employee-update-note').value.trim();
-  if(!projectId||!file||form.dataset.uploading==='true')return;
+  if(form.dataset.uploading==='true')return;
+  if(!projectId)return alert('No project is assigned to this employee account. Ask an administrator to assign a project before submitting an update.');
+  if(!file)return alert('Please choose a photo.');
   if(file.size>15*1024*1024)return alert('Please choose a photo smaller than 15 MB.');
   form.dataset.uploading='true';button.disabled=true;button.textContent='Submitting...';
   const path=`${projectId}/employee/${userId}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g,'-')}`;

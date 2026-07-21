@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="portal.css">
+<link rel="stylesheet" href="portal-theme.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
 </script>
 <script src="portal-config.js">
@@ -42,20 +43,20 @@
 <div id="loading" class="portal-card">Loading your project…</div>
 <div id="app" class="hidden">
 <section id="overview" class="portal-grid">
-<div class="portal-card span-12 project-hero">
+<div class="portal-card span-8 project-hero">
 <p class="portal-kicker">Your project</p>
 <h1 id="project-name" class="portal-title">
 </h1>
 <p id="project-address" class="portal-muted">
 </p>
-<span id="project-status" class="status-pill">
-</span>
-<div class="progress" style="margin-top:22px">
-<span id="progress-bar">
-</span>
+<span id="project-status" class="status-pill"></span>
+<div id="overview-photo" class="overview-photo"><div><strong>Project updates</strong><span>Your latest approved photo will appear here.</span></div></div>
 </div>
-<p id="progress-label" class="portal-muted">
-</p>
+<div class="portal-card span-4 progress-card">
+<p class="portal-kicker">Project progress</p>
+<div id="progress-ring" class="progress-ring"><div><strong id="progress-label">0% complete</strong><span>Overall completion</span></div></div>
+<div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
+<p class="portal-progress-status"><span class="status-dot"></span> Project moving forward</p>
 </div>
 <div class="portal-card span-4">
 <strong>Current phase</strong>

@@ -22,8 +22,10 @@ $('project-status').textContent=p.status;
 $('current-phase').textContent=p.current_phase;
 $('start-date').textContent=fmt(p.start_date);
 $('completion-date').textContent=fmt(p.target_completion_date);
-$('progress-bar').style.width=(p.progress_percent||0)+'%';
-$('progress-label').textContent=(p.progress_percent||0)+'% complete';
+const progress=Math.max(0,Math.min(100,p.progress_percent||0));
+$('progress-bar').style.width=progress+'%';
+$('progress-label').textContent=progress+'%';
+$('progress-ring').style.setProperty('--progress',progress);
 await Promise.all([loadSchedule(),loadPhotos(),loadDocuments(),loadMessages()]);
 $('loading').classList.add('hidden');
 $('app').classList.remove('hidden')}
@@ -40,6 +42,7 @@ if(!response.ok)throw new Error('Upload saved, but the email notification could 
 async function loadSchedule(){const data=await rows('milestones','target_date',true);
 $('schedule-list').innerHTML=data.length?`<div class="schedule-stack">${data.map(x=>`<article class="schedule-item"><div><strong>${safe(x.title)}</strong><span>${fmt(x.target_date)} · ${safe(x.status)}</span><p>${safe(x.description)}</p></div></article>`).join('')}</div>`:empty('No schedule has been shared yet.')}
 async function loadPhotos(){const data=(await rows('project_photos','taken_at',false)).filter(x=>x.approval_status==='approved'||x.uploaded_role!=='employee'),items=await Promise.all(data.map(async x=>({...x,url:await signed(x.bucket||'project-photos',x.storage_path)})));
+$('overview-photo').innerHTML=items[0]?.url?`<img src="${items[0].url}" alt="${safe(items[0].caption||'Latest project update')}"><div><strong>Latest approved update</strong><span>${safe(items[0].caption||'Progress photo')}</span></div>`:`<div><strong>Project updates</strong><span>Your latest approved photo will appear here.</span></div>`;
 $('photos-list').innerHTML=items.length?`<div class="photo-grid">${items.map(x=>`<figure>${x.url?`<a href="${x.url}" target="_blank" rel="noopener"><img src="${x.url}" alt="${safe(x.caption||'Project photo')}"></a>`:''}<figcaption>${safe(x.caption||'Progress photo')}</figcaption>${x.uploaded_role==='client'&&x.uploaded_by===currentUserId?`<button class="portal-btn danger customer-photo-delete" data-id="${x.id}" data-path="${safe(x.storage_path)}">Delete Photo &amp; Note</button>`:''}</figure>`).join('')}</div>`:empty('No photos have been shared yet.');
 document.querySelectorAll('.customer-photo-delete').forEach(button=>button.onclick=()=>deleteCustomerPhoto(button.dataset.id,button.dataset.path))}
 async function loadDocuments(){const data=await rows('documents'),items=await Promise.all(data.map(async x=>({...x,url:await signed(x.bucket||'project-files',x.storage_path)})));

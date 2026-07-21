@@ -30,6 +30,7 @@ if(!projectId){
   $('documents-list').innerHTML=empty('Create a project to share documents.');
   $('messages-list').innerHTML=empty('Create a project to send messages.');
   $('customer-uploads-list').innerHTML=empty('Create a project to receive customer uploads.');
+  $('employee-approval-list').innerHTML=empty('Create a project to receive employee updates.');
   return;
 }
 await loadProject()}
@@ -43,7 +44,7 @@ $('project-progress').value=p.progress_percent||0;
 $('progress-value').textContent=(p.progress_percent||0)+'%';
 $('project-start').value=p.start_date||'';
 $('project-end').value=p.target_completion_date||'';
-await Promise.all([loadSchedule(),loadPhotos(),loadDocuments(),loadMessages(),loadCustomerAccounts(),loadCustomerUploads()])}
+await Promise.all([loadSchedule(),loadPhotos(),loadDocuments(),loadMessages(),loadCustomerAccounts(),loadCustomerUploads(),loadEmployeeApprovals()])}
 async function rows(table,order='created_at',ascending=false){const {data=[],error}=await sb.from(table).select('*').eq('project_id',projectId).order(order,{ascending});
 if(error){show(error.message,'error');
 return[]}return data}
@@ -93,6 +94,20 @@ async function loadCustomerUploads(){
   $('customer-uploads-list').innerHTML=`<h3>Photos</h3>${photoHtml}<h3 style="margin-top:24px">Documents</h3>${documentHtml}`;
   document.querySelectorAll('.customer-upload-photo-delete').forEach(button=>button.onclick=()=>deletePhoto(button.dataset.id,button.dataset.path));
   document.querySelectorAll('.customer-upload-document-delete').forEach(button=>button.onclick=()=>deleteDocument(button.dataset.id,button.dataset.path));
+}
+async function loadEmployeeApprovals(){
+  const data=await rows('project_photos','created_at',false);
+  const submissions=await Promise.all(data.filter(item=>item.uploaded_role==='employee').map(async item=>({...item,url:await signed(item.bucket||'project-photos',item.storage_path)})));
+  $('employee-approval-list').innerHTML=submissions.length?`<div class="approval-grid">${submissions.map(item=>`<article class="approval-card"><div>${item.url?`<a href="${item.url}" target="_blank" rel="noopener"><img src="${item.url}" alt="${safe(item.caption||'Employee project update')}"></a>`:''}</div><div><span class="status-pill status-${safe(item.approval_status||'pending')}">${safe(item.approval_status||'pending')}</span><h3>${safe(item.caption||'No note provided')}</h3><p class="portal-muted">Submitted ${new Date(item.created_at).toLocaleString()}</p>${item.review_note?`<p><strong>Review note:</strong> ${safe(item.review_note)}</p>`:''}<label>Feedback to employee<textarea class="approval-note" data-id="${item.id}" maxlength="1000" placeholder="Optional feedback"></textarea></label><div class="item-actions"><button class="portal-btn primary employee-photo-approve" data-id="${item.id}">Approve &amp; Publish</button><button class="portal-btn danger employee-photo-reject" data-id="${item.id}">Reject</button></div></div></article>`).join('')}</div>`:empty('No employee updates have been submitted for this project.');
+  document.querySelectorAll('.employee-photo-approve').forEach(button=>button.onclick=()=>reviewEmployeePhoto(button.dataset.id,'approved'));
+  document.querySelectorAll('.employee-photo-reject').forEach(button=>button.onclick=()=>reviewEmployeePhoto(button.dataset.id,'rejected'));
+}
+async function reviewEmployeePhoto(id,status){
+  const note=document.querySelector(`.approval-note[data-id="${id}"]`)?.value.trim()||null;
+  if(!confirm(status==='approved'?'Approve and publish this update to the customer?':'Reject this update?'))return;
+  const {data:{user}}=await sb.auth.getUser();
+  const {error}=await sb.from('project_photos').update({approval_status:status,review_note:note,reviewed_by:user.id,reviewed_at:new Date().toISOString()}).eq('id',id);
+  if(error)return show(error.message,'error');show(status==='approved'?'Update approved and published to the customer.':'Update rejected.');await Promise.all([loadEmployeeApprovals(),loadPhotos()])
 }
 async function loadMessages(){const data=await rows('messages');
 $('message-count').textContent=data.filter(x=>x.sender_role==='client').length;

@@ -84,6 +84,7 @@ body.portal-body{margin:0;font-family:Manrope,Arial,sans-serif;background:var(--
 .customer-portal .message-thread li{background:#f8f8f8;border:0;border-radius:12px;padding:14px;margin:9px 0}
 .portal-modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:grid;place-items:center;padding:20px;z-index:50}
 .portal-modal>div{background:#fff;border-radius:14px;padding:22px;width:min(680px,100%);max-height:90vh;overflow:auto}
+.account-modal-panel{width:min(520px,100%)!important}.account-modal-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}.account-modal-heading h2{margin-top:0}.account-close{border:0;background:transparent;font-size:1.6rem;line-height:1;cursor:pointer;color:var(--muted)}.account-status{margin:0}.portal-top-actions{display:flex;align-items:center;gap:10px}
 @media(max-width:900px){html{scroll-padding-top:145px}
 .portal-layout{grid-template-columns:1fr}
 .portal-sidebar{display:flex;overflow:auto;border-right:0;border-bottom:1px solid var(--line);position:sticky;top:74px;z-index:10;height:auto;padding:9px 10px}

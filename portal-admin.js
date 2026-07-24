@@ -16,6 +16,7 @@ const {data:access,error}=await sb.from('portal_admins').select('is_owner,permis
 if(error)return show(error.message,'error');
 adminAccess=access||adminAccess;applyAdminAccess();
 await loadProjects();
+if(hasPermission('customers'))await loadCustomerLoginLog();
 if(hasPermission('employees'))await loadEmployeeAdmin();
 if(adminAccess.is_owner)await loadAdministratorAccounts()}
 function hasPermission(permission){return adminAccess.is_owner||adminAccess.permissions?.includes('*')||adminAccess.permissions?.includes(permission)}
@@ -277,6 +278,15 @@ location.href='portal-login.html'};
 
 let employees=[];
 async function adminFetch(path,options={}){const {data:{session}}=await sb.auth.getSession();const response=await fetch(path,{...options,headers:{...(options.headers||{}),'Authorization':'Bearer '+session.access_token}});const out=await response.json();if(!response.ok)throw new Error(out.error||'Request failed.');return out}
+async function loadCustomerLoginLog(){
+  try{
+    const out=await adminFetch('/.netlify/functions/customer-login-log');
+    const entries=out.entries||[];
+    $('customer-login-log').innerHTML=entries.length?`<table class="portal-table"><thead><tr><th>Customer</th><th>Project</th><th>Signed in</th><th>IP address</th><th>Browser / device</th></tr></thead><tbody>${entries.map(entry=>`<tr><td><strong>${safe(entry.username||'Customer')}</strong></td><td>${safe(entry.project_name||'Unknown project')}</td><td>${new Date(entry.logged_in_at).toLocaleString()}</td><td>${safe(entry.ip_address||'Unavailable')}</td><td>${safe(entry.user_agent||'Unavailable')}</td></tr>`).join('')}</tbody></table>`:empty('No customer sign-ins have been recorded yet.');
+  }catch(error){
+    $('customer-login-log').innerHTML=empty(error.message);
+  }
+}
 async function loadEmployeeAdmin(){try{const out=await adminFetch('/.netlify/functions/manage-employees');employees=out.employees||[];const projectOptions=(out.projects||[]).map(p=>`<option value="${p.id}">${safe(p.name)}</option>`).join('');$('employee-projects').innerHTML=projectOptions;$('schedule-project').innerHTML='<option value="">No project</option>'+projectOptions;renderEmployees();fillEmployeeSelectors();await Promise.all([loadEmployeeNotes(),loadEmployeeScheduleAdmin(),loadAdminInternal()])}catch(error){show(error.message,'error')}}
 function renderEmployees(){$('employees-list').innerHTML=employees.length?`<ul class="portal-list">${employees.map(e=>`<li class="managed-row"><div><strong>${safe(e.full_name)}</strong><br><span class="portal-muted">${safe(e.job_title||'Employee')} · ${e.active?'Active':'Inactive'} · ${safe(e.username)}</span></div><div class="item-actions"><button class="portal-btn light employee-edit" data-id="${e.user_id}">Manage</button><button class="portal-btn danger employee-delete" data-id="${e.user_id}">Delete</button></div></li>`).join('')}</ul>`:empty('No employees have been added.');document.querySelectorAll('.employee-edit').forEach(b=>b.onclick=()=>editEmployee(b.dataset.id));document.querySelectorAll('.employee-delete').forEach(b=>b.onclick=()=>deleteEmployee(b.dataset.id))}
 function fillEmployeeSelectors(){const options=employees.filter(e=>e.active).map(e=>`<option value="${e.user_id}">${safe(e.full_name)}</option>`).join('');$('note-employee').innerHTML=options;$('schedule-employee').innerHTML=options;$('admin-internal-recipient').innerHTML='<option value="">Team Chat — everyone</option>'+employees.filter(e=>e.active).map(e=>`<option value="${e.user_id}">Private — ${safe(e.full_name)}</option>`).join('')}

@@ -36,6 +36,7 @@
 <a href="#documents" data-requires-permission="content">Documents</a>
 <span class="portal-nav-group">People &amp; Communication</span>
 <a href="#customer-uploads" data-requires-permission="content">Customer Uploads</a>
+<a href="#login-activity" data-requires-permission="customers">Login Activity</a>
 <a href="#employee-approvals" data-requires-permission="content">Employee Approvals</a>
 <a href="#messages" data-requires-permission="content">Messages</a>
 <a href="#employees" data-requires-permission="employees">Employees</a>
@@ -223,6 +224,14 @@
 <h2>Customer Uploads</h2>
 <p class="portal-muted">Photos and documents uploaded by the customer for the selected project.</p>
 <div id="customer-uploads-list"></div>
+</div>
+</section>
+<section id="login-activity" class="portal-grid section-gap" data-requires-permission="customers">
+<div class="portal-card span-12">
+<p class="portal-kicker">Customer access</p>
+<h2>Login Activity</h2>
+<p class="portal-muted">The 250 most recent successful customer portal sign-ins. Passwords and session details are never stored.</p>
+<div id="customer-login-log"></div>
 </div>
 </section>
 <section id="employee-approvals" class="portal-grid section-gap">

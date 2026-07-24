@@ -76,3 +76,12 @@ The admin dashboard handles this structure automatically. RLS prevents clients f
 
 ## 10. Security test
 Create a second test client and second project. Confirm each client sees only their assigned project. Do not use the portal with real customer contracts or payment information until this test passes.
+
+## 11. Enable customer login activity
+1. Open **Supabase → SQL Editor → New query**.
+2. Copy and run `supabase/customer-login-log.sql` once.
+3. Redeploy the site.
+4. Sign in with a customer test account.
+5. Sign in as an administrator with **Customer Accounts** permission and open **Login Activity**.
+
+The log records successful customer sign-ins only. It stores the customer username, linked project, time, IP address, and browser/device description. It never stores passwords or session tokens.

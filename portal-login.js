@@ -14,7 +14,17 @@ document.getElementById('login-form').addEventListener('submit',async event=>{
     authEmail=`${loginId}@${employeeLogin?'employees':'portal'}.adelieconstruction.com`;
   }
   const password=document.getElementById('password').value;
-  const {error}=await sb.auth.signInWithPassword({email:authEmail,password});
+  const {data,error}=await sb.auth.signInWithPassword({email:authEmail,password});
   if(error)return show('Username or password is incorrect. Ask ADELIE to confirm the username or assign a new password.','error');
+  if(data.session){
+    try{
+      await fetch('/.netlify/functions/customer-login-log',{
+        method:'POST',
+        headers:{'Authorization':'Bearer '+data.session.access_token}
+      });
+    }catch(error){
+      console.warn('Customer login activity could not be recorded.',error);
+    }
+  }
   route();
 });

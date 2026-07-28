@@ -7,6 +7,13 @@
 [build.processing.html]
   pretty_urls = false
 
+# Consolidate every hostname signal on the canonical www site.
+[[redirects]]
+  from = "https://adelieconstruction.com/*"
+  to = "https://www.adelieconstruction.com/:splat"
+  status = 301
+  force = true
+
 [[redirects]]
   from = "/index.html"
   to = "/"

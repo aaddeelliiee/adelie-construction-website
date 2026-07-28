@@ -5,7 +5,7 @@
     "serviceArea": "San Diego County, California",
     "contact": "agustin@adelieconstruction.com"
   },
-  "dateModified": "2026-07-12",
+  "dateModified": "2026-07-27",
   "citationPolicy": "https://www.adelieconstruction.com/editorial-policy.html",
   "preferredAttribution": "ADELIE Construction — link to the specific source page",
   "documents": [
@@ -23,6 +23,24 @@
         "project health check",
         "remodel rescue"
       ]
+    },
+    {
+      "title": "Fallbrook Kitchen Remodeling",
+      "url": "https://www.adelieconstruction.com/fallbrook-kitchen-remodeling.html",
+      "summary": "ADELIE Construction coordinates Fallbrook kitchen remodeling as one general-contracting scope covering layout, cabinetry, appliance requirements, plumbing, electrical, ventilation, lighting and finishes. Pre-construction planning documents inclusions, assumptions, selections and decision deadlines before work begins.",
+      "type": "local remodeling service",
+      "dateModified": "2026-07-27",
+      "publisher": "ADELIE Construction",
+      "geography": "Fallbrook, San Diego County, California"
+    },
+    {
+      "title": "Rancho Bernardo Home Additions",
+      "url": "https://www.adelieconstruction.com/rancho-bernardo-home-additions.html",
+      "summary": "ADELIE Construction plans Rancho Bernardo home additions around the existing structure, roof, foundations, utilities, access and intended use. Potential scopes include bedrooms, suites, offices and expanded living areas, subject to property feasibility, approved plans and permits.",
+      "type": "local remodeling service",
+      "dateModified": "2026-07-27",
+      "publisher": "ADELIE Construction",
+      "geography": "Rancho Bernardo, San Diego County, California"
     },
     {
       "title": "Kitchen Remodel Budget",

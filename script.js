@@ -2,15 +2,21 @@
 const toggle=document.querySelector('.menu-toggle');
 const nav=document.querySelector('.main-nav');
 if(toggle&&nav){toggle.addEventListener('click',()=>{const open=nav.classList.toggle('open');toggle.setAttribute('aria-expanded',String(open));});}
-document.querySelectorAll('.reveal').forEach(el=>new IntersectionObserver(([entry],obs)=>{if(entry.isIntersecting){entry.target.classList.add('visible');obs.unobserve(entry.target)}},{threshold:.12}).observe(el));
+const revealElements=[...document.querySelectorAll('.reveal')];
+if('IntersectionObserver' in window&&revealElements.length){
+  const revealObserver=new IntersectionObserver((entries,observer)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  },{threshold:.12});
+  revealElements.forEach(el=>{el.classList.add('is-observed');revealObserver.observe(el);});
+}
 document.querySelectorAll('#year').forEach(el=>el.textContent=new Date().getFullYear());
 
 
-
-const adelieEnhancementStyles=document.createElement('link');
-adelieEnhancementStyles.rel='stylesheet';
-adelieEnhancementStyles.href='adelie-enhancements.css';
-document.head.appendChild(adelieEnhancementStyles);
 
 document.querySelectorAll('.resources-v5 .dropdown-menu').forEach(menu=>{
   if(!menu.querySelector('a[href="downloads.html"]')){

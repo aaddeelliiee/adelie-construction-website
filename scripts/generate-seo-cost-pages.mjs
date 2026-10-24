@@ -16,11 +16,11 @@ const pages = [
     title: 'Is $100K Enough to Remodel a House in San Diego?',
     description: 'See what a $100,000 remodeling budget may cover in San Diego, which scopes are realistic, and how to protect the budget from common surprises.',
     eyebrow: 'San Diego Remodel Budget',
-    answer: 'Yes—$100,000 can fund a meaningful San Diego remodel, but it is usually not enough for a complete, high-end gut renovation of an average-size house. It may cover one substantial kitchen, a kitchen plus a modest bathroom, or carefully selected updates across several rooms when the layout and major systems stay largely intact.',
+    answer: 'Yes—$100,000 can fund a meaningful San Diego remodel, but it is usually better treated as a focused-project budget than a promise of a complete whole-house renovation. It may cover one substantial kitchen, a kitchen plus a modest bathroom, or carefully selected updates across several rooms when the layout and major systems stay largely intact.',
     intro: 'A six-figure budget sounds substantial, yet the result depends on what is included. Moving walls, replacing windows, upgrading an electrical panel, relocating plumbing, custom cabinetry and premium appliances can consume the same budget very differently. The useful question is not simply “Is $100K enough?” but “Which version of my project fits inside $100K with an appropriate reserve?”',
     sections: [
       ['What $100K can realistically accomplish', 'A focused project usually produces the strongest result. Examples include a full kitchen in the existing footprint; a kitchen and modest guest bathroom with controlled selections; or flooring, paint, lighting and selected cabinetry across several rooms. The budget stretches further when demolition is limited, plumbing remains near existing locations and custom fabrication is used selectively.'],
-      ['What usually does not fit', 'A full gut renovation of a typical San Diego house, major structural changes, a large addition, or a luxury whole-home finish package will often exceed $100,000. Published local contractor guides show very broad whole-home figures, commonly beginning around $100 to $150 per square foot and rising well above $300 per square foot for complex or premium work. Those figures are market observations, not a quote for a specific property.'],
+      ['What usually does not fit', 'A full gut renovation of a typical San Diego house, major structural changes, a large addition, or a luxury whole-home finish package will often exceed $100,000. Precision Home Design’s 2026 report places the middle half of its completed “home renovation” projects between $205,000 and $375,000. That is one company’s observed project data—not a universal market price—but it helps show why a complete renovation and a focused $100,000 scope are different projects.'],
       ['A practical way to divide the budget', 'Start with the construction scope, then identify owner selections, professional services, permit-related costs and a contingency. Do not treat the entire $100,000 as spendable finish money. A project with older wiring, plumbing, moisture damage or unknown prior work needs more room for discovery than a newer home with good records.'],
       ['Decisions that protect the budget', 'Keep the footprint when it works, make cabinet and fixture selections early, avoid starting with unresolved drawings, and compare contractor proposals line by line. Ask whether appliances, demolition, disposal, protection, engineering, permit fees, paint and finish carpentry are included.'],
       ['When phasing makes sense', 'If the desired scope is larger than the available budget, phase by complete systems or spaces—not by stopping halfway through a room. A coherent first phase might complete the kitchen and adjacent flooring while documenting future electrical, plumbing or structural plans so later work does not undo the first phase.'],
@@ -39,7 +39,7 @@ const pages = [
     title: 'How Much Does a Home Remodel Cost in San Diego?',
     description: 'A practical 2026 guide to San Diego home remodeling costs, cost-per-square-foot limitations, budget tiers, permits, soft costs and contingency.',
     eyebrow: '2026 San Diego Cost Guide',
-    answer: 'San Diego remodeling costs vary too much for one honest average. A cosmetic refresh may remain below $100 per square foot, coordinated mid-range work is often discussed around $100–$250 per square foot, and structural or high-end whole-home projects can exceed $300 per square foot. Scope, existing conditions and what the price includes matter more than the headline rate.',
+    answer: 'San Diego remodeling costs vary too much for one honest average. In a 2026 report based on its completed projects, Precision Home Design lists a $264,000 median for “home renovation,” with the middle half ranging from $205,000 to $375,000. Another local design-build guide from Lars Remodeling discusses roughly $250,000–$600,000+ for whole-home work. These are published company datasets and planning ranges—not quotes for your house.',
     intro: 'Cost-per-square-foot can be useful for an early feasibility check, but it becomes misleading when two projects include different rooms, systems and professional services. A kitchen-heavy remodel costs more per square foot than repainting bedrooms; an addition is different from renovating existing space. Use ranges to choose a direction, then price a written scope.',
     sections: [
       ['Three useful planning levels', 'A refresh keeps the layout and concentrates on finishes. A coordinated renovation replaces major finishes and selected systems while making limited layout changes. A comprehensive remodel may open walls, change structure, replace building systems and rebuild most interior surfaces. Each level needs a different budget and schedule.'],
@@ -56,7 +56,7 @@ const pages = [
   {
     slug: 'kitchen-remodel-cost-san-diego', title: 'Kitchen Remodel Cost in San Diego: What Drives the Price?',
     description: 'Understand realistic San Diego kitchen remodel cost ranges, inclusions, allowances, layout changes and the decisions that most affect price.', eyebrow: 'San Diego Kitchen Cost Guide',
-    answer: 'Published San Diego contractor guides commonly place full kitchen remodels somewhere between roughly $35,000 and $130,000+, with cosmetic work below that and custom, structural or luxury projects above it. The most important variables are cabinetry, layout changes, appliances, electrical and plumbing work, and exactly what the contract includes.',
+    answer: 'One San Diego contractor’s 2026 planning guide places its kitchen projects around $35,000–$95,000, while other published local guides extend higher for structural, custom or luxury scopes. Treat those figures as examples from individual companies, not a market-wide promise. Cabinetry, layout changes, appliances, electrical and plumbing work—and what the contract includes—drive the useful number.',
     intro: 'A kitchen is dense with cabinetry, utilities, fixtures and finish decisions, so its cost is not well explained by square footage alone. A smaller kitchen with custom cabinets and relocated plumbing may cost more than a larger kitchen that keeps its footprint.',
     sections: [['Use scope tiers, not one average','A refresh may retain cabinet boxes and layout. A full remodel usually replaces cabinets, counters, flooring, lighting and fixtures. A custom or structural remodel may move walls, windows, plumbing and ventilation. Be clear which tier you mean before comparing numbers.'],['Cabinetry is a major lever','Stock, semi-custom and custom cabinets differ in sizing, construction, finish, accessories and installation requirements. Confirm whether the quoted number includes demolition, design, delivery, fillers, panels, crown, hardware and installation.'],['Layout and systems change the math','Moving a sink, range or refrigerator can affect plumbing, electrical, gas, ventilation, framing and finishes. Panel capacity, required circuits and hood duct routes should be evaluated before the design is treated as final.'],['Allowances need product-level detail','An allowance should identify quantity, quality, tax, delivery and installation. Appliances and decorative fixtures can change the total quickly, so separate owner purchases from the construction contract.'],['Permits and inspections','Electrical, plumbing, mechanical or structural work may require permits and inspections. Confirm the requirements with the applicable city or county and identify who obtains permits in the written contract.'],['Build an estimate-ready scope','Document the layout, cabinet level, countertop material, appliance models, flooring limits, lighting plan and finish responsibilities. ADELIE can then connect design choices to construction scope instead of pricing a collection of inspiration images.']],
     faqs: [['Can I remodel a San Diego kitchen for $50K?', 'Often, with a controlled scope and selections, especially when the footprint stays. The home and inclusions still matter.'],['What makes a kitchen remodel expensive?', 'Cabinetry, appliances, structural changes, relocated utilities and premium fabrication are common drivers.'],['Do I need plans?', 'Detailed cabinet and electrical plans improve coordination; structural changes may require professional plans and engineering.']],
@@ -65,16 +65,16 @@ const pages = [
   {
     slug: 'bathroom-remodel-cost-san-diego', title: 'Bathroom Remodel Cost in San Diego: A Scope-Based Guide',
     description: 'Plan a San Diego bathroom remodel budget around shower waterproofing, tile, plumbing, fixtures, layout and permit requirements.', eyebrow: 'San Diego Bathroom Cost Guide',
-    answer: 'San Diego bathroom remodeling can range from a limited cosmetic update to well over $75,000 for a custom primary bath. Published local guides vary widely because some include only basic labor and finishes while others include full demolition, waterproofing, plumbing, glass, cabinetry and project management.',
+    answer: 'Swell Contracting’s 2026 San Diego planning guide places its bathroom projects around $25,000–$70,000+, while a limited cosmetic update may be different. That is one contractor’s published range, not a quote or industry average. Scope varies because some prices omit demolition, waterproofing, plumbing, glass, cabinetry or project management.',
     intro: 'Bathrooms are small but construction-dense. Waterproofing, tile labor, plumbing, ventilation, electrical work and glass can make cost per square foot look high. Define the room and assembly details before comparing bids.',
     sections: [['Guest bath, primary bath and wet room','A compact hall bath with the same layout is different from a primary bath with a curbless shower, freestanding tub and custom vanity. Wet rooms, steam showers and large-format stone introduce additional planning and installation requirements.'],['Waterproofing is not a finish upgrade','The assembly behind the tile controls durability. Proposals should identify the shower system, drain, slope, transitions, penetrations, testing and substrate preparation—not simply list “tile shower.”'],['Layout changes affect several trades','Moving a toilet or shower can affect drainage, venting, slab or framing work, waterproofing, electrical and finish repair. Keeping fixtures near existing locations often protects the budget.'],['Selections must be coordinated','Verify rough-in dimensions, valve components, drain type, glass thickness, tile quantity, trim profiles and lead times. A fixture price online may omit required valves or installation parts.'],['Permit planning','Plumbing, electrical, mechanical and structural changes may require permits. Confirm jurisdiction-specific requirements before work begins and keep required work visible for inspection.'],['Create a comparable scope','List demolition, protection, waterproofing, tile areas, fixtures, vanity, countertop, glass, lighting, fan, paint and accessories. ADELIE uses these details to distinguish a complete bath from an attractive but incomplete allowance.']],
     faqs: [['Can a bathroom be remodeled for $20K?', 'A small, straightforward bath may fit, but full-service San Diego projects with extensive tile or plumbing work often exceed that amount.'],['Why is shower tile expensive?', 'The price includes substrate preparation, waterproofing, layout, cutting, setting, grouting and transitions—not only tile.'],['Should I keep the layout?', 'Keeping plumbing locations can reduce cost and risk, though the best decision depends on function and existing conditions.']],
     related: [['Bathroom budgeting guide','bathroom-remodel-cost-guide.html'],['Bathroom planning guide','bathroom-planning-guide.html'],['Bathroom remodeling service','bathroom-remodeling.html']], hero:'assets/variants/bathroom-wide-use-3.webp'
   },
   {
-    slug: 'whole-home-remodel-cost-per-square-foot-san-diego', title: 'Whole-Home Remodel Cost per Square Foot in San Diego',
-    description: 'Learn when San Diego whole-home remodel cost per square foot is useful, what published ranges omit, and how to create a more reliable budget.', eyebrow: 'Whole-Home Cost Guide',
-    answer: 'For early planning, San Diego whole-home remodel discussions often span about $100–$400+ per square foot. The lower end generally implies limited work and retained systems; the upper end can involve structural changes, premium finishes and extensive mechanical, electrical and plumbing work. A scope-based estimate is more reliable.',
+    slug: 'whole-home-remodel-cost-per-square-foot-san-diego', title: 'Whole-Home Remodel Cost per Square Foot: What It Misses',
+    description: 'Learn why San Diego whole-home remodel cost per square foot can mislead, what published project data includes, and how to build a useful budget.', eyebrow: 'Whole-Home Cost Guide',
+    answer: 'There is no single trustworthy cost-per-square-foot rate for a San Diego whole-home remodel. The room mix, structural work, systems, finish level and excluded soft costs can change the result dramatically. Published local project data is more useful as a broad feasibility check; a room-by-room scope is more reliable for decisions.',
     intro: 'Per-square-foot pricing compresses hundreds of decisions into one number. It works best as a feasibility screen after defining the level of renovation, and worst when used to compare unlike projects.',
     sections: [['What the range may represent','Lower planning ranges generally assume finish updates with limited system changes. Mid-range renovation coordinates kitchens, bathrooms and finishes. Comprehensive work may rebuild layouts, structure and systems. Always ask what the reported number includes.'],['Room mix matters','Kitchens and bathrooms carry more cost than bedrooms and hallways. Two homes of equal size can have very different budgets based on cabinet quantity, tile, plumbing fixtures and appliance packages.'],['Existing conditions matter','Foundation issues, water damage, older electrical service, galvanized or cast-iron plumbing, asbestos or lead protocols, and undocumented alterations can add investigation and corrective work.'],['Soft costs and owner costs','Design, engineering, surveys, permits, temporary housing, storage, furniture and owner-purchased products may sit outside a contractor’s square-foot figure. Put them into the total project budget.'],['Use the number responsibly','Select a scope tier, multiply only for a preliminary range, then test it against room-by-room priorities. Keep a contingency appropriate to the property and do not commit all funds to visible finishes.'],['Move from benchmark to proposal','ADELIE can review the property, define included areas and systems, identify assumptions and build a scope that contractors can price consistently.']],
     faqs: [['Does square footage include garages or patios?', 'Not necessarily. Confirm the exact measured area and which exterior or nonconditioned spaces are included.'],['Is a kitchen remodel included?', 'Only if the stated scope says so; kitchens can materially raise the average rate.'],['Does the rate include design and permits?', 'Often it does not. Ask for an explicit list of inclusions and exclusions.']],
@@ -166,7 +166,7 @@ pages.push(
   {
     slug:'adu-cost-san-diego', title:'How Much Does an ADU Cost in San Diego?',
     description:'Plan a San Diego ADU budget around size, type, utilities, site access, design, permits, development fees and finish level.', eyebrow:'San Diego ADU Cost Guide',
-    answer:'A San Diego ADU does not have one reliable average price. A garage conversion may reuse parts of an existing shell, while a detached ADU needs a foundation, complete structure, utilities and site work. Size, utility distance, access, grading, fire requirements, design and finish level determine the useful range.',
+    answer:'A San Diego ADU does not have one reliable average price. Swell Contracting’s 2026 guide lists $180,000–$350,000 for its detached ADU projects, including design, permits and construction. That is one contractor’s planning range—not a countywide average. Conversions, difficult sites, utility work and finish choices can produce very different totals.',
     intro:'Per-square-foot comparisons often omit design, engineering, utility work, permit-related costs or difficult site conditions. Build the budget from the property outward: feasibility first, then the building, then finishes.',
     sections:[
       ['ADU type changes the starting point','Garage conversions, attached ADUs, detached units and additions above garages have different structural and utility requirements. Existing construction is only valuable when it is documented, suitable and adaptable.'],
@@ -220,14 +220,51 @@ const practicalNotes = {
 };
 
 const sourceLinks = {
+  'is-100k-enough-to-remodel-a-house-san-diego': [
+    ['Precision Home Design — 2026 San Diego Remodeling Cost Report','https://www.precision-sd.com/san-diego-remodeling-cost-report'],
+    ['Swell Contracting — 2026 San Diego Remodel Cost Guide','https://www.swellcontractinginc.com/cost-guide/2026'],
+    ['CSLB — Building Permit Requirements','https://www.cslb.ca.gov/consumers/hire_a_contractor/Building_Permit_Requirements.aspx']
+  ],
+  'home-remodeling-cost-san-diego': [
+    ['Precision Home Design — 2026 San Diego Remodeling Cost Report','https://www.precision-sd.com/san-diego-remodeling-cost-report'],
+    ['Lars Remodeling — Whole-Home Remodel Cost in San Diego','https://larsremodel.com/educational-post/whole-home-remodel-cost-san-diego'],
+    ['City of San Diego — Building Permits','https://www.sandiego.gov/development-services/permits/building-permit']
+  ],
+  'kitchen-remodel-cost-san-diego': [
+    ['Swell Contracting — 2026 San Diego Remodel Cost Guide','https://www.swellcontractinginc.com/cost-guide/2026'],
+    ['Lars Remodeling — San Diego Home Remodeling Cost Guide','https://larsremodel.com/educational-post/san-diego-home-remodeling-cost'],
+    ['City of San Diego — Building Permits','https://www.sandiego.gov/development-services/permits/building-permit']
+  ],
+  'bathroom-remodel-cost-san-diego': [
+    ['Swell Contracting — 2026 San Diego Remodel Cost Guide','https://www.swellcontractinginc.com/cost-guide/2026'],
+    ['CSLB — Building Permit Requirements','https://www.cslb.ca.gov/consumers/hire_a_contractor/Building_Permit_Requirements.aspx']
+  ],
+  'whole-home-remodel-cost-per-square-foot-san-diego': [
+    ['Precision Home Design — 2026 San Diego Remodeling Cost Report','https://www.precision-sd.com/san-diego-remodeling-cost-report'],
+    ['Lars Remodeling — Whole-Home Remodel Cost in San Diego','https://larsremodel.com/educational-post/whole-home-remodel-cost-san-diego']
+  ],
+  'how-long-does-a-whole-house-remodel-take': [
+    ['City of San Diego — Building Permits','https://www.sandiego.gov/development-services/permits/building-permit'],
+    ['City of San Diego — Residential Additions and Remodels (IB 140)','https://www.sandiego.gov/development-services/forms-publications/information-bulletins/140']
+  ],
+  'what-can-you-remodel-with-50k': [
+    ['Swell Contracting — 2026 San Diego Remodel Cost Guide','https://www.swellcontractinginc.com/cost-guide/2026'],
+    ['CSLB — Building Permit Requirements','https://www.cslb.ca.gov/consumers/hire_a_contractor/Building_Permit_Requirements.aspx']
+  ],
+  'remodel-or-rebuild': [
+    ['City of San Diego — Building Permits','https://www.sandiego.gov/development-services/permits/building-permit'],
+    ['City of San Diego — Residential Additions and Remodels (IB 140)','https://www.sandiego.gov/development-services/forms-publications/information-bulletins/140']
+  ],
   'bathroom-remodel-permit-california': [
+    ['CSLB — Building Permit Requirements','https://www.cslb.ca.gov/consumers/hire_a_contractor/Building_Permit_Requirements.aspx'],
     ['City of San Diego building permit guidance','https://www.sandiego.gov/development-services/permits/building-permit'],
     ['City of San Diego residential addition and remodel bulletin','https://www.sandiego.gov/development-services/forms-publications/information-bulletins/140'],
     ['CSLB home-improvement contract guidance','https://www.cslb.ca.gov/Consumers/Hire_A_Contractor/Home_Improvement_Contracts/What_Is_A_Contract.aspx']
   ],
   'adu-cost-san-diego': [
     ['California HCD accessory dwelling unit guidance','https://www.hcd.ca.gov/policy-and-research/accessory-dwelling-units'],
-    ['City of San Diego ADU and JADU information','https://www.sandiego.gov/development-services/forms-publications/information-bulletins/400']
+    ['City of San Diego ADU and JADU information','https://www.sandiego.gov/development-services/forms-publications/information-bulletins/400'],
+    ['Swell Contracting — 2026 San Diego Remodel Cost Guide','https://www.swellcontractinginc.com/cost-guide/2026']
   ]
 };
 

@@ -1,5 +1,6 @@
 [build]
-  publish = "."
+  command = "node scripts/build-site.mjs"
+  publish = "dist"
 
 # Keep the public URL format aligned with the canonical tags and sitemap.
 # Netlify's Pretty URLs processing otherwise exposes both /page and /page.html,
@@ -31,7 +32,9 @@
 [[headers]]
   for = "/assets/*"
   [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
+    # Asset filenames are stable rather than content-hashed, so allow updates to
+    # propagate without leaving returning visitors on a year-old CSS/image copy.
+    Cache-Control = "public, max-age=604800, stale-while-revalidate=86400"
 
 [functions]
   directory = "netlify/functions"

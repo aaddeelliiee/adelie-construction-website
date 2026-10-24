@@ -8,6 +8,7 @@ import {
 } from "node:fs/promises";
 import { dirname, extname, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
+import { ACADEMY_REDIRECTS } from "./academy-consolidation.mjs";
 
 import {
   EXCLUDED_ROOT_HTML,
@@ -132,7 +133,7 @@ for (const entry of await readdir(projectRoot, { withFileTypes: true })) {
   }
 }
 
-await copyTree("academy");
+await copyTree("academy", (file) => !ACADEMY_REDIRECTS.has(file));
 await copyTree("assets");
 await copyTree("vendor");
 await copyTree("project-rescue", (path) => [".css", ".js"].includes(extname(path).toLowerCase()));
@@ -150,6 +151,11 @@ const artifactPaths = [
 ].sort();
 
 const redirects = new Map();
+for (const [file, target] of ACADEMY_REDIRECTS) {
+  for (const variant of htmlVariants(`/${file}`, { includeCanonical: true })) {
+    addRedirect(redirects, variant, target);
+  }
+}
 for (const relativePath of artifactPaths) {
   const urlPath = `/${relativePath}`;
   const target = await artifactTarget(relativePath);

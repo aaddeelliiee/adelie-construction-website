@@ -159,42 +159,32 @@
   ],
   "academy": {
     "name": "ADELIE Remodeling Academy",
-    "articleCount": 126,
+    "articleCount": 103,
     "index": "https://www.adelieconstruction.com/academy-index.json",
     "categories": [
       {
-        "name": "Kitchen Remodeling",
-        "slug": "kitchen-remodeling",
-        "articleCount": 16
-      },
-      {
         "name": "Bathroom Remodeling",
         "slug": "bathroom-remodeling",
-        "articleCount": 10
-      },
-      {
-        "name": "Whole-Home Remodeling",
-        "slug": "whole-home-remodeling",
-        "articleCount": 10
+        "articleCount": 9
       },
       {
         "name": "ADUs & Home Additions",
         "slug": "adu-and-additions",
-        "articleCount": 10
+        "articleCount": 6
       },
       {
         "name": "Planning & Budgeting",
         "slug": "planning-and-budgeting",
-        "articleCount": 10
+        "articleCount": 7
       },
       {
-        "name": "Contractors & Contracts",
-        "slug": "contractors-and-contracts",
-        "articleCount": 10
+        "name": "High-End Details & Modern Finishes",
+        "slug": "high-end-modern-finishes",
+        "articleCount": 13
       },
       {
-        "name": "Permits & Inspections",
-        "slug": "permits-and-inspections",
+        "name": "Kitchen Remodeling",
+        "slug": "kitchen-remodeling",
         "articleCount": 10
       },
       {
@@ -205,7 +195,17 @@
       {
         "name": "Construction Process",
         "slug": "construction-process",
-        "articleCount": 10
+        "articleCount": 8
+      },
+      {
+        "name": "Contractors & Contracts",
+        "slug": "contractors-and-contracts",
+        "articleCount": 5
+      },
+      {
+        "name": "San Diego Planning Considerations",
+        "slug": "local-san-diego-planning",
+        "articleCount": 8
       },
       {
         "name": "Outdoor Living",
@@ -213,16 +213,23 @@
         "articleCount": 10
       },
       {
-        "name": "Maintenance & Closeout",
-        "slug": "maintenance-and-closeout",
-        "articleCount": 10
+        "name": "Permits & Inspections",
+        "slug": "permits-and-inspections",
+        "articleCount": 3
       },
       {
-        "name": "San Diego Planning Considerations",
-        "slug": "local-san-diego-planning",
-        "articleCount": 10
+        "name": "Whole-Home Remodeling",
+        "slug": "whole-home-remodeling",
+        "articleCount": 6
+      },
+      {
+        "name": "Maintenance & Closeout",
+        "slug": "maintenance-and-closeout",
+        "articleCount": 8
       }
-    ]
+    ],
+    "currentArticleCount": 25,
+    "archivedArticleCount": 78
   },
   "project_advisor": {
     "url": "https://www.adelieconstruction.com/project-advisor.html",

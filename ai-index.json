@@ -181,7 +181,7 @@
   "remodelingAcademy": {
     "url": "https://www.adelieconstruction.com/academy.html",
     "machineIndex": "https://www.adelieconstruction.com/academy-index.json",
-    "articleCount": 126,
+    "articleCount": 103,
     "topics": [
       "Kitchen Remodeling",
       "Bathroom Remodeling",
@@ -195,7 +195,9 @@
       "Outdoor Living",
       "Maintenance & Closeout",
       "San Diego Planning Considerations"
-    ]
+    ],
+    "currentArticleCount": 25,
+    "archivedArticleCount": 78
   },
   "resources": [
     {

@@ -1,6 +1,7 @@
 import { access, readFile, readdir } from "node:fs/promises";
 import { dirname, extname, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
+import { ACADEMY_REDIRECTS } from "./academy-consolidation.mjs";
 
 import {
   GUIDE_SCHEMA_FILES,
@@ -201,6 +202,15 @@ for (const relativePath of GUIDE_SCHEMA_FILES) {
 }
 
 const redirects = parseRedirects(await readFile(resolve(outputDir, "_redirects"), "utf8"));
+for (const [file, target] of ACADEMY_REDIRECTS) {
+  assert(!outputFileSet.has(file), `Merged Academy page leaked into dist: ${file}`);
+  assert(outputFileSet.has(target.slice(1)), `Missing Academy merge destination: ${target}`);
+  assert(!redirects.has(target), `Academy redirect chain: ${file} -> ${target}`);
+  assert(sitemapSet.has(`${SITE_ORIGIN}${target}`), `Academy redirect target is not indexable: ${target}`);
+  for (const variant of htmlVariants(`/${file}`, { includeCanonical: true })) {
+    assert(redirects.get(variant) === target, `Missing Academy redirect: ${variant}`);
+  }
+}
 const sourceArtifactPaths = [
   "HOMEPAGE_SECTION.html",
   ...REMOVED_CITY_SERVICE_REDIRECTS.keys(),

@@ -8,6 +8,17 @@ const types = { '.html':'text/html; charset=utf-8', '.css':'text/css; charset=ut
 
 http.createServer((request, response) => {
   const pathname = decodeURIComponent(new URL(request.url, `http://${request.headers.host}`).pathname);
+  // Exercise the generated production redirect destinations in local previews too.
+  const redirectFile = path.join(root, '_redirects');
+  const redirects = new Map(fs.readFileSync(redirectFile, 'utf8').split(/\r?\n/)
+    .filter(line => line.trim() && !line.startsWith('#'))
+    .map(line => { const [from, to] = line.trim().split(/\s+/); return [from.replace(/\/+$/, ''), to]; }));
+  const redirect = redirects.get(pathname.replace(/\/+$/, ''));
+  if (redirect) {
+    response.writeHead(301, { Location: redirect });
+    response.end();
+    return;
+  }
   const relative = pathname === '/' ? 'index.html' : pathname.replace(/^\/+/, '');
   const file = path.resolve(root, relative);
   if (!file.startsWith(root + path.sep) || !fs.existsSync(file) || fs.statSync(file).isDirectory()) {

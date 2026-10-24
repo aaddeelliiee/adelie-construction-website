@@ -1,0 +1,70 @@
+// A merge is activated only when its destination covers the source's useful intent.
+// Source files remain in Git for recovery; the production build omits redirected files.
+const groups = {
+  '/academy/remodeling-condos.html':['hoa-approvals'],
+  '/academy/older-san-diego-homes.html':['existing-conditions','historic-character'],
+  '/academy/adu-feasibility.html':['adu-utility-planning','adu-site-access','adu-design-decisions'],
+  '/academy/structural-changes.html':['structural-engineering','addition-structural-openings','rough-framing','special-inspections'],
+  '/academy/accessible-bathroom-design.html':['walk-in-shower-design'],
+  '/academy/kitchen-layout-design.html':['kitchen-island-design','appliance-planning','kitchen-plumbing-plan','kitchen-electrical-plan'],
+  '/academy/plan-review.html':['permit-documents','inspection-sequence','permit-closeout'],
+  '/academy/allowances.html':['contingency','budget-tracking','soft-costs'],
+  '/academy/whole-home-closeout.html':['warranty-records','one-year-review','final-cleaning','warranties','final-payment'],
+  '/contractor-estimate-comparison-guide.html':['compare-remodeling-bids','contract-exclusions'],
+  '/living-through-remodel-guide.html':['living-arrangements'],
+  '/san-diego-remodel-permit-guide.html':['when-permits-needed'],
+  '/kitchen-remodel-cost-san-diego.html':['kitchen-remodel-budgeting'],
+  '/remodel-timeline-guide.html':['kitchen-remodel-timeline','construction-delays','local-project-seasonality'],
+  '/whole-home-remodel-guide.html':['whole-home-scope','whole-home-phasing']
+};
+export const ACADEMY_REDIRECTS = new Map(Object.entries(groups).flatMap(([target,slugs])=>slugs.map(slug=>[`academy/${slug}.html`,target])));
+// Later groups are editorial recommendations, not live redirects to unfinished content.
+export const laterGroups = [
+ ['cabinet-construction',['cabinet-construction','cabinet-styles','cabinet-hardware','cabinet-installation-process'],'Create a cabinet selection and installation guide with measurable construction differences, shop-drawing checks and hardware coordination.'],
+ ['quartz-countertops',['quartz-countertops','quartz-care'],'Combine purchase and care guidance; verify heat, cleaning and warranty claims against named manufacturers.'],
+ ['granite-countertops',['granite-countertops','granite-care'],'Combine slab selection and care; research stone-specific sealing and repair guidance rather than implying all granite behaves alike.'],
+ ['kitchen-lighting-plan',['kitchen-lighting-plan','lighting-fixtures'],'Develop a lighting plan example with task placement, controls, fixture schedules and applicable energy requirements.'],
+ ['bathroom-vanity-planning',['bathroom-vanity-planning','bathroom-storage','bathroom-lighting'],'Coordinate vanity, storage and mirror lighting in a practical small-bathroom layout; keep electrical requirements verified.'],
+ ['bathroom-tile-layout',['bathroom-tile-layout','grout-selection','tile-installation-process','tile-grout-care'],'Combine tile layout, installation decisions and care; preserve distinct floor and wall assembly requirements.'],
+ ['lvp-vs-hardwood',['lvp-vs-hardwood','engineered-vs-solid-wood','kitchen-flooring-options','wood-floor-care','lvp-care'],'Create a material comparison with product-specific moisture, installation, repair and care evidence.'],
+ ['scope-of-work',['scope-of-work','remodel-priorities','value-engineering','project-readiness'],'Consolidate scope preparation and prioritization into a usable briefing worksheet; do not repeat existing cost guides.'],
+ ['preconstruction-meeting',['preconstruction-meeting','communication-plan','decision-schedule'],'Build one preconstruction meeting agenda with named decisions, owners and deadlines.'],
+ ['verify-contractor-license',['verify-contractor-license','contractor-insurance'],'Research current CSLB checks, classifications and insurance documents; avoid blanket insurance conclusions.'],
+ ['payment-schedules',['payment-schedules','change-orders'],'Review alongside existing contract guides; verify California payment and change-order rules before consolidation.'],
+ ['whole-home-electrical',['whole-home-electrical','rough-electrical'],'Develop an electrical upgrade planning guide with load assessment and current code references, not DIY wiring instructions.'],
+ ['whole-home-plumbing',['whole-home-plumbing','rough-plumbing','bathroom-plumbing-layout','plumbing-fixtures'],'Build a coordinated plumbing scope guide covering fixture moves, compatibility, testing and restoration.'],
+ ['painting-process',['painting-process','paint-sheen-guide','paint-touchups'],'Combine preparation, sheen and touch-up guidance; correct the old paint-flashing explanation that incorrectly describes roof flashing.'],
+ ['site-protection',['site-protection','demolition-process','small-lot-logistics'],'Develop an occupied-site and demolition plan using EPA guidance; separate access advice from hazardous-material procedures.'],
+ ['outdoor-kitchen-planning',['outdoor-kitchen-planning','outdoor-project-budget','outdoor-project-sequence'],'Build an outdoor-project plan with a utility diagram and scope breakdown; research appliance listing and ventilation requirements.'],
+ ['coastal-home-remodeling',['coastal-home-remodeling','exterior-materials'],'Research exposure-specific material and maintenance choices; keep coastal permitting distinct from salt-air durability.'],
+ ['seasonal-home-checklist',['seasonal-home-checklist'],'Retain as a future maintenance tool with product-specific intervals and clear escalation triggers, rather than a thin search article.']
+];
+export const standaloneNotes = {
+ 'marble-countertops':'Distinct material decision; needs sourced etching, staining and maintenance tradeoffs with realistic use cases.',
+ 'butcher-block-countertops':'Distinct wood-countertop decision; research finish compatibility, sink detailing and care by product.',
+ 'kitchen-ventilation':'High-value technical topic; replace the irrelevant plumbing-vent explanation with sourced capture, duct and makeup-air planning.',
+ 'bathroom-ventilation':'High-value moisture-control topic; replace the plumbing-vent definition with verified fan, duct and control guidance.',
+ 'bathtub-selection':'Keep a distinct tub comparison with access, weight/support, cleaning and plumbing implications.',
+ 'mechanical-systems':'Needs HVAC sizing and distribution sources; retain a planning scope distinct from electrical and plumbing articles.',
+ 'finish-consistency':'Potential design worksheet; support with actual coordinated examples rather than generic MEP definitions.',
+ 'home-addition-foundations':'Needs engineering-led site and soil discussion; do not imply a universal foundation solution.',
+ 'addition-roof-connections':'Needs illustrated roof and flashing options with verified technical sources.',
+ 'addition-budget':'Distinct addition budget scope; research local evidence and distinguish new floor area from interior remodel costs.',
+ 'addition-timeline':'Potential addition-specific sequence; retain only if it develops foundation and dry-in dependencies beyond the existing timeline guide.',
+ 'energy-requirements':'Requires current California energy-code research and clear distinctions among alteration types.',
+ 'porcelain-vs-ceramic':'Distinct material comparison; verify classifications and use limitations from standards/manufacturers.',
+ 'interior-doors':'Useful selection topic if expanded around core, swing, jamb and installation conditions.',
+ 'trim-and-baseboards':'Compare conventional trim coordination; avoid competing with existing detailed recessed-baseboard guide.',
+ 'insulation-drywall':'Needs distinct discussion of inspection timing, finish levels and acoustic assemblies with verified sources.',
+ 'patio-cover-planning':'Research local approval, attachment and drainage requirements before publication.',
+ 'deck-materials':'Needs manufacturer-based maintenance, exposure and heat comparison; avoid universal performance claims.',
+ 'exterior-tile':'Needs verified wet-use suitability, drainage and movement details, distinct from indoor tile.',
+ 'pool-remodel-planning':'Distinct service intent; research scope-specific permits and equipment requirements.',
+ 'landscape-lighting':'Develop a real zone/control planning example; verify electrical claims before indexing.',
+ 'outdoor-drainage':'Distinct site issue; needs authority and engineering sources on approved discharge, grading and runoff.',
+ 'shower-maintenance':'Keep maintenance intent separate from construction waterproofing; research cleaners, sealants and leak-response guidance.',
+ 'hillside-properties':'High-value local candidate; needs verified grading, drainage and geotechnical review information.',
+ 'wildfire-conscious-remodeling':'High-value local candidate; use current CAL FIRE and jurisdiction requirements before making safety claims.',
+ 'water-efficiency':'Needs current fixture and water-agency guidance with measured savings assumptions.',
+ 'heat-and-sun':'Needs climate/site-specific shading, glazing and comfort evidence; replace the unrelated plumbing-vent explanation.'
+};

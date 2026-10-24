@@ -2,7 +2,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const root = path.resolve(import.meta.dirname, '..');
-const base = fs.readFileSync(path.join(root, 'kitchen-remodel-cost-guide.html'), 'utf8');
+// Always inherit the site's current global navigation and footer from the homepage.
+// The SEO hub adds content; it must never introduce a second menu variant.
+const base = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 const header = base.match(/<body>([\s\S]*?)<main id="main-content">/)[1];
 const footer = base.match(/<\/main>([\s\S]*)<\/body>/)[1];
 const updated = '2026-10-24';

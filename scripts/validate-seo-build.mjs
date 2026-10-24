@@ -41,7 +41,7 @@ function canonicalHref(html) {
 
 function htmlVariants(urlPath, { includeCanonical = false } = {}) {
   const stem = urlPath.slice(0, -".html".length);
-  const variants = [stem, `${stem}/`, `${urlPath}/`];
+  const variants = [stem];
   if (includeCanonical) variants.unshift(urlPath);
   return variants;
 }
@@ -55,6 +55,7 @@ function parseRedirects(source) {
     assert(Boolean(from && to && status), `Malformed redirect line: ${line}`);
     assert(!redirects.has(from), `Duplicate redirect source: ${from}`);
     assert(status === "301!", `Redirect is not a forced 301: ${line}`);
+    assert(from.replace(/\/+$/, '') !== to.replace(/\/+$/, ''), `Netlify-normalized redirect loop: ${line}`);
     redirects.set(from, to);
   }
   return redirects;

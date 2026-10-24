@@ -101,12 +101,17 @@ async function artifactTarget(relativePath) {
 
 function htmlVariants(urlPath, { includeCanonical = false } = {}) {
   const stem = urlPath.slice(0, -".html".length);
-  const variants = [stem, `${stem}/`, `${urlPath}/`];
+  // Netlify ignores trailing slashes when matching rules. A /page.html/
+  // redirect to /page.html also matches /page.html and creates a loop.
+  const variants = [stem];
   if (includeCanonical) variants.unshift(urlPath);
   return variants;
 }
 
 function addRedirect(redirects, from, to) {
+  if (from.replace(/\/+$/, '') === to.replace(/\/+$/, '')) {
+    throw new Error(`Redirect loops after Netlify path normalization: ${from}`);
+  }
   const existing = redirects.get(from);
   if (existing && existing !== to) {
     throw new Error(`Conflicting redirect for ${from}: ${existing} vs ${to}`);

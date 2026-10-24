@@ -32,6 +32,14 @@ home = home.replace('<h3>Kitchen Remodel Cost Guide</h3><p>Build a realistic bud
 home = home.replace('<h3>Choosing a Contractor</h3><p>Compare scopes, communication and change-order processes with confidence.</p><a href="choosing-a-contractor-guide.html">Read guide →</a>', '<h3>Home Remodeling Cost in San Diego</h3><p>Understand planning ranges, inclusions and the choices that change the total.</p><a href="home-remodeling-cost-san-diego.html">Read guide →</a>');
 fs.writeFileSync(homePath,home);
 
+const editorialPath = path.join(root,'editorial-policy.html');
+let editorial = fs.readFileSync(editorialPath,'utf8');
+editorial = editorial.replace(
+  '<h2>How information is reviewed</h2><p>Guides are checked for clear scope language, practical sequencing, homeowner decision points and appropriate limitations. We revise content when services, processes or commonly referenced requirements change.</p>',
+  '<h2>How information is created and reviewed</h2><p>Research and drafting tools may help organize source material or prepare early language. ADELIE is responsible for the final guidance. Before publication, pages are checked for clear scope language, practical sequencing, homeowner decision points, factual support and appropriate limitations. We revise content when services, processes or commonly referenced requirements change.</p>'
+);
+fs.writeFileSync(editorialPath,editorial);
+
 const sitemapPath = path.join(root,'sitemap.xml');
 let sitemap = fs.readFileSync(sitemapPath,'utf8');
 const urls = pages.map(([,href],i)=>`<url><loc>https://www.adelieconstruction.com/${href}</loc><lastmod>2026-10-24</lastmod><priority>${i < 4 ? '0.9' : '0.8'}</priority></url>`).join('\n');

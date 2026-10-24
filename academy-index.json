@@ -1,8 +1,8 @@
 {
   "name": "ADELIE Remodeling Academy",
-  "articleCount": 103,
-  "currentArticleCount": 25,
-  "archivedArticleCount": 78,
+  "articleCount": 53,
+  "currentArticleCount": 53,
+  "archivedArticleCount": 0,
   "lastModified": "2026-10-24",
   "articles": [
     {
@@ -16,34 +16,14 @@
       "status": "current"
     },
     {
-      "title": "Home Addition Budget Planning",
+      "title": "Planning a San Diego Home Addition: Budget, Structure & Schedule",
       "slug": "addition-budget",
       "url": "/academy/addition-budget.html",
       "category": "ADUs & Home Additions",
       "category_slug": "adu-and-additions",
-      "description": "Build a budget around design, engineering, site work, structure, systems and finishes.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
-    },
-    {
-      "title": "Connecting a Home Addition to the Existing Roof",
-      "slug": "addition-roof-connections",
-      "url": "/academy/addition-roof-connections.html",
-      "category": "ADUs & Home Additions",
-      "category_slug": "adu-and-additions",
-      "description": "Plan drainage, flashing, roof geometry and interior ceiling transitions.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
-    },
-    {
-      "title": "Home Addition Timeline",
-      "slug": "addition-timeline",
-      "url": "/academy/addition-timeline.html",
-      "category": "ADUs & Home Additions",
-      "category_slug": "adu-and-additions",
-      "description": "See how design, permits, foundation, framing, dry-in, rough work and finishes sequence.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
+      "description": "Build a complete addition plan around site work, foundations, roof connections, utilities, approvals and the sequence that keeps the existing home protected.",
+      "dateModified": "2026-10-24",
+      "status": "current"
     },
     {
       "title": "San Diego ADU Feasibility: Site, Utilities & Access",
@@ -66,74 +46,34 @@
       "status": "current"
     },
     {
-      "title": "Bathroom Lighting Design",
-      "slug": "bathroom-lighting",
-      "url": "/academy/bathroom-lighting.html",
-      "category": "Bathroom Remodeling",
-      "category_slug": "bathroom-remodeling",
-      "description": "Plan vanity lighting, general light, shower-rated fixtures and nighttime use.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
-    },
-    {
-      "title": "Bathroom Plumbing Layout",
-      "slug": "bathroom-plumbing-layout",
-      "url": "/academy/bathroom-plumbing-layout.html",
-      "category": "Bathroom Remodeling",
-      "category_slug": "bathroom-remodeling",
-      "description": "Understand how fixture moves affect drainage, venting, water lines, framing and cost.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
-    },
-    {
-      "title": "Bathroom Storage Ideas",
-      "slug": "bathroom-storage",
-      "url": "/academy/bathroom-storage.html",
-      "category": "Bathroom Remodeling",
-      "category_slug": "bathroom-remodeling",
-      "description": "Use recessed cabinets, vanity drawers, linen storage and shower niches effectively.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
-    },
-    {
-      "title": "Bathroom Tile Layout Planning",
+      "title": "Choosing and Installing Tile: Layout, Grout & Wet-Area Details",
       "slug": "bathroom-tile-layout",
       "url": "/academy/bathroom-tile-layout.html",
       "category": "Bathroom Remodeling",
       "category_slug": "bathroom-remodeling",
-      "description": "Use layout drawings, focal points, grout joints, cuts and transitions to improve the final result.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
+      "description": "Plan tile for bathrooms, floors and exterior areas using product suitability, substrate preparation, layout drawings, movement joints and care requirements.",
+      "dateModified": "2026-10-24",
+      "status": "current"
     },
     {
-      "title": "Bathroom Vanity Planning",
+      "title": "Bathroom Layout: Vanities, Storage, Lighting & Bathtubs",
       "slug": "bathroom-vanity-planning",
       "url": "/academy/bathroom-vanity-planning.html",
       "category": "Bathroom Remodeling",
       "category_slug": "bathroom-remodeling",
-      "description": "Size, storage, sink type, plumbing, lighting, outlets and countertop coordination.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
+      "description": "Coordinate vanity size, storage, lighting, plumbing and tub access before ordering fixtures for a bathroom remodel.",
+      "dateModified": "2026-10-24",
+      "status": "current"
     },
     {
-      "title": "Bathroom Ventilation Planning",
+      "title": "Bathroom Ventilation: Fan, Duct & Control Planning",
       "slug": "bathroom-ventilation",
       "url": "/academy/bathroom-ventilation.html",
       "category": "Bathroom Remodeling",
       "category_slug": "bathroom-remodeling",
-      "description": "Fan sizing concepts, duct routing, controls and moisture management for remodeled bathrooms.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
-    },
-    {
-      "title": "How to Choose a Bathtub",
-      "slug": "bathtub-selection",
-      "url": "/academy/bathtub-selection.html",
-      "category": "Bathroom Remodeling",
-      "category_slug": "bathroom-remodeling",
-      "description": "Compare alcove, freestanding, drop-in and soaking tubs by space, plumbing and maintenance.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
+      "description": "Plan a bathroom exhaust system around the duct route, installed airflow, noise, controls and maintenance access before closing the ceiling.",
+      "dateModified": "2026-10-24",
+      "status": "current"
     },
     {
       "title": "Bookmatched Stone: Slab Selection, Seams and Waste",
@@ -146,94 +86,34 @@
       "status": "current"
     },
     {
-      "title": "Butcher Block Countertops",
+      "title": "Wood Countertops: Finish, Sink Details & Maintenance",
       "slug": "butcher-block-countertops",
       "url": "/academy/butcher-block-countertops.html",
       "category": "Kitchen Remodeling",
       "category_slug": "kitchen-remodeling",
-      "description": "Wood species, finish systems, sink areas, movement, maintenance and realistic use expectations.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
+      "description": "Plan a wood countertop around its finish system, intended use, moisture exposure, movement and care before choosing the species or edge.",
+      "dateModified": "2026-10-24",
+      "status": "current"
     },
     {
-      "title": "Cabinet Construction: Stock, Semi-Custom and Custom",
+      "title": "Choosing Kitchen Cabinets: Construction, Style & Installation",
       "slug": "cabinet-construction",
       "url": "/academy/cabinet-construction.html",
       "category": "Kitchen Remodeling",
       "category_slug": "kitchen-remodeling",
-      "description": "A practical comparison of cabinet boxes, joinery, hardware, sizing flexibility and lead times.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
+      "description": "Compare kitchen cabinets by construction, usable storage, finish, hardware and installation scope before approving shop drawings or placing an order.",
+      "dateModified": "2026-10-24",
+      "status": "current"
     },
     {
-      "title": "Cabinet Hardware Planning",
-      "slug": "cabinet-hardware",
-      "url": "/academy/cabinet-hardware.html",
-      "category": "Materials & Finishes",
-      "category_slug": "materials-and-finishes",
-      "description": "Coordinate size, placement, drilling, appliance clearances and style.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
-    },
-    {
-      "title": "Cabinet Installation Process",
-      "slug": "cabinet-installation-process",
-      "url": "/academy/cabinet-installation-process.html",
-      "category": "Construction Process",
-      "category_slug": "construction-process",
-      "description": "From layout and leveling to fillers, panels, hardware and appliance coordination.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
-    },
-    {
-      "title": "Kitchen Cabinet Styles: Shaker, Slab, Inset and More",
-      "slug": "cabinet-styles",
-      "url": "/academy/cabinet-styles.html",
-      "category": "Kitchen Remodeling",
-      "category_slug": "kitchen-remodeling",
-      "description": "How door style, overlay, proportions and finish influence appearance, cleaning and cost.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
-    },
-    {
-      "title": "How Change Orders Should Work",
-      "slug": "change-orders",
-      "url": "/academy/change-orders.html",
-      "category": "Contractors & Contracts",
-      "category_slug": "contractors-and-contracts",
-      "description": "Document reason, scope, cost and schedule impact before proceeding whenever practical.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
-    },
-    {
-      "title": "Planning a Remodel Near the San Diego Coast",
+      "title": "Coastal San Diego Remodeling: Exposure, Materials & Approvals",
       "slug": "coastal-home-remodeling",
       "url": "/academy/coastal-home-remodeling.html",
       "category": "San Diego Planning Considerations",
       "category_slug": "local-san-diego-planning",
-      "description": "Consider salt exposure, moisture, ventilation, corrosion and material durability.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
-    },
-    {
-      "title": "Creating a Contractor Communication Plan",
-      "slug": "communication-plan",
-      "url": "/academy/communication-plan.html",
-      "category": "Contractors & Contracts",
-      "category_slug": "contractors-and-contracts",
-      "description": "Set meeting cadence, decision channels, documentation and escalation paths.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
-    },
-    {
-      "title": "Understanding Contractor Insurance",
-      "slug": "contractor-insurance",
-      "url": "/academy/contractor-insurance.html",
-      "category": "Contractors & Contracts",
-      "category_slug": "contractors-and-contracts",
-      "description": "Know which documents to request and what questions to ask your insurer or advisor.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
+      "description": "Plan coastal remodeling around actual salt and moisture exposure, compatible exterior components, maintenance access and location-specific approvals.",
+      "dateModified": "2026-10-24",
+      "status": "current"
     },
     {
       "title": "Cove Ceilings: Curves, Shadow Lines and Hidden Costs",
@@ -256,86 +136,6 @@
       "status": "current"
     },
     {
-      "title": "Creating a Remodeling Decision Schedule",
-      "slug": "decision-schedule",
-      "url": "/academy/decision-schedule.html",
-      "category": "Planning & Budgeting",
-      "category_slug": "planning-and-budgeting",
-      "description": "Match selections and approvals to procurement and construction dependencies.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
-    },
-    {
-      "title": "Deck Material Options",
-      "slug": "deck-materials",
-      "url": "/academy/deck-materials.html",
-      "category": "Outdoor Living",
-      "category_slug": "outdoor-living",
-      "description": "Compare wood, composite and other systems by structure, maintenance and heat.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
-    },
-    {
-      "title": "What to Expect During Demolition",
-      "slug": "demolition-process",
-      "url": "/academy/demolition-process.html",
-      "category": "Construction Process",
-      "category_slug": "construction-process",
-      "description": "Understand protection, utility shutoffs, sorting, concealed conditions and debris removal.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
-    },
-    {
-      "title": "Energy Requirements During Remodeling",
-      "slug": "energy-requirements",
-      "url": "/academy/energy-requirements.html",
-      "category": "Permits & Inspections",
-      "category_slug": "permits-and-inspections",
-      "description": "A high-level overview of how windows, lighting, insulation and equipment may be affected.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
-    },
-    {
-      "title": "Engineered vs. Solid Hardwood",
-      "slug": "engineered-vs-solid-wood",
-      "url": "/academy/engineered-vs-solid-wood.html",
-      "category": "Materials & Finishes",
-      "category_slug": "materials-and-finishes",
-      "description": "Understand construction, stability, refinishing and installation conditions.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
-    },
-    {
-      "title": "Choosing Exterior Materials",
-      "slug": "exterior-materials",
-      "url": "/academy/exterior-materials.html",
-      "category": "Outdoor Living",
-      "category_slug": "outdoor-living",
-      "description": "Compare exposure, movement, corrosion, cleaning and maintenance.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
-    },
-    {
-      "title": "Exterior Tile and Paver Planning",
-      "slug": "exterior-tile",
-      "url": "/academy/exterior-tile.html",
-      "category": "Outdoor Living",
-      "category_slug": "outdoor-living",
-      "description": "Understand drainage, movement, slip resistance and substrate preparation.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
-    },
-    {
-      "title": "Creating a Consistent Finish Palette",
-      "slug": "finish-consistency",
-      "url": "/academy/finish-consistency.html",
-      "category": "Whole-Home Remodeling",
-      "category_slug": "whole-home-remodeling",
-      "description": "Coordinate flooring, paint, cabinetry, hardware and lighting across the home.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
-    },
-    {
       "title": "Flush and Concealed Doors: What Makes Them Disappear",
       "slug": "flush-concealed-doors",
       "url": "/academy/flush-concealed-doors.html",
@@ -356,94 +156,34 @@
       "status": "current"
     },
     {
-      "title": "How to Care for Granite Countertops",
-      "slug": "granite-care",
-      "url": "/academy/granite-care.html",
-      "category": "Maintenance & Closeout",
-      "category_slug": "maintenance-and-closeout",
-      "description": "Cleaning, sealing, chips, stains and natural variation.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
-    },
-    {
-      "title": "Granite Countertops for Kitchens",
+      "title": "Granite Countertops: Slab Selection, Sealing & Care",
       "slug": "granite-countertops",
       "url": "/academy/granite-countertops.html",
       "category": "Kitchen Remodeling",
       "category_slug": "kitchen-remodeling",
-      "description": "How natural variation, slab selection, sealing, seams and support affect a granite installation.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
+      "description": "Evaluate granite slabs, seams, support and maintenance before ordering. Learn why sealing and cleaning advice should match the actual stone.",
+      "dateModified": "2026-10-24",
+      "status": "current"
     },
     {
-      "title": "How to Choose Grout",
-      "slug": "grout-selection",
-      "url": "/academy/grout-selection.html",
-      "category": "Materials & Finishes",
-      "category_slug": "materials-and-finishes",
-      "description": "Consider joint width, color, maintenance, movement and installation requirements.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
-    },
-    {
-      "title": "Designing for San Diego Heat and Sun",
-      "slug": "heat-and-sun",
-      "url": "/academy/heat-and-sun.html",
-      "category": "San Diego Planning Considerations",
-      "category_slug": "local-san-diego-planning",
-      "description": "Consider glazing, shade, roofing, insulation, ventilation and material exposure.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
-    },
-    {
-      "title": "Remodeling Hillside Properties",
+      "title": "Remodeling a San Diego Hillside Home: Drainage, Access and Ground Work",
       "slug": "hillside-properties",
       "url": "/academy/hillside-properties.html",
       "category": "San Diego Planning Considerations",
       "category_slug": "local-san-diego-planning",
-      "description": "Review access, drainage, retaining conditions, staging and structural coordination.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
+      "description": "Plan slope-sensitive remodeling around site investigation, drainage, access, grading review and retaining structures before fixing an addition or outdoor layout.",
+      "dateModified": "2026-10-24",
+      "status": "current"
     },
     {
-      "title": "Foundation Planning for Home Additions",
-      "slug": "home-addition-foundations",
-      "url": "/academy/home-addition-foundations.html",
-      "category": "ADUs & Home Additions",
-      "category_slug": "adu-and-additions",
-      "description": "How soils, elevations, existing foundations and engineering affect the project.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
-    },
-    {
-      "title": "Insulation and Drywall Sequence",
-      "slug": "insulation-drywall",
-      "url": "/academy/insulation-drywall.html",
-      "category": "Construction Process",
-      "category_slug": "construction-process",
-      "description": "Coordinate inspections, sound control, backing, drywall levels and drying time.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
-    },
-    {
-      "title": "Interior Door Selection",
+      "title": "Choosing Interior Doors, Trim and Finish Details Together",
       "slug": "interior-doors",
       "url": "/academy/interior-doors.html",
       "category": "Materials & Finishes",
       "category_slug": "materials-and-finishes",
-      "description": "Compare styles, cores, jambs, hardware and swing coordination.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
-    },
-    {
-      "title": "Kitchen Flooring Options",
-      "slug": "kitchen-flooring-options",
-      "url": "/academy/kitchen-flooring-options.html",
-      "category": "Kitchen Remodeling",
-      "category_slug": "kitchen-remodeling",
-      "description": "Compare tile, wood, engineered wood, LVP and other materials for durability, transitions and maintenance.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
+      "description": "Coordinate door construction, swing, jambs, hardware, baseboards and floor transitions. Use a finish schedule to avoid mismatched details during installation.",
+      "dateModified": "2026-10-24",
+      "status": "current"
     },
     {
       "title": "Kitchen Layout Planning: Islands, Appliances & Utility Moves",
@@ -456,34 +196,24 @@
       "status": "current"
     },
     {
-      "title": "How to Plan Kitchen Lighting",
+      "title": "Planning Kitchen and Outdoor Lighting That Works After Dark",
       "slug": "kitchen-lighting-plan",
       "url": "/academy/kitchen-lighting-plan.html",
       "category": "Kitchen Remodeling",
       "category_slug": "kitchen-remodeling",
-      "description": "Layer ambient, task and accent lighting while coordinating switches, dimmers and cabinet details.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
+      "description": "Plan task lighting, fixture placement, dimming and outdoor zones before electrical work. Use a room-by-room schedule to avoid shadows and glare.",
+      "dateModified": "2026-10-24",
+      "status": "current"
     },
     {
-      "title": "Kitchen Ventilation and Range Hoods",
+      "title": "Kitchen Range Hood Planning: Capture, Ducts & California Review",
       "slug": "kitchen-ventilation",
       "url": "/academy/kitchen-ventilation.html",
       "category": "Kitchen Remodeling",
       "category_slug": "kitchen-remodeling",
-      "description": "Understand capture area, duct routing, make-up air considerations, noise and installation constraints.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
-    },
-    {
-      "title": "Landscape Lighting Planning",
-      "slug": "landscape-lighting",
-      "url": "/academy/landscape-lighting.html",
-      "category": "Outdoor Living",
-      "category_slug": "outdoor-living",
-      "description": "Plan zones, controls, fixture placement, voltage drop and service access.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
+      "description": "Plan the range hood before cabinets: cooking coverage, duct route, noise, makeup-air questions and California verification requirements.",
+      "dateModified": "2026-10-24",
+      "status": "current"
     },
     {
       "title": "Large-Format Porcelain Slabs for Walls and Countertops",
@@ -506,16 +236,6 @@
       "status": "current"
     },
     {
-      "title": "How to Select Lighting Fixtures",
-      "slug": "lighting-fixtures",
-      "url": "/academy/lighting-fixtures.html",
-      "category": "Materials & Finishes",
-      "category_slug": "materials-and-finishes",
-      "description": "Coordinate scale, output, mounting, controls and installation requirements.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
-    },
-    {
       "title": "Linear Slot HVAC Diffusers in High-End Homes",
       "slug": "linear-slot-diffusers",
       "url": "/academy/linear-slot-diffusers.html",
@@ -526,44 +246,34 @@
       "status": "current"
     },
     {
-      "title": "LVP Flooring Maintenance",
-      "slug": "lvp-care",
-      "url": "/academy/lvp-care.html",
-      "category": "Maintenance & Closeout",
-      "category_slug": "maintenance-and-closeout",
-      "description": "Cleaning, furniture protection, heat, moisture and plank replacement.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
-    },
-    {
-      "title": "LVP vs. Hardwood Flooring",
+      "title": "LVP, Engineered Wood or Solid Wood? A Remodel Comparison",
       "slug": "lvp-vs-hardwood",
       "url": "/academy/lvp-vs-hardwood.html",
       "category": "Materials & Finishes",
       "category_slug": "materials-and-finishes",
-      "description": "Compare appearance, moisture, repairability, transitions and long-term value.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
+      "description": "Compare vinyl plank and wood flooring by site conditions, moisture, repair options, transitions and daily care before choosing the finished surface.",
+      "dateModified": "2026-10-24",
+      "status": "current"
     },
     {
-      "title": "Marble Countertops: Beauty, Patina and Maintenance",
+      "title": "Marble Countertops: Etching, Staining & the Choice to Accept Patina",
       "slug": "marble-countertops",
       "url": "/academy/marble-countertops.html",
       "category": "Kitchen Remodeling",
       "category_slug": "kitchen-remodeling",
-      "description": "An honest look at etching, staining, sealing and where marble may or may not fit a kitchen.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
+      "description": "Decide whether marble fits your kitchen by understanding appearance changes, slab layout, sealing limits and the care you are prepared to provide.",
+      "dateModified": "2026-10-24",
+      "status": "current"
     },
     {
-      "title": "Coordinating HVAC in a Whole-Home Remodel",
+      "title": "Home Comfort During a Remodel: HVAC, Windows & Insulation",
       "slug": "mechanical-systems",
       "url": "/academy/mechanical-systems.html",
       "category": "Whole-Home Remodeling",
       "category_slug": "whole-home-remodeling",
-      "description": "Plan comfort, equipment, ductwork, ventilation and access before finishes.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
+      "description": "Coordinate heating, cooling, shade, windows, insulation and wall closure around actual room conditions and applicable California energy requirements.",
+      "dateModified": "2026-10-24",
+      "status": "current"
     },
     {
       "title": "Remodeling an Older San Diego Home: Investigate Before Pricing",
@@ -576,74 +286,24 @@
       "status": "current"
     },
     {
-      "title": "Outdoor Drainage Around Remodels",
-      "slug": "outdoor-drainage",
-      "url": "/academy/outdoor-drainage.html",
-      "category": "Outdoor Living",
-      "category_slug": "outdoor-living",
-      "description": "Protect structures by planning slopes, drains, downspouts and discharge paths.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
-    },
-    {
-      "title": "Outdoor Kitchen Planning",
+      "title": "Planning an Outdoor Kitchen, Patio and Deck in San Diego",
       "slug": "outdoor-kitchen-planning",
       "url": "/academy/outdoor-kitchen-planning.html",
       "category": "Outdoor Living",
       "category_slug": "outdoor-living",
-      "description": "Coordinate utilities, weather exposure, appliances, ventilation and materials.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
+      "description": "Define outdoor cooking, seating, utilities, drainage and shade together. Compare a complete scope and sequence before choosing appliances or deck finishes.",
+      "dateModified": "2026-10-24",
+      "status": "current"
     },
     {
-      "title": "Outdoor Living Budget Planning",
-      "slug": "outdoor-project-budget",
-      "url": "/academy/outdoor-project-budget.html",
-      "category": "Outdoor Living",
-      "category_slug": "outdoor-living",
-      "description": "Account for site work, structure, utilities, drainage, finishes and landscaping.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
-    },
-    {
-      "title": "Outdoor Project Construction Sequence",
-      "slug": "outdoor-project-sequence",
-      "url": "/academy/outdoor-project-sequence.html",
-      "category": "Outdoor Living",
-      "category_slug": "outdoor-living",
-      "description": "Understand demolition, underground work, structure, hardscape, finishes and landscaping.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
-    },
-    {
-      "title": "Paint Sheen Guide",
-      "slug": "paint-sheen-guide",
-      "url": "/academy/paint-sheen-guide.html",
-      "category": "Materials & Finishes",
-      "category_slug": "materials-and-finishes",
-      "description": "Choose flat, eggshell, satin, semi-gloss and gloss based on light, use and cleaning.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
-    },
-    {
-      "title": "How to Manage Paint Touch-Ups",
-      "slug": "paint-touchups",
-      "url": "/academy/paint-touchups.html",
-      "category": "Maintenance & Closeout",
-      "category_slug": "maintenance-and-closeout",
-      "description": "Store records, match sheen, understand flashing and maintain surfaces.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
-    },
-    {
-      "title": "Interior Painting Process",
+      "title": "Planning Interior Painting: Preparation, Sheen and Touch-Ups",
       "slug": "painting-process",
       "url": "/academy/painting-process.html",
       "category": "Construction Process",
       "category_slug": "construction-process",
-      "description": "Surface preparation, primers, coats, curing and touch-up expectations.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
+      "description": "Compare painting scopes by preparation, surface repairs, primer and finish. Learn why touch-ups show and how to keep useful color and product records.",
+      "dateModified": "2026-10-24",
+      "status": "current"
     },
     {
       "title": "Panel-Ready Appliances and Integrated Kitchens",
@@ -656,24 +316,14 @@
       "status": "current"
     },
     {
-      "title": "Patio Cover Planning",
-      "slug": "patio-cover-planning",
-      "url": "/academy/patio-cover-planning.html",
-      "category": "Outdoor Living",
-      "category_slug": "outdoor-living",
-      "description": "Review structure, drainage, shade, lighting and permit considerations.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
-    },
-    {
-      "title": "Understanding Construction Payment Schedules",
+      "title": "California Remodel Payment Schedules and Change Orders",
       "slug": "payment-schedules",
       "url": "/academy/payment-schedules.html",
       "category": "Contractors & Contracts",
       "category_slug": "contractors-and-contracts",
-      "description": "Connect payments to lawful contract terms, progress and documented milestones.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
+      "description": "Understand deposit limits, progress-payment milestones and written change orders. Keep the contract total, approved changes and payment records aligned.",
+      "dateModified": "2026-10-24",
+      "status": "current"
     },
     {
       "title": "San Diego Remodel Permits: From Application to Final Inspection",
@@ -686,74 +336,34 @@
       "status": "current"
     },
     {
-      "title": "How to Select Plumbing Fixtures",
-      "slug": "plumbing-fixtures",
-      "url": "/academy/plumbing-fixtures.html",
-      "category": "Materials & Finishes",
-      "category_slug": "materials-and-finishes",
-      "description": "Verify rough-in dimensions, valves, flow, finish, service parts and compatibility.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
-    },
-    {
-      "title": "Pool Remodel Planning",
+      "title": "Planning a Pool Remodel: Scope, Equipment and Site Access",
       "slug": "pool-remodel-planning",
       "url": "/academy/pool-remodel-planning.html",
       "category": "Outdoor Living",
       "category_slug": "outdoor-living",
-      "description": "Coordinate surfaces, coping, equipment, drainage, access and surrounding improvements.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
+      "description": "Separate pool finish repairs from structural and equipment changes. Plan approvals, access, barriers, surrounding surfaces and startup responsibilities.",
+      "dateModified": "2026-10-24",
+      "status": "current"
     },
     {
-      "title": "Porcelain vs. Ceramic Tile",
-      "slug": "porcelain-vs-ceramic",
-      "url": "/academy/porcelain-vs-ceramic.html",
-      "category": "Materials & Finishes",
-      "category_slug": "materials-and-finishes",
-      "description": "Compare density, applications, cutting, cost and maintenance.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
-    },
-    {
-      "title": "What Happens at a Preconstruction Meeting",
+      "title": "Preconstruction Meeting: A Homeowner’s Agenda Before Demolition",
       "slug": "preconstruction-meeting",
       "url": "/academy/preconstruction-meeting.html",
       "category": "Planning & Budgeting",
       "category_slug": "planning-and-budgeting",
-      "description": "Confirm scope, access, communication, schedule, protection, utilities and documentation.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
+      "description": "Use a preconstruction meeting to confirm the scope, approvals, selections, access, communication and decisions needed before a remodel starts.",
+      "dateModified": "2026-10-24",
+      "status": "current"
     },
     {
-      "title": "Are You Ready to Start a Remodel?",
-      "slug": "project-readiness",
-      "url": "/academy/project-readiness.html",
-      "category": "Planning & Budgeting",
-      "category_slug": "planning-and-budgeting",
-      "description": "Evaluate scope, budget, plans, selections, financing and household readiness.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
-    },
-    {
-      "title": "How to Care for Quartz Countertops",
-      "slug": "quartz-care",
-      "url": "/academy/quartz-care.html",
-      "category": "Maintenance & Closeout",
-      "category_slug": "maintenance-and-closeout",
-      "description": "Daily cleaning, heat protection, stains, chemicals and seam expectations.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
-    },
-    {
-      "title": "Quartz Countertops for Kitchens",
+      "title": "Quartz Countertops: Selection, Seams, Heat & Everyday Care",
       "slug": "quartz-countertops",
       "url": "/academy/quartz-countertops.html",
       "category": "Kitchen Remodeling",
       "category_slug": "kitchen-remodeling",
-      "description": "What homeowners should know about appearance, seams, edge profiles, heat, maintenance and fabrication.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
+      "description": "Choose quartz countertops with a plan for slab layout, seams, supports, appliance heat and care instructions—not just a color sample.",
+      "dateModified": "2026-10-24",
+      "status": "current"
     },
     {
       "title": "Recessed Baseboards and Flush Wall Details",
@@ -764,16 +374,6 @@
       "description": "",
       "dateModified": "2026-07-11",
       "status": "current"
-    },
-    {
-      "title": "How to Set Remodeling Priorities",
-      "slug": "remodel-priorities",
-      "url": "/academy/remodel-priorities.html",
-      "category": "Planning & Budgeting",
-      "category_slug": "planning-and-budgeting",
-      "description": "Separate must-haves, preferences and optional upgrades before pricing begins.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
     },
     {
       "title": "Condo Remodeling in San Diego: HOA, Permits & Shared Systems",
@@ -796,44 +396,24 @@
       "status": "current"
     },
     {
-      "title": "What Happens During Rough Electrical",
-      "slug": "rough-electrical",
-      "url": "/academy/rough-electrical.html",
-      "category": "Construction Process",
-      "category_slug": "construction-process",
-      "description": "Understand boxes, wiring, circuits, lighting and inspection timing.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
-    },
-    {
-      "title": "What Happens During Rough Plumbing",
-      "slug": "rough-plumbing",
-      "url": "/academy/rough-plumbing.html",
-      "category": "Construction Process",
-      "category_slug": "construction-process",
-      "description": "Learn how supply, drains, vents, valves and testing are coordinated.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
-    },
-    {
-      "title": "How to Write a Remodeling Scope of Work",
+      "title": "How to Write a Remodeling Scope Before Requesting Bids",
       "slug": "scope-of-work",
       "url": "/academy/scope-of-work.html",
       "category": "Planning & Budgeting",
       "category_slug": "planning-and-budgeting",
-      "description": "Document what is included, excluded, assumed and selected.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
+      "description": "Turn remodeling goals into a comparable scope: room boundaries, inclusions, exclusions, selections, assumptions and cost-saving alternatives.",
+      "dateModified": "2026-10-24",
+      "status": "current"
     },
     {
-      "title": "Seasonal Home Maintenance Checklist",
+      "title": "A Practical Home Maintenance Checklist After a San Diego Remodel",
       "slug": "seasonal-home-checklist",
       "url": "/academy/seasonal-home-checklist.html",
       "category": "Maintenance & Closeout",
       "category_slug": "maintenance-and-closeout",
-      "description": "A simple schedule for drainage, sealants, filters, detectors and exterior conditions.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
+      "description": "Organize post-remodel checks around rain, leaks, shower care and installed equipment. Keep product instructions and clear records of changes that need attention.",
+      "dateModified": "2026-10-24",
+      "status": "current"
     },
     {
       "title": "Shadow-Gap Reveals: The Small Detail That Exposes Big Mistakes",
@@ -846,16 +426,6 @@
       "status": "current"
     },
     {
-      "title": "Shower Maintenance After Remodeling",
-      "slug": "shower-maintenance",
-      "url": "/academy/shower-maintenance.html",
-      "category": "Maintenance & Closeout",
-      "category_slug": "maintenance-and-closeout",
-      "description": "Ventilation, drying, sealants, drains and grout care.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
-    },
-    {
       "title": "Shower Waterproofing: What to Verify Before Tile Goes In",
       "slug": "shower-waterproofing",
       "url": "/academy/shower-waterproofing.html",
@@ -866,24 +436,14 @@
       "status": "current"
     },
     {
-      "title": "How a Contractor Should Protect Your Home",
+      "title": "Remodel Site Protection: Dust, Demolition & Access Planning",
       "slug": "site-protection",
       "url": "/academy/site-protection.html",
       "category": "Construction Process",
       "category_slug": "construction-process",
-      "description": "Review dust control, floor protection, barriers, negative air and daily cleanup.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
-    },
-    {
-      "title": "Construction Logistics on Small Lots",
-      "slug": "small-lot-logistics",
-      "url": "/academy/small-lot-logistics.html",
-      "category": "San Diego Planning Considerations",
-      "category_slug": "local-san-diego-planning",
-      "description": "Plan parking, deliveries, debris, staging, neighbor communication and protection.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
+      "description": "Plan work zones, household access, dust control, deliveries and demolition checks before remodeling an occupied San Diego home.",
+      "dateModified": "2026-10-24",
+      "status": "current"
     },
     {
       "title": "Removing a Wall During a Remodel: Structure, Permits & Repairs",
@@ -894,36 +454,6 @@
       "description": "Understand what to establish before removing a wall: structural design, support below, utilities, inspections and the surrounding finish repairs.",
       "dateModified": "2026-10-24",
       "status": "current"
-    },
-    {
-      "title": "Tile and Grout Maintenance",
-      "slug": "tile-grout-care",
-      "url": "/academy/tile-grout-care.html",
-      "category": "Maintenance & Closeout",
-      "category_slug": "maintenance-and-closeout",
-      "description": "Cleaning methods, sealers, movement joints and early signs of problems.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
-    },
-    {
-      "title": "Tile Installation Process",
-      "slug": "tile-installation-process",
-      "url": "/academy/tile-installation-process.html",
-      "category": "Construction Process",
-      "category_slug": "construction-process",
-      "description": "Substrate preparation, layout, waterproofing, setting, grout and curing.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
-    },
-    {
-      "title": "Trim and Baseboard Planning",
-      "slug": "trim-and-baseboards",
-      "url": "/academy/trim-and-baseboards.html",
-      "category": "Materials & Finishes",
-      "category_slug": "materials-and-finishes",
-      "description": "Coordinate profiles, heights, transitions, flooring and paint.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
     },
     {
       "title": "Trimless Recessed Lighting Without Cracked Ceilings",
@@ -946,34 +476,14 @@
       "status": "current"
     },
     {
-      "title": "Value Engineering Without Cutting Quality",
-      "slug": "value-engineering",
-      "url": "/academy/value-engineering.html",
-      "category": "Planning & Budgeting",
-      "category_slug": "planning-and-budgeting",
-      "description": "Reduce cost by simplifying scope, sequencing and specifications rather than using poor materials.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
-    },
-    {
-      "title": "How to Verify a Contractor License",
+      "title": "Checking a California Contractor: License, Insurance & References",
       "slug": "verify-contractor-license",
       "url": "/academy/verify-contractor-license.html",
       "category": "Contractors & Contracts",
       "category_slug": "contractors-and-contracts",
-      "description": "Use official records and confirm the classification and status applicable to the project.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
-    },
-    {
-      "title": "Water-Efficient Remodeling",
-      "slug": "water-efficiency",
-      "url": "/academy/water-efficiency.html",
-      "category": "San Diego Planning Considerations",
-      "category_slug": "local-san-diego-planning",
-      "description": "Coordinate fixtures, irrigation, hot-water delivery and household use goals.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
+      "description": "Use CSLB records to check a contractor’s identity and status, then verify insurance documents, relevant experience and who will perform the work.",
+      "dateModified": "2026-10-24",
+      "status": "current"
     },
     {
       "title": "Wet Room Bathrooms: What Luxury Photos Do Not Show",
@@ -996,44 +506,34 @@
       "status": "current"
     },
     {
-      "title": "Whole-Home Electrical Planning",
+      "title": "Electrical Planning for a Remodel: Loads, Layout & Service Work",
       "slug": "whole-home-electrical",
       "url": "/academy/whole-home-electrical.html",
       "category": "Whole-Home Remodeling",
       "category_slug": "whole-home-remodeling",
-      "description": "Coordinate service capacity, panels, circuits, lighting and future loads.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
+      "description": "Plan electrical work around actual appliances, service capacity, circuit and lighting layouts, utility coordination and inspections before walls close.",
+      "dateModified": "2026-10-24",
+      "status": "current"
     },
     {
-      "title": "Whole-Home Plumbing Planning",
+      "title": "Remodel Plumbing: Fixture Moves, Existing Pipes & Water Use",
       "slug": "whole-home-plumbing",
       "url": "/academy/whole-home-plumbing.html",
       "category": "Whole-Home Remodeling",
       "category_slug": "whole-home-remodeling",
-      "description": "Evaluate supply, drainage, venting, fixture locations and aging systems.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
+      "description": "Coordinate drains, vents, supply lines, fixture compatibility and water-efficient selections before approving plumbing changes in a remodel.",
+      "dateModified": "2026-10-24",
+      "status": "current"
     },
     {
-      "title": "Wildfire-Conscious Remodeling Decisions",
+      "title": "Wildfire-Conscious Remodeling for San Diego County Homes",
       "slug": "wildfire-conscious-remodeling",
       "url": "/academy/wildfire-conscious-remodeling.html",
       "category": "San Diego Planning Considerations",
       "category_slug": "local-san-diego-planning",
-      "description": "Discuss exterior materials, vents, vegetation and local requirements with qualified professionals.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
-    },
-    {
-      "title": "Wood Floor Maintenance",
-      "slug": "wood-floor-care",
-      "url": "/academy/wood-floor-care.html",
-      "category": "Maintenance & Closeout",
-      "category_slug": "maintenance-and-closeout",
-      "description": "Humidity, cleaning, furniture protection, sunlight and refinishing.",
-      "dateModified": "2026-07-11",
-      "status": "archived"
+      "description": "Use a remodel to review roofs, vents, exterior assemblies and maintenance access. Confirm parcel-specific fire requirements and select documented products.",
+      "dateModified": "2026-10-24",
+      "status": "current"
     }
   ]
 }

@@ -46,7 +46,7 @@ San Diego County, California. Project availability depends on scope, access and 
 ## Remodeling Academy
 - Hub: https://www.adelieconstruction.com/academy.html
 - Machine-readable article index: https://www.adelieconstruction.com/academy-index.json
-- 103 guides and references: 25 current guides and 78 archived references awaiting rewriting. Check each article's status before citing it.
+- 53 guides and references: 53 current guides. Check the linked sources and property-specific requirements before relying on a guide.
 
 ## ADELIE Project Advisor
 - https://www.adelieconstruction.com/project-advisor.html — guided homeowner project profile covering property, scope, goals, budget, timing and constraints.

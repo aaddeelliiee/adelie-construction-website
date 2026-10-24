@@ -159,23 +159,23 @@
   ],
   "academy": {
     "name": "ADELIE Remodeling Academy",
-    "articleCount": 103,
+    "articleCount": 53,
     "index": "https://www.adelieconstruction.com/academy-index.json",
     "categories": [
       {
         "name": "Bathroom Remodeling",
         "slug": "bathroom-remodeling",
-        "articleCount": 9
+        "articleCount": 5
       },
       {
         "name": "ADUs & Home Additions",
         "slug": "adu-and-additions",
-        "articleCount": 6
+        "articleCount": 3
       },
       {
         "name": "Planning & Budgeting",
         "slug": "planning-and-budgeting",
-        "articleCount": 7
+        "articleCount": 3
       },
       {
         "name": "High-End Details & Modern Finishes",
@@ -185,51 +185,51 @@
       {
         "name": "Kitchen Remodeling",
         "slug": "kitchen-remodeling",
-        "articleCount": 10
-      },
-      {
-        "name": "Materials & Finishes",
-        "slug": "materials-and-finishes",
-        "articleCount": 10
-      },
-      {
-        "name": "Construction Process",
-        "slug": "construction-process",
         "articleCount": 8
-      },
-      {
-        "name": "Contractors & Contracts",
-        "slug": "contractors-and-contracts",
-        "articleCount": 5
       },
       {
         "name": "San Diego Planning Considerations",
         "slug": "local-san-diego-planning",
-        "articleCount": 8
+        "articleCount": 5
       },
       {
-        "name": "Outdoor Living",
-        "slug": "outdoor-living",
-        "articleCount": 10
-      },
-      {
-        "name": "Permits & Inspections",
-        "slug": "permits-and-inspections",
-        "articleCount": 3
+        "name": "Materials & Finishes",
+        "slug": "materials-and-finishes",
+        "articleCount": 2
       },
       {
         "name": "Whole-Home Remodeling",
         "slug": "whole-home-remodeling",
-        "articleCount": 6
+        "articleCount": 5
+      },
+      {
+        "name": "Outdoor Living",
+        "slug": "outdoor-living",
+        "articleCount": 2
+      },
+      {
+        "name": "Construction Process",
+        "slug": "construction-process",
+        "articleCount": 2
+      },
+      {
+        "name": "Contractors & Contracts",
+        "slug": "contractors-and-contracts",
+        "articleCount": 2
+      },
+      {
+        "name": "Permits & Inspections",
+        "slug": "permits-and-inspections",
+        "articleCount": 2
       },
       {
         "name": "Maintenance & Closeout",
         "slug": "maintenance-and-closeout",
-        "articleCount": 8
+        "articleCount": 1
       }
     ],
-    "currentArticleCount": 25,
-    "archivedArticleCount": 78
+    "currentArticleCount": 53,
+    "archivedArticleCount": 0
   },
   "project_advisor": {
     "url": "https://www.adelieconstruction.com/project-advisor.html",

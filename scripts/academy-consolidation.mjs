@@ -17,7 +17,33 @@ const groups = {
   '/remodel-timeline-guide.html':['kitchen-remodel-timeline','construction-delays','local-project-seasonality'],
   '/whole-home-remodel-guide.html':['whole-home-scope','whole-home-phasing']
 };
-export const ACADEMY_REDIRECTS = new Map(Object.entries(groups).flatMap(([target,slugs])=>slugs.map(slug=>[`academy/${slug}.html`,target])));
+export const BATCH_TWO_REDIRECTS = new Map(Object.entries({
+ '/academy/cabinet-construction.html':['cabinet-styles','cabinet-hardware','cabinet-installation-process'],
+ '/academy/quartz-countertops.html':['quartz-care'],
+ '/academy/granite-countertops.html':['granite-care'],
+ '/academy/lvp-vs-hardwood.html':['engineered-vs-solid-wood','kitchen-flooring-options','wood-floor-care','lvp-care'],
+ '/academy/verify-contractor-license.html':['contractor-insurance'],
+ '/academy/scope-of-work.html':['remodel-priorities','value-engineering','project-readiness'],
+ '/academy/preconstruction-meeting.html':['communication-plan','decision-schedule'],
+ '/academy/site-protection.html':['demolition-process','small-lot-logistics']
+}).flatMap(([target,slugs])=>slugs.map(slug=>[`academy/${slug}.html`,target])));
+export const FINAL_BATCH_REDIRECTS = new Map(Object.entries({
+ '/academy/addition-budget.html':['addition-roof-connections','addition-timeline','home-addition-foundations'],
+ '/academy/bathroom-vanity-planning.html':['bathroom-lighting','bathroom-storage','bathtub-selection'],
+ '/academy/bathroom-tile-layout.html':['grout-selection','porcelain-vs-ceramic','tile-installation-process','tile-grout-care','exterior-tile'],
+ '/academy/coastal-home-remodeling.html':['exterior-materials'],
+ '/academy/mechanical-systems.html':['energy-requirements','heat-and-sun','insulation-drywall'],
+ '/academy/whole-home-electrical.html':['rough-electrical'],
+ '/academy/whole-home-plumbing.html':['rough-plumbing','bathroom-plumbing-layout','plumbing-fixtures','water-efficiency'],
+ '/academy/kitchen-lighting-plan.html':['lighting-fixtures','landscape-lighting'],
+ '/academy/outdoor-kitchen-planning.html':['outdoor-project-budget','outdoor-project-sequence','patio-cover-planning','deck-materials'],
+ '/academy/hillside-properties.html':['outdoor-drainage'],
+ '/academy/painting-process.html':['paint-sheen-guide','paint-touchups'],
+ '/academy/interior-doors.html':['trim-and-baseboards','finish-consistency'],
+ '/academy/payment-schedules.html':['change-orders'],
+ '/academy/seasonal-home-checklist.html':['shower-maintenance']
+}).flatMap(([target,slugs])=>slugs.map(slug=>[`academy/${slug}.html`,target])));
+export const ACADEMY_REDIRECTS = new Map([...Object.entries(groups).flatMap(([target,slugs])=>slugs.map(slug=>[`academy/${slug}.html`,target])), ...BATCH_TWO_REDIRECTS, ...FINAL_BATCH_REDIRECTS]);
 // Later groups are editorial recommendations, not live redirects to unfinished content.
 export const laterGroups = [
  ['cabinet-construction',['cabinet-construction','cabinet-styles','cabinet-hardware','cabinet-installation-process'],'Create a cabinet selection and installation guide with measurable construction differences, shop-drawing checks and hardware coordination.'],

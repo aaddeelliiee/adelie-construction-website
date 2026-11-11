@@ -1,7 +1,23 @@
 const db = supabase.createClient(window.ADELIE_PORTAL_CONFIG.supabaseUrl, window.ADELIE_PORTAL_CONFIG.supabaseAnonKey);
 const $ = id => document.getElementById(id);
-const screens = ['loading','welcome','question-view','checkpoint','complete','error-view'];
+const safe = value => String(value??'').replace(/[&<>\"]/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[char]));
+const screens = ['loading','welcome','question-view','design-sheet','checkpoint','complete','error-view'];
 let record, mode = 'discovery', index = 0, questions = [], answers = {};
+document.head.insertAdjacentHTML('beforeend',`<style>
+.onboarding-shell:has(.design-sheet:not(.hidden)){width:min(1080px,100%)}
+.design-sheet{background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:0 18px 60px rgba(30,27,20,.08);overflow:hidden}
+.design-sheet-heading{padding:clamp(28px,6vw,58px);background:linear-gradient(135deg,#fff 0 68%,#fff7d8 68%);border-bottom:1px solid var(--line)}
+.design-sheet-heading h1{font-family:'Playfair Display',Georgia,serif;font-size:clamp(2.5rem,6vw,4.6rem);line-height:1;margin:0 0 18px}
+.design-sheet-heading>p:not(.eyebrow){max-width:700px;color:var(--muted);line-height:1.7}
+.design-sheet-meta{display:flex;gap:10px 24px;flex-wrap:wrap;margin-top:24px;font-weight:800}.design-sheet-meta span+span{color:var(--muted)}
+#design-sheet-form{padding:clamp(24px,5vw,52px)}#design-sheet-fields{display:grid;grid-template-columns:1fr 1fr;gap:20px 24px}
+#design-sheet-fields h2{grid-column:1/-1;margin:24px 0 0;padding-bottom:10px;border-bottom:2px solid var(--gold);font-family:'Playfair Display',Georgia,serif;font-size:1.8rem}
+.design-field{margin:0;padding:20px;border:1px solid var(--line);border-radius:13px;background:#faf9f5}.design-field strong,.design-field legend{font-weight:900;line-height:1.4}.design-field legend{padding:0 4px}
+.design-field textarea{width:100%;min-height:120px;margin-top:13px;padding:14px;border:1px solid var(--line);border-radius:9px;background:#fff;font:inherit;resize:vertical}
+.design-options{display:grid;gap:9px;margin-top:13px}.design-options label{display:flex;align-items:flex-start;gap:9px;padding:8px 10px;border-radius:8px;background:#fff;cursor:pointer}.design-options input{margin-top:3px;accent-color:var(--gold-deep)}
+.design-sheet-actions{display:flex;justify-content:flex-end;gap:12px;margin-top:30px;padding-top:24px;border-top:1px solid var(--line)}
+@media(max-width:720px){#design-sheet-fields{grid-template-columns:1fr}.design-sheet-heading{background:#fff}.design-sheet-actions{display:grid}.design-sheet-actions button{width:100%}}
+</style>`);
 
 const discoveryQuestions = [
   {id:'spaces',title:'Which parts of your home are you thinking about remodeling?',help:'Choose all that apply. We’ll use this to tailor everything that follows.',multi:true,options:['Kitchen','Bathroom','Whole house','Addition','Exterior / outdoor living','Flooring / paint only','Not sure yet']},
@@ -52,6 +68,36 @@ function buildDesignQuestions(){
   list.push({id:'design_notes',title:'Anything else you want your ADELIE team to know?',type:'text',placeholder:'Special requests, inspiration links, materials you love, or anything you want to avoid.'});
   return list;
 }
+const designSection = id => id.startsWith('bath_') ? 'Bathroom' : id.startsWith('kitchen_') ? 'Kitchen' : id.startsWith('exterior_') ? 'Exterior & outdoor living' : id.startsWith('wholehome_') ? 'Whole home' : id === 'design_notes' ? 'Final notes' : 'Overall look & feel';
+function renderDesignSheet(){
+  questions=buildDesignQuestions();
+  answers={...record.design_answers};
+  $('design-customer-name').textContent=record.full_name;
+  $('design-project-address').textContent=record.address;
+  let section='';
+  $('design-sheet-fields').innerHTML=questions.map(q=>{
+    const heading=designSection(q.id),sectionHeading=heading!==section?`<h2>${heading}</h2>`:'';section=heading;
+    if(q.type==='text')return `${sectionHeading}<label class="design-field"><strong>${safe(q.title)}</strong><textarea data-question="${q.id}" placeholder="${safe(q.placeholder||'')}">${safe(answers[q.id]||'')}</textarea></label>`;
+    const type=q.multi?'checkbox':'radio',values=Array.isArray(answers[q.id])?answers[q.id]:[answers[q.id]];
+    return `${sectionHeading}<fieldset class="design-field"><legend>${q.title}</legend><div class="design-options">${q.options.map(option=>`<label><input type="${type}" name="${q.id}" data-question="${q.id}" value="${option}"${values.includes(option)?' checked':''}> <span>${option}</span></label>`).join('')}</div></fieldset>`;
+  }).join('');
+  show('design-sheet');
+}
+function collectDesignSheet(){
+  const next={};
+  questions.forEach(q=>{
+    if(q.type==='text'){const value=$('design-sheet-fields').querySelector(`[data-question="${q.id}"]`).value.trim();if(value)next[q.id]=value;return;}
+    const checked=[...$('design-sheet-fields').querySelectorAll(`[data-question="${q.id}"]:checked`)].map(input=>input.value);
+    if(checked.length)next[q.id]=q.multi?checked:checked[0];
+  });
+  answers=next;
+}
+async function saveDesignSheet(redirect=false){
+  collectDesignSheet();
+  $('design-save-status').textContent='Saving your Design Sheet…';
+  try{await save(redirect?'design':null);$('design-save-status').textContent='Design Sheet saved.';if(redirect)location.href='portal.html'}
+  catch{$('design-save-status').textContent='We could not save your Design Sheet. Please try again.'}
+}
 function renderQuestion(){
   const q = questions[index], current = answers[q.id];
   $('question-kicker').textContent = mode === 'discovery' ? 'Your project' : 'Your design preferences';
@@ -95,6 +141,8 @@ async function init(){
   const hasPassword=session.user.user_metadata?.portal_password_set===true;
   $('password-setup').classList.toggle('hidden',hasPassword);
   $('begin').classList.toggle('hidden',!hasPassword);
+  const openDesign=new URLSearchParams(location.search).get('view')==='design';
+  if(openDesign&&hasPassword&&Object.keys(data.discovery||{}).length){mode='design';return renderDesignSheet()}
   show('welcome');
 }
 $('password-setup').addEventListener('submit',async event=>{
@@ -118,6 +166,8 @@ Object.assign($('show-password').style,{width:'18px',height:'18px',padding:'0',m
 Object.assign($('show-password').closest('label').style,{display:'flex',alignItems:'center',gap:'9px',width:'max-content',maxWidth:'100%',cursor:'pointer'});
 $('begin').onclick=()=>{mode='discovery';questions=discoveryQuestions;answers={...record.discovery};index=0;show('question-view');renderQuestion()};
 $('back').onclick=()=>{if(index>0){index--;renderQuestion()}}; $('skip').onclick=()=>advance(true); $('next').onclick=()=>advance(false);
-$('continue-design').onclick=()=>{mode='design';questions=buildDesignQuestions();answers={...record.design_answers};index=0;show('question-view');renderQuestion()};
+$('continue-design').onclick=()=>{mode='design';renderDesignSheet()};
+$('save-design').onclick=()=>saveDesignSheet(false);
+$('design-sheet-form').addEventListener('submit',event=>{event.preventDefault();saveDesignSheet(true)});
 $('finish-now').onclick=()=>location.href='portal.html'; $('sign-out').onclick=async()=>{await db.auth.signOut();location.href='portal-login.html'};
 init().catch(()=>{ $('error-message').textContent='Please refresh the page or contact ADELIE for help.'; show('error-view'); });

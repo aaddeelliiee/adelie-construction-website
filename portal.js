@@ -26,9 +26,16 @@ const progress=Math.max(0,Math.min(100,p.progress_percent||0));
 $('progress-bar').style.width=progress+'%';
 $('progress-label').textContent=progress+'%';
 $('progress-ring').style.setProperty('--progress',progress);
-const { data: questionnaire } = await sb.from('finish_questionnaires').select('project_id')
-  .eq('user_id', currentUserId).eq('project_id', projectId).maybeSingle();
-if (questionnaire) {
+const [{ data: questionnaire },{ data: onboarding }] = await Promise.all([
+  sb.from('finish_questionnaires').select('project_id').eq('user_id', currentUserId).eq('project_id', projectId).maybeSingle(),
+  sb.from('customer_onboarding').select('id,discovery').eq('user_id',currentUserId).maybeSingle()
+]);
+if (onboarding) {
+  const link = $('open-finish-questionnaire');
+  link.textContent = 'My Design Sheet';
+  link.href = 'portal-questionnaire.html?view=design';
+  link.classList.remove('hidden');
+} else if (questionnaire) {
   const link = $('open-finish-questionnaire');
   link.href = 'portal-questionnaire.html?project=' + encodeURIComponent(projectId);
   link.classList.remove('hidden');

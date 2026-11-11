@@ -20,18 +20,18 @@
 <img src="assets/optimized/adelie-logo-512.webp" alt="ADELIE Construction" width="512" height="512">
 <p class="portal-kicker">Secure account access</p>
 <h1 class="portal-title">ADELIE Portal</h1>
-<p class="portal-muted">Use the username and password provided by ADELIE. Administrators may continue using their email address.</p>
+<p class="portal-muted">Homeowners can sign in with their email and the password they created. Staff can use their assigned username and password.</p>
 <div id="login-message" class="notice hidden">
 </div>
 <form id="login-form" class="portal-form">
 <label>Account type<select id="account-type"><option value="customer">Customer</option><option value="employee">Employee</option><option value="admin">Administrator</option></select></label>
-<label>Username or administrator email<input type="text" id="login-id" autocomplete="username" required>
+<label>Homeowner email or staff username<input type="text" id="login-id" autocomplete="username" required>
 </label>
 <label>Password<input type="password" id="password" autocomplete="current-password" required>
 </label>
 <button class="portal-btn primary" type="submit">Sign In</button>
 </form>
-<p class="portal-muted" style="font-size:.85rem">Contact <a href="mailto:agustin@adelieconstruction.com">agustin@adelieconstruction.com</a> if you need your username or password changed.</p>
+<form id="email-link-form" class="portal-form"><label>Forgot your password? Enter your homeowner email<input id="email-link-address" type="email" autocomplete="email" required></label><button class="portal-btn light" type="submit">Email me a secure access link</button></form><p class="portal-muted" style="font-size:.85rem">Contact <a href="mailto:agustin@adelieconstruction.com">agustin@adelieconstruction.com</a> if you need help accessing your account.</p>
 <a href="index.html" class="portal-btn dark" style="width:100%">Return to ADELIEConstruction.com</a>
 </section>
 </main>

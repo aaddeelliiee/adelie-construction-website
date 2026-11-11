@@ -91,8 +91,24 @@ async function init(){
   const {data:{session}}=await db.auth.getSession(); if(!session) return location.replace('portal-login.html');
   const {data,error}=await db.from('customer_onboarding').select('*').eq('user_id',session.user.id).maybeSingle();
   if(error||!data){ $('error-message').textContent='This sign-in is not linked to a homeowner welcome. Please contact ADELIE for help.'; return show('error-view'); }
-  record=data; $('customer-first-name').textContent=firstName(); $('customer-name').textContent=data.full_name; $('customer-email').textContent=data.email; $('customer-address').textContent=data.address; show('welcome');
+  record=data; $('customer-first-name').textContent=firstName(); $('customer-name').textContent=data.full_name; $('customer-email').textContent=data.email; $('customer-address').textContent=data.address;
+  const hasPassword=session.user.user_metadata?.portal_password_set===true;
+  $('password-setup').classList.toggle('hidden',hasPassword);
+  $('begin').classList.toggle('hidden',!hasPassword);
+  show('welcome');
 }
+$('password-setup').addEventListener('submit',async event=>{
+  event.preventDefault();
+  const form=event.currentTarget, button=form.querySelector('button');
+  const password=$('new-password').value, confirmation=$('confirm-password').value;
+  if(password.length<10){$('password-status').textContent='Use at least 10 characters.';return;}
+  if(password!==confirmation){$('password-status').textContent='The passwords do not match.';return;}
+  button.disabled=true;$('password-status').textContent='Saving your password…';
+  const {error}=await db.auth.updateUser({password,data:{portal_password_set:true}});
+  button.disabled=false;
+  if(error){$('password-status').textContent='We could not save that password. Please try a different password.';return;}
+  form.reset();form.classList.add('hidden');$('begin').classList.remove('hidden');$('password-status').textContent='';
+});
 $('begin').onclick=()=>{mode='discovery';questions=discoveryQuestions;answers={...record.discovery};index=0;show('question-view');renderQuestion()};
 $('back').onclick=()=>{if(index>0){index--;renderQuestion()}}; $('skip').onclick=()=>advance(true); $('next').onclick=()=>advance(false);
 $('continue-design').onclick=()=>{mode='design';questions=buildDesignQuestions();answers={...record.design_answers};index=0;show('question-view');renderQuestion()};

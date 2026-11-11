@@ -127,10 +127,21 @@ async function save(completed=null){
   if(mode==='discovery') record.discovery={...answers}; else record.design_answers={...answers};
   $('save-status').textContent='Saved';
 }
+async function emailInitialAnswers(){
+  const value=key=>Array.isArray(answers[key])?answers[key].join(', '):(answers[key]||'Not answered');
+  const body=new URLSearchParams({
+    'form-name':'customer-lead-capture',customer_name:record.full_name,customer_email:record.email,property_address:record.address,
+    remodel_areas:value('spaces'),expected_scope:value('extent'),top_priorities:value('priority'),ideal_start:value('timing'),
+    investment_range:value('budget'),occupancy:value('occupancy'),customer_notes:value('vision'),submitted_at:new Date().toLocaleString(),
+    admin_portal:new URL('portal-leads.html',location.href).href
+  });
+  const response=await fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:body.toString()});
+  if(!response.ok)throw new Error('Lead email submission failed.');
+}
 async function advance(skip=false){
   if(skip) delete answers[questions[index].id];
   if(index < questions.length-1){ index++; renderQuestion(); if(index%3===0) save().catch(()=>{$('save-status').textContent='Could not save yet. Your answers remain on this screen.'}); return; }
-  try{ await save(mode); if(mode==='discovery') show('checkpoint'); else location.href='portal.html'; }catch{ $('save-status').textContent='We couldn’t save your answers. Please try again.'; }
+  try{ await save(mode); if(mode==='discovery'){emailInitialAnswers().catch(error=>console.warn(error));show('checkpoint')} else location.href='portal.html'; }catch{ $('save-status').textContent='We couldn’t save your answers. Please try again.'; }
 }
 function finish(){ $('complete-name').textContent=firstName(); $('project-link').classList.toggle('hidden',!record.project_id); show('complete'); }
 async function init(){

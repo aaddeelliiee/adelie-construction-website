@@ -1,32 +1,10 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="robots" content="noindex,nofollow">
-<title>Finish &amp; Design Questionnaire | ADELIE Construction</title>
-<link rel="stylesheet" href="portal.css">
-<link rel="stylesheet" href="portal-questionnaire.css">
-<script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script defer src="portal-config.js"></script>
-<script defer src="portal-questionnaire.js"></script>
-</head>
-<body class="portal-body">
-<main class="questionnaire">
-<div class="portal-card">
-<img src="assets/adelie-logo.png" width="128" alt="ADELIE Construction">
-<h1 class="portal-title">Finish &amp; Design Questionnaire</h1>
-<p id="questionnaire-project"></p>
-<p id="questionnaire-status" role="status">Loading your questionnaire…</p>
-<form id="questionnaire-form" class="portal-form hidden">
-<div id="questionnaire-fields"></div>
-<div class="questionnaire-actions">
-<button class="portal-btn light" type="button" id="save-draft">Save and continue later</button>
-<button class="portal-btn primary" type="submit">Submit selections</button>
-</div>
-</form>
-<p><a href="portal.html">Go to my project</a></p>
-</div>
-</main>
-</body>
-</html>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Your ADELIE Plan | ADELIE Construction</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Playfair+Display:wght@600;700&amp;display=swap" rel="stylesheet"><link rel="stylesheet" href="portal-questionnaire.css"><script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script defer src="portal-config.js"></script><script defer src="portal-questionnaire.js"></script></head><body>
+<header class="onboarding-header"><a class="wordmark" href="https://www.adelieconstruction.com" aria-label="ADELIE Construction home">ADELIE</a><button id="sign-out" class="text-button" type="button">Sign out</button></header>
+<main class="onboarding-shell">
+<section id="loading" class="welcome-card"><p>Preparing your welcome…</p></section>
+<section id="welcome" class="welcome-card hidden"><p class="eyebrow">Your remodel starts here</p><h1>Welcome, <span id="customer-first-name"></span>.</h1><p class="welcome-copy">Tell us what you have in mind. We’ll keep this simple and only ask what applies to your home.</p><dl class="customer-summary"><div><dt>Name</dt><dd id="customer-name"></dd></div><div><dt>Email</dt><dd id="customer-email"></dd></div><div><dt>Project address</dt><dd id="customer-address"></dd></div></dl><button id="begin" class="primary-button" type="button">Let’s get started <span aria-hidden="true">→</span></button><p class="fine-print">About 3 minutes for the first step. You can stop and return anytime.</p></section>
+<section id="question-view" class="question-view hidden" aria-live="polite"><div class="progress-row"><span id="progress-label">A few quick questions</span><span id="progress-count"></span></div><div class="progress-track"><span id="progress-bar"></span></div><article class="question-card"><p id="question-kicker" class="eyebrow"></p><h1 id="question-title"></h1><p id="question-help" class="question-help"></p><div id="answer-options" class="answer-options"></div><div class="question-actions"><button id="back" class="secondary-button" type="button">Back</button><button id="skip" class="text-button" type="button">Skip this question</button><button id="next" class="primary-button" type="button" disabled>Continue</button></div><p id="save-status" class="save-status" role="status"></p></article></section>
+<section id="checkpoint" class="welcome-card hidden"><p class="eyebrow">Great start</p><h1>We have enough to begin.</h1><p class="welcome-copy">Your answers are saved. If you’d like, continue with a design questionnaire tailored to the spaces you selected—no irrelevant kitchen or bathroom questions.</p><div class="checkpoint-actions"><button id="continue-design" class="primary-button" type="button">Continue with my design questions</button><button id="finish-now" class="secondary-button" type="button">I’m finished for now</button></div></section>
+<section id="complete" class="welcome-card hidden"><div class="complete-mark" aria-hidden="true">✓</div><p class="eyebrow">Saved</p><h1>Thank you, <span id="complete-name"></span>.</h1><p class="welcome-copy">Your answers are with the ADELIE team. As your remodel moves forward, this same account can show project progress, photos, messages, and any forms that are ready for you.</p><a id="project-link" class="primary-button hidden" href="portal.html">View my project portal</a></section>
+<section id="error-view" class="welcome-card hidden"><h1>We couldn’t open your plan.</h1><p id="error-message"></p><a class="primary-button" href="portal-login.html">Return to sign in</a></section>
+</main></body></html>

@@ -9,6 +9,9 @@ async function route() {
   if (isAdmin) return location.replace('portal-admin.html');
   const { data: isEmployee } = await sb.rpc('is_employee');
   if (isEmployee) return location.replace('portal-employee.html');
+  const { data: onboarding } = await sb.from('customer_onboarding')
+    .select('id,project_id').eq('user_id', session.user.id).maybeSingle();
+  if (onboarding && !onboarding.project_id) return location.replace('portal-questionnaire.html');
   const { data: questionnaires } = await sb.from('finish_questionnaires')
     .select('project_id').eq('user_id', session.user.id).is('submitted_at', null).limit(1);
   if (questionnaires?.length) return location.replace('portal-questionnaire.html?project=' + encodeURIComponent(questionnaires[0].project_id));

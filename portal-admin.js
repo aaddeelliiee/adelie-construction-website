@@ -64,7 +64,7 @@ $('project-start').value=p.start_date||'';
 $('project-end').value=p.target_completion_date||'';
 const tasks=[];
 if(hasPermission('content'))tasks.push(loadSchedule(),loadPhotos(),loadDocuments(),loadMessages(),loadCustomerUploads(),loadEmployeeApprovals());
-if(hasPermission('customers'))tasks.push(loadCustomerAccounts(),loadQuestionnaireResponses());
+if(hasPermission('customers'))tasks.push(loadCustomerAccounts());
 await Promise.all(tasks)}
 function setProjectSetupAvailability(){
   const hasProject=Boolean(projectId);
@@ -335,79 +335,3 @@ async function deleteAdministrator(id){
   try{await adminFetch('/.netlify/functions/manage-admins',{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({userId:id})});show('Administrator account deleted.');await loadAdministratorAccounts()}catch(error){show(error.message,'error')}
 }
 guard();
-
-async function loadQuestionnaireResponses() {
-  const selectedProject = projectId;
-  const list = $('questionnaire-responses');
-  list.replaceChildren();
-  if (!selectedProject) return;
-  const { data, error } = await sb.from('finish_questionnaires')
-    .select('contact_email,answers,updated_at,submitted_at')
-    .eq('project_id', selectedProject);
-  if (selectedProject !== projectId) return;
-  if (error) {
-    list.textContent = 'Could not load questionnaire responses.';
-    return;
-  }
-  const heading = document.createElement('h3');
-  heading.textContent = 'Questionnaire responses';
-  list.append(heading);
-  if (!data.length) {
-    list.append('No questionnaire has been assigned for this project.');
-    return;
-  }
-  for (const row of data) {
-    const details = document.createElement('details');
-    const summary = document.createElement('summary');
-    summary.textContent = row.contact_email + ' · ' + (row.submitted_at ? 'Submitted · ' + new Date(row.submitted_at).toLocaleString() :
-      row.updated_at ? 'Draft saved · ' + new Date(row.updated_at).toLocaleString() : 'Assigned · No draft saved');
-    details.append(summary);
-    const answers = document.createElement('dl');
-    for (const [key, value] of Object.entries(row.answers)) {
-      const question = document.createElement('dt');
-      question.textContent = key.replaceAll('-', ' ');
-      const answer = document.createElement('dd');
-      answer.textContent = String(value);
-      answers.append(question, answer);
-    }
-    details.append(answers);
-    list.append(details);
-  }
-}
-
-$('questionnaire-invite-form').addEventListener('submit', async event => {
-  event.preventDefault();
-  const selectedProject = projectId;
-  const status = $('questionnaire-invite-status');
-  if (!selectedProject) {
-    status.textContent = 'Create or select a project first.';
-    return;
-  }
-  const form = event.currentTarget;
-  const button = form.querySelector('button');
-  if (button.disabled) return;
-  button.disabled = true;
-  status.textContent = 'Preparing the homeowner invitation…';
-  try {
-    const { data: { session } } = await sb.auth.getSession();
-    if (!session) throw new Error('Please sign in again.');
-    const response = await fetch('/.netlify/functions/invite-questionnaire', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + session.access_token },
-      body: JSON.stringify({
-        projectId: selectedProject,
-        name: $('questionnaire-invite-name').value,
-        email: $('questionnaire-invite-email').value,
-        phone: $('questionnaire-invite-phone').value
-      })
-    });
-    const result = await response.json();
-    status.textContent = result.message || result.error || 'Could not send the invitation.';
-    if (selectedProject === projectId) await loadQuestionnaireResponses();
-    if (response.ok) form.reset();
-  } catch {
-    status.textContent = 'Could not send the invitation. Check your connection and try again.';
-  } finally {
-    button.disabled = false;
-  }
-});

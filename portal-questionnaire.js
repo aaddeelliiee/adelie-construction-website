@@ -1,136 +1,100 @@
-const client = supabase.createClient(window.ADELIE_PORTAL_CONFIG.supabaseUrl, window.ADELIE_PORTAL_CONFIG.supabaseAnonKey);
-const form = document.getElementById('questionnaire-form');
-const statusLine = document.getElementById('questionnaire-status');
-const sections = [
-  ['Design style',
-    ['overall-style', 'Overall style', 'Modern|Contemporary|Transitional|Traditional|Farmhouse|Industrial|Scandinavian|Mid-century|Coastal|Craftsman|Mediterranean|Other'],
-    ['finish-level', 'Desired finish level', 'Builder grade|Mid grade|Premium|Luxury'],
-    ['budget', 'Finish budget', 'Economy|Standard|High-end|No specific budget']],
-  ['Walls, ceilings and paint',
-    ['drywall', 'Drywall finish', 'Level 4|Level 5 smooth'],
-    ['wall-texture', 'Wall texture', 'Smooth|Orange peel|Knockdown|Santa Fe|Skip trowel|Match existing|Other'],
-    ['ceiling-finish', 'Ceiling texture, height and details'],
-    ['corner-beads', 'Corner beads', 'Square|Bullnose'],
-    ['wall-paint', 'Wall paint brand, color and sheen'],
-    ['ceiling-paint', 'Ceiling paint color and sheen'],
-    ['trim-paint', 'Trim and door paint color and sheen']],
-  ['Flooring and tile',
-    ['flooring-type', 'Flooring type', 'Luxury vinyl plank|Engineered hardwood|Solid hardwood|Laminate|Tile|Carpet|Other'],
-    ['flooring-details', 'Flooring pattern, plank width, color and transitions'],
-    ['tile-material', 'Tile material', 'Porcelain|Ceramic|Marble|Travertine|Slate|Other'],
-    ['tile-details', 'Tile size, finish, layout and grout preferences']],
-  ['Shower, vanity and plumbing',
-    ['waterproofing', 'Shower waterproofing', 'Liquid membrane|Sheet membrane|Contractor recommendation'],
-    ['shower-details', 'Drain, curb, bench, niches, glass and shower head preferences'],
-    ['vanity-style', 'Vanity style', 'Floating|Freestanding'],
-    ['sink-details', 'Sink count, sink style and faucet configuration'],
-    ['faucet-finish', 'Faucet finish', 'Chrome|Brushed nickel|Matte black|Satin brass|Oil-rubbed bronze|Other'],
-    ['toilet-tub', 'Toilet, seat and tub preferences']],
-  ['Interior doors and trim',
-    ['door-style', 'Interior door style', 'Flush|Shaker|Two panel|Five panel|Glass panel|Other'],
-    ['door-details', 'Door material and height'],
-    ['trim-details', 'Baseboard height and style, casing and crown molding']],
-  ['Lighting, electrical and ventilation',
-    ['lighting', 'General, bathroom and closet lighting and dimmers'],
-    ['electrical', 'Outlet and switch styles, colors and electrical upgrades'],
-    ['ventilation', 'Bathroom fan and accessory preferences']],
-  ['Kitchen, if applicable',
-    ['cabinet-style', 'Cabinet style', 'Shaker|Slab|Raised panel|Inset|Other'],
-    ['cabinet-material', 'Cabinet finish', 'Painted|Stained|Wood veneer|Thermofoil|Other'],
-    ['countertop', 'Countertop', 'Quartz|Granite|Marble|Butcher block|Other'],
-    ['kitchen-details', 'Backsplash, appliances, sink, faucet, hardware and island']],
-  ['Exterior, if applicable',
-    ['exterior', 'Siding, roofing, doors and exterior lighting'],
-    ['exterior-paint', 'Exterior paint brand, colors and hardware finish']],
-  ['Accessibility and special requests',
-    ['accessibility', 'Accessibility options you need'],
-    ['notes', 'Other requests, inspiration links or finish preferences']]
+const db = supabase.createClient(window.ADELIE_PORTAL_CONFIG.supabaseUrl, window.ADELIE_PORTAL_CONFIG.supabaseAnonKey);
+const $ = id => document.getElementById(id);
+const screens = ['loading','welcome','question-view','checkpoint','complete','error-view'];
+let record, mode = 'discovery', index = 0, questions = [], answers = {};
+
+const discoveryQuestions = [
+  {id:'spaces',title:'Which parts of your home are you thinking about remodeling?',help:'Choose all that apply. We’ll use this to tailor everything that follows.',multi:true,options:['Kitchen','Bathroom','Whole house','Addition','Exterior / outdoor living','Flooring / paint only','Not sure yet']},
+  {id:'extent',title:'How extensive do you expect the remodel to be?',options:['A focused refresh','Replace finishes and fixtures','Change the layout','Major structural changes','I’m not sure yet']},
+  {id:'priority',title:'What matters most to you?',multi:true,options:['Better function','A new look and feel','More space','Accessibility or aging in place','Energy efficiency','Resale value','Repair damage or wear']},
+  {id:'timing',title:'When would you ideally like work to begin?',options:['As soon as possible','Within 3 months','3–6 months','6–12 months','More than a year away','Just exploring']},
+  {id:'budget',title:'Do you have a working investment range?',help:'An early range helps us recommend realistic next steps. It can change as the scope develops.',options:['Under $25,000','$25,000–$75,000','$75,000–$150,000','$150,000–$300,000','$300,000+','I’d like guidance']},
+  {id:'occupancy',title:'Will you be living in the home during construction?',options:['Yes','No','Not sure yet','This is not my primary residence']},
+  {id:'vision',title:'Is there anything you want us to understand from the start?',help:'Share a challenge, must-have, inspiration, or concern.',type:'text',placeholder:'For example: We need more storage and want the space to feel brighter…'}
 ];
 
-function renderFields(answers) {
-  const fields = document.getElementById('questionnaire-fields');
-  for (const [heading, ...questions] of sections) {
-    const fieldset = document.createElement('fieldset');
-    const legend = document.createElement('legend');
-    legend.textContent = heading;
-    fieldset.append(legend);
-    for (const [name, title, choices] of questions) {
-      const label = document.createElement('label');
-      label.textContent = title;
-      const field = document.createElement(choices ? 'select' : 'textarea');
-      field.name = name;
-      if (choices) {
-        field.add(new Option('Select an option', ''));
-        for (const choice of [...choices.split('|'), 'Undecided']) field.add(new Option(choice, choice));
-      } else {
-        field.maxLength = 1200;
-        field.rows = 2;
-      }
-      field.value = answers[name] || '';
-      label.append(field);
-      fieldset.append(label);
-    }
-    fields.append(fieldset);
-  }
-}
+const commonDesign = [
+  {id:'style',title:'Which overall style feels most like you?',options:['Modern','Contemporary','Transitional','Traditional','Coastal','Craftsman','Farmhouse','Mid-century','I’m undecided']},
+  {id:'finishLevel',title:'What finish level are you aiming for?',options:['Practical / builder grade','Mid-range','Premium','Luxury','I’d like recommendations']},
+  {id:'flooring',title:'What flooring are you considering?',multi:true,options:['Luxury vinyl plank','Engineered hardwood','Solid hardwood','Tile','Carpet','Keep existing','Undecided']},
+  {id:'paint',title:'Do you already have paint colors or finishes in mind?',type:'text',placeholder:'Color, brand, sheen—or tell us you’d like recommendations.'},
+  {id:'accessibility',title:'Should we plan for accessibility or aging in place?',multi:true,options:['Curbless shower','Grab-bar blocking','Slip-resistant flooring','Wider doorways','Comfort-height fixtures','Lever handles','No special requirements','I’d like guidance']}
+];
+const bathroomDesign = [
+  {id:'bath_shower',title:'What kind of bathing area do you picture?',multi:true,options:['Walk-in shower','Tub and shower','Freestanding tub','Keep the current layout','Curbless entry','Undecided']},
+  {id:'bath_vanity',title:'What vanity setup works best?',options:['Single sink','Double sink','Floating vanity','Freestanding vanity','Keep existing','Undecided']},
+  {id:'bath_details',title:'Which bathroom features matter to you?',multi:true,options:['Frameless glass','Built-in bench','Shower niche','Rain head','Handheld shower','Bidet seat','Quiet ventilation','Heated floors']}
+];
+const kitchenDesign = [
+  {id:'kitchen_layout',title:'What should change most in the kitchen?',multi:true,options:['Cabinet layout','Storage','Counter space','Island','Lighting','Appliances','Open it to another room','Mostly finishes']},
+  {id:'kitchen_cabinets',title:'Which cabinet direction do you prefer?',options:['Shaker','Slab / flat panel','Raised panel','Inset','Keep existing boxes','Undecided']},
+  {id:'kitchen_surfaces',title:'What surfaces are you considering?',multi:true,options:['Quartz','Granite','Marble','Butcher block','Tile backsplash','Slab backsplash','Undecided']},
+  {id:'kitchen_appliances',title:'Which appliances are part of the plan?',multi:true,options:['Refrigerator','Range / cooktop','Wall oven','Microwave','Dishwasher','Wine cooler','Range hood','Keep existing']}
+];
+const exteriorDesign = [
+  {id:'exterior_scope',title:'What exterior work are you considering?',multi:true,options:['Stucco or siding','Roofing','Exterior doors','Windows','Exterior lighting','Paint','Patio / outdoor living','Pool area']},
+  {id:'exterior_style',title:'How would you describe the exterior direction?',type:'text',placeholder:'Colors, materials, inspiration, or anything you want to preserve.'}
+];
+const wholeHomeDesign = [
+  {id:'wholehome_changes',title:'Which whole-home changes are most important?',multi:true,options:['Rework the floor plan','Interior doors and trim','Lighting and electrical','Windows and doors','Ceiling details','Storage','Smart-home features','Consistent finishes throughout']}
+];
 
-async function init() {
-  const { data: { session } } = await client.auth.getSession();
-  if (!session) {
-    location.replace('portal-login.html');
-    return;
+function show(id){ screens.forEach(name => $(name).classList.toggle('hidden', name !== id)); }
+function firstName(){ return record.full_name.trim().split(/\s+/)[0] || 'there'; }
+function buildDesignQuestions(){
+  const spaces = record.discovery.spaces || [];
+  const has = word => spaces.some(item => item.toLowerCase().includes(word));
+  const list = [...commonDesign];
+  if (has('bath') || has('whole') || has('not sure')) list.push(...bathroomDesign);
+  if (has('kitchen') || has('whole') || has('not sure')) list.push(...kitchenDesign);
+  if (has('exterior') || has('whole')) list.push(...exteriorDesign);
+  if (has('whole') || has('addition')) list.push(...wholeHomeDesign);
+  list.push({id:'design_notes',title:'Anything else you want your ADELIE team to know?',type:'text',placeholder:'Special requests, inspiration links, materials you love, or anything you want to avoid.'});
+  return list;
+}
+function renderQuestion(){
+  const q = questions[index], current = answers[q.id];
+  $('question-kicker').textContent = mode === 'discovery' ? 'Your project' : 'Your design preferences';
+  $('question-title').textContent = q.title;
+  $('question-help').textContent = q.help || (q.multi ? 'Choose all that apply.' : 'Choose one option.');
+  $('progress-label').textContent = mode === 'discovery' ? 'A few quick questions' : 'Tailored design questionnaire';
+  $('progress-count').textContent = `${index + 1} of ${questions.length}`;
+  $('progress-bar').style.width = `${((index + 1) / questions.length) * 100}%`;
+  $('back').disabled = index === 0;
+  $('next').disabled = !current || (Array.isArray(current) && !current.length);
+  $('answer-options').replaceChildren();
+  if(q.type === 'text'){
+    const input = document.createElement('textarea'); input.className='answer-input'; input.placeholder=q.placeholder||''; input.maxLength=1600; input.value=current||'';
+    input.addEventListener('input',()=>{ answers[q.id]=input.value.trim(); $('next').disabled=!answers[q.id]; }); $('answer-options').append(input); input.focus(); return;
   }
-  const project = new URLSearchParams(location.search).get('project');
-  let query = client.from('finish_questionnaires')
-    .select('project_id,answers,submitted_at').eq('user_id', session.user.id);
-  if (project) query = query.eq('project_id', project);
-  const { data, error } = await query.order('submitted_at', { ascending: false, nullsFirst: true }).limit(1).maybeSingle();
-  if (error || !data) {
-    statusLine.textContent = 'We couldn’t open a questionnaire for this account. Contact ADELIE for help.';
-    return;
-  }
-  const { data: details } = await client.from('projects').select('name,address').eq('id', data.project_id).maybeSingle();
-  document.getElementById('questionnaire-project').textContent = details ? [details.name, details.address].filter(Boolean).join(' · ') : '';
-  renderFields(data.answers);
-  form.classList.remove('hidden');
-  const buttons = [...form.querySelectorAll('button')];
-  function showSubmitted() {
-    statusLine.textContent = 'Your selections were sent to ADELIE. You can review them below.';
-    for (const field of form.querySelectorAll('fieldset')) field.disabled = true;
-    document.querySelector('.questionnaire-actions').hidden = true;
-    buttons.forEach(button => { button.hidden = true; });
-  }
-  if (data.submitted_at) {
-    showSubmitted();
-    return;
-  }
-  statusLine.textContent = 'Choose the finishes you have in mind. You can skip sections that don’t apply and save a draft to finish later.';
-  async function save(submit) {
-    const answers = Object.fromEntries([...new FormData(form)].filter(([, value]) => value.trim()));
-    if (submit && !answers['overall-style']) {
-      statusLine.textContent = 'Choose an overall style or select Undecided before submitting.';
-      form.elements.namedItem('overall-style').focus();
-      return;
-    }
-    buttons.forEach(button => { button.disabled = true; });
-    try {
-      const { error: saveError } = await client.rpc('save_finish_questionnaire', {
-        target_project: data.project_id, new_answers: answers, submit_answers: submit
-      });
-      if (saveError) throw saveError;
-      if (submit) showSubmitted();
-      else statusLine.textContent = 'Draft saved. Sign in again any time to continue.';
-    } catch {
-      statusLine.textContent = 'Your selections could not be saved. Please try again.';
-    } finally {
-      buttons.forEach(button => { button.disabled = false; });
-    }
-  }
-  form.addEventListener('submit', event => {
-    event.preventDefault();
-    save(true);
+  q.options.forEach(option => {
+    const selected = q.multi ? (current||[]).includes(option) : current === option;
+    const button=document.createElement('button'); button.type='button'; button.className=`answer-choice${q.multi?' multi':''}${selected?' selected':''}`; button.innerHTML='<span class="choice-dot" aria-hidden="true"></span><span></span>'; button.lastChild.textContent=option;
+    button.addEventListener('click',()=>{ if(q.multi){ const values=new Set(answers[q.id]||[]); values.has(option)?values.delete(option):values.add(option); answers[q.id]=[...values]; } else answers[q.id]=option; renderQuestion(); });
+    $('answer-options').append(button);
   });
-  document.getElementById('save-draft').addEventListener('click', () => save(false));
 }
-
-init().catch(() => { statusLine.textContent = 'Could not load your questionnaire. Please try again.'; });
+async function save(completed=null){
+  $('save-status').textContent='Saving…';
+  const params={onboarding_id:record.id,discovery_answers:mode==='discovery'?answers:null,finish_answers:mode==='design'?answers:null,completed};
+  const {error}=await db.rpc('save_customer_onboarding',params); if(error) throw error;
+  if(mode==='discovery') record.discovery={...answers}; else record.design_answers={...answers};
+  $('save-status').textContent='Saved';
+}
+async function advance(skip=false){
+  if(skip) delete answers[questions[index].id];
+  if(index < questions.length-1){ index++; renderQuestion(); if(index%3===0) save().catch(()=>{$('save-status').textContent='Could not save yet. Your answers remain on this screen.'}); return; }
+  try{ await save(mode); if(mode==='discovery') show('checkpoint'); else finish(); }catch{ $('save-status').textContent='We couldn’t save your answers. Please try again.'; }
+}
+function finish(){ $('complete-name').textContent=firstName(); $('project-link').classList.toggle('hidden',!record.project_id); show('complete'); }
+async function init(){
+  const {data:{session}}=await db.auth.getSession(); if(!session) return location.replace('portal-login.html');
+  const {data,error}=await db.from('customer_onboarding').select('*').eq('user_id',session.user.id).maybeSingle();
+  if(error||!data){ $('error-message').textContent='This sign-in is not linked to a homeowner welcome. Please contact ADELIE for help.'; return show('error-view'); }
+  record=data; $('customer-first-name').textContent=firstName(); $('customer-name').textContent=data.full_name; $('customer-email').textContent=data.email; $('customer-address').textContent=data.address; show('welcome');
+}
+$('begin').onclick=()=>{mode='discovery';questions=discoveryQuestions;answers={...record.discovery};index=0;show('question-view');renderQuestion()};
+$('back').onclick=()=>{if(index>0){index--;renderQuestion()}}; $('skip').onclick=()=>advance(true); $('next').onclick=()=>advance(false);
+$('continue-design').onclick=()=>{mode='design';questions=buildDesignQuestions();answers={...record.design_answers};index=0;show('question-view');renderQuestion()};
+$('finish-now').onclick=finish; $('sign-out').onclick=async()=>{await db.auth.signOut();location.href='portal-login.html'};
+init().catch(()=>{ $('error-message').textContent='Please refresh the page or contact ADELIE for help.'; show('error-view'); });

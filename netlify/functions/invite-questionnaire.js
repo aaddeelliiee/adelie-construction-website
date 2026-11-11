@@ -71,7 +71,9 @@ exports.handler = async event => {
   }
 
   const emailClient = createClient(SUPABASE_URL, portalConfig.supabaseAnonKey, options);
-  const redirect = 'https://www.adelieconstruction.com/portal-login.html';
+  const host = event.headers.host || '';
+  const previewHost = /^deploy-preview-\d+--ubiquitous-blini-9e7222\.netlify\.app$/i.test(host);
+  const redirect = `https://${previewHost ? host : 'www.adelieconstruction.com'}/portal-login.html`;
   const { error: sendError } = await emailClient.auth.signInWithOtp({
     email, options: { shouldCreateUser: false, emailRedirectTo: redirect }
   });

@@ -46,6 +46,15 @@ exports.handler = async event => {
   }
   if (!user) return response(502, { error: 'Could not create the homeowner account.' });
 
+  const { data: existingOnboarding, error: existingError } = await db.from('customer_onboarding')
+    .select('id,archived_at')
+    .eq('user_id', user.id)
+    .maybeSingle();
+  if (existingError) return response(503, { error: 'The homeowner record could not be checked.' });
+  if (existingOnboarding?.archived_at) {
+    return response(409, { error: 'This homeowner is in the protected Removed Homeowners list. The owner must restore the account before another welcome link can be sent.' });
+  }
+
   const { data: onboarding, error: saveError } = await db.from('customer_onboarding').upsert({
     user_id: user.id, full_name: fullName, email, address, created_by: identity.user.id
   }, { onConflict: 'user_id' }).select('id').single();

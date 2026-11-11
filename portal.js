@@ -28,11 +28,11 @@ $('progress-label').textContent=progress+'%';
 $('progress-ring').style.setProperty('--progress',progress);
 const [{ data: questionnaire },{ data: onboarding }] = await Promise.all([
   sb.from('finish_questionnaires').select('project_id').eq('user_id', currentUserId).eq('project_id', projectId).maybeSingle(),
-  sb.from('customer_onboarding').select('id,discovery').eq('user_id',currentUserId).maybeSingle()
+  sb.from('customer_onboarding').select('id,discovery,design_answers').eq('user_id',currentUserId).maybeSingle()
 ]);
 if (onboarding) {
   const link = $('open-finish-questionnaire');
-  link.textContent = 'My Design Sheet';
+  link.textContent = Object.keys(onboarding.design_answers||{}).length ? 'Edit My Design Sheet' : 'Complete My Design Sheet';
   link.href = 'portal-questionnaire.html?view=design';
   link.classList.remove('hidden');
 } else if (questionnaire) {

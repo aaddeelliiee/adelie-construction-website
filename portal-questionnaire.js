@@ -84,7 +84,7 @@ async function save(completed=null){
 async function advance(skip=false){
   if(skip) delete answers[questions[index].id];
   if(index < questions.length-1){ index++; renderQuestion(); if(index%3===0) save().catch(()=>{$('save-status').textContent='Could not save yet. Your answers remain on this screen.'}); return; }
-  try{ await save(mode); if(mode==='discovery') show('checkpoint'); else finish(); }catch{ $('save-status').textContent='We couldn’t save your answers. Please try again.'; }
+  try{ await save(mode); if(mode==='discovery') show('checkpoint'); else location.href='portal.html'; }catch{ $('save-status').textContent='We couldn’t save your answers. Please try again.'; }
 }
 function finish(){ $('complete-name').textContent=firstName(); $('project-link').classList.toggle('hidden',!record.project_id); show('complete'); }
 async function init(){

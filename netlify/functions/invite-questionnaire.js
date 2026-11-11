@@ -5,13 +5,14 @@ const reply = (statusCode, body) => ({
   headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' },
   body: JSON.stringify(body)
 });
+const portalConfig = require('../../portal-config.js');
 const uuid = /^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i;
 const options = { auth: { autoRefreshToken: false, persistSession: false, detectSessionInUrl: false } };
 
 exports.handler = async event => {
   if (event.httpMethod !== 'POST') return reply(405, { error: 'Method not allowed.' });
-  const { SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, SUPABASE_ANON_KEY, URL } = process.env;
-  if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY || !SUPABASE_ANON_KEY || !URL) {
+  const { SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY } = process.env;
+  if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY || !portalConfig.supabaseAnonKey) {
     return reply(503, { error: 'Customer email invitations are not configured.' });
   }
   const token = (event.headers.authorization || '').match(/^Bearer (\S+)$/i)?.[1];
@@ -69,8 +70,8 @@ exports.handler = async event => {
     return reply(503, { error: 'The questionnaire could not be assigned. Retry this email for the same project.' });
   }
 
-  const emailClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, options);
-  const redirect = new globalThis.URL('/portal-login.html', URL).href;
+  const emailClient = createClient(SUPABASE_URL, portalConfig.supabaseAnonKey, options);
+  const redirect = 'https://www.adelieconstruction.com/portal-login.html';
   const { error: sendError } = await emailClient.auth.signInWithOtp({
     email, options: { shouldCreateUser: false, emailRedirectTo: redirect }
   });

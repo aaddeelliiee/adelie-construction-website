@@ -109,8 +109,15 @@ $('password-setup').addEventListener('submit',async event=>{
   if(error){$('password-status').textContent='We could not save that password. Please try a different password.';return;}
   form.reset();form.classList.add('hidden');$('begin').classList.remove('hidden');$('password-status').textContent='';
 });
+$('show-password').addEventListener('change',event=>{
+  const type=event.currentTarget.checked?'text':'password';
+  $('new-password').type=type;
+  $('confirm-password').type=type;
+});
+Object.assign($('show-password').style,{width:'18px',height:'18px',padding:'0',margin:'0'});
+Object.assign($('show-password').closest('label').style,{display:'flex',alignItems:'center',gap:'9px',width:'max-content',maxWidth:'100%',cursor:'pointer'});
 $('begin').onclick=()=>{mode='discovery';questions=discoveryQuestions;answers={...record.discovery};index=0;show('question-view');renderQuestion()};
 $('back').onclick=()=>{if(index>0){index--;renderQuestion()}}; $('skip').onclick=()=>advance(true); $('next').onclick=()=>advance(false);
 $('continue-design').onclick=()=>{mode='design';questions=buildDesignQuestions();answers={...record.design_answers};index=0;show('question-view');renderQuestion()};
-$('finish-now').onclick=finish; $('sign-out').onclick=async()=>{await db.auth.signOut();location.href='portal-login.html'};
+$('finish-now').onclick=()=>location.href='portal.html'; $('sign-out').onclick=async()=>{await db.auth.signOut();location.href='portal-login.html'};
 init().catch(()=>{ $('error-message').textContent='Please refresh the page or contact ADELIE for help.'; show('error-view'); });

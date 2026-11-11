@@ -10,8 +10,11 @@ async function route() {
   const { data: isEmployee } = await sb.rpc('is_employee');
   if (isEmployee) return location.replace('portal-employee.html');
   const { data: onboarding } = await sb.from('customer_onboarding')
-    .select('id,project_id').eq('user_id', session.user.id).maybeSingle();
-  if (onboarding && !onboarding.project_id) return location.replace('portal-questionnaire.html');
+    .select('id,completed_forms').eq('user_id', session.user.id).maybeSingle();
+  if (onboarding) {
+    if (!(onboarding.completed_forms||[]).includes('discovery')) return location.replace('portal-questionnaire.html');
+    return location.replace('portal.html');
+  }
   const { data: questionnaires } = await sb.from('finish_questionnaires')
     .select('project_id').eq('user_id', session.user.id).is('submitted_at', null).limit(1);
   if (questionnaires?.length) return location.replace('portal-questionnaire.html?project=' + encodeURIComponent(questionnaires[0].project_id));

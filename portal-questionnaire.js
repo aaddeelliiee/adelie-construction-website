@@ -143,6 +143,7 @@ async function init(){
   $('begin').classList.toggle('hidden',!hasPassword);
   const openDesign=new URLSearchParams(location.search).get('view')==='design';
   if(openDesign&&hasPassword&&Object.keys(data.discovery||{}).length){mode='design';return renderDesignSheet()}
+  if((data.completed_forms||[]).includes('discovery'))return location.replace('portal.html');
   show('welcome');
 }
 $('password-setup').addEventListener('submit',async event=>{

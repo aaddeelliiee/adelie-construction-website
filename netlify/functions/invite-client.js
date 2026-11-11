@@ -24,7 +24,7 @@ exports.handler = async event => {
     const {data:members=[],error}=await admin.from('project_members').select('user_id').eq('project_id',projectId).eq('role','client');
     if(error)return response(400,{error:error.message});
     const memberIds=new Set(members.map(item=>item.user_id));
-    const accounts=userList.users.filter(user=>memberIds.has(user.id)).map(user=>({
+    const accounts=userList.users.filter(user=>memberIds.has(user.id)&&user.email?.toLowerCase().endsWith(`@${DOMAIN}`)).map(user=>({
       id:user.id,
       username:user.user_metadata?.portal_username||String(user.email||'').replace(`@${DOMAIN}`,'')
     }));
@@ -41,7 +41,7 @@ exports.handler = async event => {
     if(membershipError)return response(400,{error:membershipError.message});
     if(!membership)return response(403,{error:'That customer is not linked to this project.'});
     const customer=userList.users.find(user=>user.id===userId);
-    if(!customer)return response(404,{error:'Customer account not found.'});
+    if(!customer?.email?.toLowerCase().endsWith('@'+DOMAIN))return response(404,{error:'Customer username account not found.'});
     const {error}=await admin.auth.admin.deleteUser(userId);
     if(error)return response(400,{error:error.message});
     return response(200,{message:'Customer login deleted.'});
@@ -64,7 +64,7 @@ exports.handler = async event => {
     if(!membership)return response(403,{error:'That customer is not linked to this project.'});
     if(emailOwner&&emailOwner.id!==userId)return response(400,{error:'That username is already in use.'});
     const current=userList.users.find(item=>item.id===userId);
-    if(!current)return response(404,{error:'Customer account not found.'});
+    if(!current?.email?.toLowerCase().endsWith('@'+DOMAIN))return response(404,{error:'Customer username account not found.'});
     const updates={email,email_confirm:true,user_metadata:{...current.user_metadata,portal_username:username}};
     if(password)updates.password=password;
     const {data,error}=await admin.auth.admin.updateUserById(userId,updates);

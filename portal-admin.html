@@ -94,6 +94,19 @@
 <p class="portal-muted">The login below will only have access to the project selected here.</p>
 <label class="project-picker setup-project-picker">Customer login project<select id="customer-project-select"></select></label>
 <div id="customer-project-confirmation" class="project-link-confirmation"></div>
+<form id="questionnaire-invite-form" class="portal-form">
+<h3>Invite a homeowner to the design questionnaire</h3>
+<p class="portal-muted">The invitation links the homeowner’s login to the project selected above.</p>
+<label>Homeowner name<input id="questionnaire-invite-name" autocomplete="off" maxlength="120" required></label>
+<label>Homeowner email<input id="questionnaire-invite-email" type="email" autocomplete="off" maxlength="254" required></label>
+<label>Homeowner phone (optional)<input id="questionnaire-invite-phone" type="tel" autocomplete="off" maxlength="40"></label>
+<button class="portal-btn primary" type="submit">Email Questionnaire Invite</button>
+<p id="questionnaire-invite-status" role="status"></p>
+</form>
+<hr>
+<div id="questionnaire-responses"></div>
+<hr>
+<h3>Username and password logins</h3>
 <div id="customer-accounts-list" class="customer-accounts"></div>
 <form id="invite-form" class="portal-form">
 <input type="hidden" id="invite-user-id">

@@ -26,6 +26,13 @@ const progress=Math.max(0,Math.min(100,p.progress_percent||0));
 $('progress-bar').style.width=progress+'%';
 $('progress-label').textContent=progress+'%';
 $('progress-ring').style.setProperty('--progress',progress);
+const { data: questionnaire } = await sb.from('finish_questionnaires').select('project_id')
+  .eq('user_id', currentUserId).eq('project_id', projectId).maybeSingle();
+if (questionnaire) {
+  const link = $('open-finish-questionnaire');
+  link.href = 'portal-questionnaire.html?project=' + encodeURIComponent(projectId);
+  link.classList.remove('hidden');
+}
 await Promise.all([loadSchedule(),loadPhotos(),loadDocuments(),loadMessages()]);
 $('loading').classList.add('hidden');
 $('app').classList.remove('hidden')}

@@ -1,5 +1,5 @@
 window.ADELIE_ESTIMATOR_PRICING={
-  version:'2026.11.3',location:'San Diego County',
+  version:'2026.11.4',location:'San Diego County',
   quick:{whole:[125,225],kitchen:[190,270],bathroom:[250,400],addition:[300,480],outdoor:[100,220]},
   finish:{basic:.78,standard:1,premium:1.32,luxury:1.72},extent:{cosmetic:.62,replace:1,layout:1.20,structural:1.48},
   core:{whole:[90,165],kitchen:[150,250],bathroom:[200,350],addition:[280,450],outdoor:[75,145]},

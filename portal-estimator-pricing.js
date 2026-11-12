@@ -1,0 +1,19 @@
+window.ADELIE_ESTIMATOR_PRICING={
+  version:'2026.11',location:'San Diego County',
+  quick:{whole:[140,300],kitchen:[280,550],bathroom:[350,700],addition:[350,650],outdoor:[125,350]},
+  finish:{basic:.78,standard:1,premium:1.34,luxury:1.78},extent:{cosmetic:.62,replace:1,layout:1.22,structural:1.52},
+  core:{whole:[90,165],kitchen:[150,250],bathroom:[200,350],addition:[280,450],outdoor:[75,145]},
+  unit:{
+    cabinetType:{imported:[450,720,.42],american:[620,940,.40],semi:[850,1300,.38],custom:[1200,2000,.45]},
+    counterType:{laminate:[45,75,.35],butcher:[65,110,.32],granite:[75,140,.30],quartz:[85,155,.30],quartzite:[110,220,.34],porcelain:[100,180,.36]},
+    backsplash:[18,42,.55],appliances:{basic:[6500,10500,.12],standard:[12000,22000,.12],premium:[25000,50000,.10],luxury:[55000,120000,.09]},
+    island:[7500,18000,.44],kitchenPlumbing:[4500,12000,.68],bathBase:[9500,18000,.62],
+    vanityType:{prefab:[1800,3500,.30],semi:[3500,6500,.34],custom:[6500,14000,.42]},
+    showerType:{refresh:[3500,7500,.58],tub:[6500,13000,.56],shower:[12000,26000,.62],wetroom:[26000,60000,.60]},
+    bathTile:[16,38,.58],bathFixtures:{basic:[2200,4500,.28],standard:[4500,8500,.24],premium:[9000,18000,.22],luxury:[20000,45000,.20]},
+    floorType:{laminate:[7,13,.46],lvp:[8,15,.43],tile:[15,30,.60],engineered:[15,28,.46],hardwood:[18,35,.52]},floorDemo:[2.5,6,.78],
+    drywallLevel:{l3:[3.5,6,.64],l4:[4.5,8,.66],l5:[6.5,11,.70]},paintSheen:{flat:[2,4,.65],eggshell:[2.5,5,.64],satin:[3,5.5,.63],semi:[4,6.5,.62]},
+    baseboardType:{mdf:[8,15,.58],pine:[12,22,.56],hardwood:[20,40,.58]},light:[350,750,.68],device:[180,420,.72],door:[900,2200,.45],window:[1400,3200,.48],
+    panel:{upgrade:[6500,14000,.70],rewire:[18000,45000,.75]},softCosts:{simple:[2500,6000,.72],normal:[7000,18000,.68],complex:[18000,45000,.65]}
+  },adjustments:{occupied:1.08,homeAge:{newer:1,mid:1.05,older:1.12},access:{easy:1,limited:1.08,difficult:1.18}}
+};

@@ -1,6 +1,6 @@
 # ADELIE Remodel Cost Planner — pricing methodology
 
-Version `2026.11` is a planning model for San Diego County. It is deliberately shown as a range and must not be presented as an ADELIE bid, proposal, or guaranteed price.
+Version `2026.11.2` is a planning model for San Diego County. It is deliberately shown as a range and must not be presented as an ADELIE bid, proposal, or guaranteed price. The starting bands intentionally favor a useful consultation range rather than an extreme worst-case spread; unusual conditions and premium decisions are added only when selected.
 
 ## How the range is built
 

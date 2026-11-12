@@ -1,7 +1,7 @@
 window.ADELIE_ESTIMATOR_PRICING={
-  version:'2026.11',location:'San Diego County',
-  quick:{whole:[140,300],kitchen:[280,550],bathroom:[350,700],addition:[350,650],outdoor:[125,350]},
-  finish:{basic:.78,standard:1,premium:1.34,luxury:1.78},extent:{cosmetic:.62,replace:1,layout:1.22,structural:1.52},
+  version:'2026.11.2',location:'San Diego County',
+  quick:{whole:[125,225],kitchen:[190,270],bathroom:[250,400],addition:[300,480],outdoor:[100,220]},
+  finish:{basic:.78,standard:1,premium:1.32,luxury:1.72},extent:{cosmetic:.62,replace:1,layout:1.20,structural:1.48},
   core:{whole:[90,165],kitchen:[150,250],bathroom:[200,350],addition:[280,450],outdoor:[75,145]},
   unit:{
     cabinetType:{imported:[450,720,.42],american:[620,940,.40],semi:[850,1300,.38],custom:[1200,2000,.45]},

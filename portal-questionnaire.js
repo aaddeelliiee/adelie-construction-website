@@ -146,6 +146,8 @@ async function advance(skip=false){
 function finish(){ $('complete-name').textContent=firstName(); $('project-link').classList.toggle('hidden',!record.project_id); show('complete'); }
 async function init(){
   const {data:{session}}=await db.auth.getSession(); if(!session) return location.replace('portal-login.html');
+  const {data:{user},error:userError}=await db.auth.getUser();
+  if(userError||!user){await db.auth.signOut({scope:'local'});return location.replace('portal-login.html?account-reset=1')}
   const {data,error}=await db.from('customer_onboarding').select('*').eq('user_id',session.user.id).maybeSingle();
   if(error||!data){ $('error-message').textContent='This sign-in is not linked to a homeowner welcome. Please contact ADELIE for help.'; return show('error-view'); }
   record=data; $('customer-first-name').textContent=firstName(); $('customer-name').textContent=data.full_name; $('customer-email').textContent=data.email; $('customer-address').textContent=data.address;

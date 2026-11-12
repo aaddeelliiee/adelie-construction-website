@@ -7,10 +7,24 @@ document.head.insertAdjacentHTML('beforeend',`<style>
 </style>`);
 const safe=value=>String(value??'').replace(/[&<>\"]/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[char]));
 const discoveryLabels={spaces:'Remodel areas',extent:'Expected scope',priority:'Top priorities',timing:'Ideal start',budget:'Working investment range',occupancy:'Living in the home',vision:'What they want us to know'};
+const discoveryOptions={
+  spaces:['Kitchen','Bathroom','Whole house','Addition','Exterior / outdoor living','Flooring / paint only','Not sure yet'],
+  extent:['A focused refresh','Replace finishes and fixtures','Change the layout','Major structural changes','I’m not sure yet'],
+  priority:['Better function','A new look and feel','More space','Accessibility or aging in place','Energy efficiency','Resale value','Repair damage or wear'],
+  timing:['As soon as possible','Within 3 months','3–6 months','6–12 months','More than a year away','Just exploring'],
+  budget:['Under $25,000','$25,000–$75,000','$75,000–$150,000','$150,000–$300,000','$300,000+','I’d like guidance'],
+  occupancy:['Yes','No','Not sure yet','This is not my primary residence']
+};
 
 function answerReview(item){
   const entries=Object.entries(item.discovery||{});
   return `<details class="answer-review"><summary>View initial answers${entries.length?` (${entries.length})`:''}</summary>${entries.length?`<dl>${entries.map(([key,value])=>`<div><dt>${safe(discoveryLabels[key]||key)}</dt><dd>${safe(Array.isArray(value)?value.join(', '):value)}</dd></div>`).join('')}</dl>`:'<p>No initial answers have been saved yet.</p>'}${Object.keys(item.design_answers||{}).length?'<p class="design-sheet-ready">Design Sheet saved and editable in the customer account.</p>':''}</details>`;
+}
+
+function answerEditor(item){
+  const current=item.discovery||{};
+  const optionGroup=(key,multi=false)=>`<fieldset class="answer-editor-group"><legend>${safe(discoveryLabels[key])}</legend>${discoveryOptions[key].map(option=>{const selected=multi?(current[key]||[]).includes(option):current[key]===option;return `<label><input type="${multi?'checkbox':'radio'}" data-answer="${key}" name="answer-${key}-${item.id}" value="${safe(option)}"${selected?' checked':''}> <span>${safe(option)}</span></label>`}).join('')}</fieldset>`;
+  return `<details class="answer-editor"><summary>Edit project answers &amp; Design Sheet scope</summary><div class="answer-editor-grid">${optionGroup('spaces',true)}${optionGroup('extent')}${optionGroup('priority',true)}${optionGroup('timing')}${optionGroup('budget')}${optionGroup('occupancy')}<label class="answer-editor-notes"><strong>${safe(discoveryLabels.vision)}</strong><textarea data-answer="vision" maxlength="1600">${safe(current.vision||'')}</textarea></label></div><div class="homeowner-actions"><button class="portal-btn primary save-answers" type="button">Save project answers</button><span class="portal-muted">Changing remodel areas automatically expands or narrows the customer’s editable Design Sheet.</span></div></details>`;
 }
 
 async function request(url,options={}){
@@ -21,7 +35,7 @@ async function request(url,options={}){
 }
 
 function activeCard(item){
-  return `<form class="onboarding-row" data-id="${item.id}"><div><strong>${safe(item.full_name)}</strong><span>${safe(item.email)} · ${safe(item.address)}</span></div>${answerReview(item)}<label>Stage<select name="stage">${['new','discovery','planning','proposal','contract','active','complete'].map(stage=>`<option${stage===item.stage?' selected':''}>${stage}</option>`).join('')}</select></label><fieldset><legend>Available forms</legend>${[['discovery','Project discovery'],['design','Design Sheet'],['letter_of_intent','Letter of intent'],['property_access','Property access']].map(([value,label])=>`<label><input type="checkbox" name="form" value="${value}"${item.enabled_forms.includes(value)?' checked':''}> ${label}</label>`).join('')}</fieldset><div class="homeowner-actions"><button class="portal-btn light" type="submit">Save access</button><button class="portal-btn danger archive-homeowner" type="button">Delete from admin list</button></div><p role="status"></p></form>`;
+  return `<form class="onboarding-row" data-id="${item.id}"><div><strong>${safe(item.full_name)}</strong><span>${safe(item.email)} · ${safe(item.address)}</span></div>${answerReview(item)}${answerEditor(item)}<label>Stage<select name="stage">${['new','discovery','planning','proposal','contract','active','complete'].map(stage=>`<option${stage===item.stage?' selected':''}>${stage}</option>`).join('')}</select></label><fieldset><legend>Available forms</legend>${[['discovery','Project discovery'],['design','Design Sheet'],['letter_of_intent','Letter of intent'],['property_access','Property access']].map(([value,label])=>`<label><input type="checkbox" name="form" value="${value}"${item.enabled_forms.includes(value)?' checked':''}> ${label}</label>`).join('')}</fieldset><div class="homeowner-actions"><button class="portal-btn light" type="submit">Save access</button><button class="portal-btn danger archive-homeowner" type="button">Remove from active list</button></div><p role="status"></p></form>`;
 }
 
 function removedCard(item){
@@ -57,6 +71,8 @@ async function accountAction(button,action){
 async function init(){
   ({data:{session}}=await db.auth.getSession());
   if(!session)return location.replace('portal-login.html');
+  const {data:{user},error:userError}=await db.auth.getUser();
+  if(userError||!user){await db.auth.signOut({scope:'local'});return location.replace('portal-login.html?account-reset=1')}
   const [{data:admin},{data:employee}]=await Promise.all([db.rpc('is_portal_user'),db.rpc('is_employee')]);
   isAdmin=!!admin;
   if(!admin&&!employee)return location.replace('portal.html');
@@ -84,8 +100,19 @@ $('onboarding-list').addEventListener('submit',async event=>{
   catch(error){status.textContent=error.message}finally{button.disabled=false}
 });
 
-$('onboarding-list').addEventListener('click',event=>{const button=event.target.closest('.archive-homeowner');if(!button)return;const row=button.closest('[data-id]'),item=records.find(record=>record.id===row.dataset.id);if(confirm(`Remove ${item?.full_name||'this homeowner'} from the active admin list? Your protected owner account will retain the complete record.`))accountAction(button,'archive')});
-$('removed-list').addEventListener('click',event=>{const restore=event.target.closest('.restore-homeowner'),purge=event.target.closest('.purge-homeowner');if(restore)return accountAction(restore,'restore');if(!purge)return;const row=purge.closest('[data-id]'),item=records.find(record=>record.id===row.dataset.id);if(confirm(`Permanently delete ${item?.full_name||'this homeowner'} and all saved account data? This cannot be undone.`))accountAction(purge,'purge')});
+$('onboarding-list').addEventListener('click',async event=>{
+  const saveAnswers=event.target.closest('.save-answers');
+  if(saveAnswers){
+    const row=saveAnswers.closest('[data-id]'),status=row.querySelector('[role="status"]'),discovery={};
+    ['spaces','priority'].forEach(key=>discovery[key]=[...row.querySelectorAll(`[data-answer="${key}"]:checked`)].map(input=>input.value));
+    ['extent','timing','budget','occupancy'].forEach(key=>discovery[key]=row.querySelector(`[data-answer="${key}"]:checked`)?.value||'');
+    discovery.vision=row.querySelector('[data-answer="vision"]').value.trim();saveAnswers.disabled=true;
+    try{const result=await request('/.netlify/functions/manage-customer-onboarding',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:row.dataset.id,action:'update_answers',discovery})});status.textContent=result.message;await loadRecords()}
+    catch(error){status.textContent=error.message;saveAnswers.disabled=false}return;
+  }
+  const button=event.target.closest('.archive-homeowner');if(!button)return;const row=button.closest('[data-id]'),item=records.find(record=>record.id===row.dataset.id);if(confirm(`Remove ${item?.full_name||'this homeowner'} from the active admin list? Your protected owner account will retain the complete record.`))accountAction(button,'archive')
+});
+$('removed-list').addEventListener('click',event=>{const restore=event.target.closest('.restore-homeowner'),purge=event.target.closest('.purge-homeowner');if(restore)return accountAction(restore,'restore');if(!purge)return;const row=purge.closest('[data-id]'),item=records.find(record=>record.id===row.dataset.id);if(confirm(`FULL RESET: permanently delete ${item?.full_name||'this homeowner'}, their login, answers, project access, and uploaded Supabase files? This cannot be undone.`))accountAction(purge,'purge')});
 
 $('logout').onclick=async()=>{await db.auth.signOut();location.href='portal-login.html'};
 init();

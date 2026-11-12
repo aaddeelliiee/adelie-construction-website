@@ -28,22 +28,26 @@
 </header>
 <div class="portal-layout">
 <nav class="portal-sidebar">
-<span class="portal-nav-group">Homeowners</span>
-<a href="portal-leads.html" data-requires-permission="customers">Homeowner Accounts</a>
-<span class="portal-nav-group">Project</span>
+<span class="portal-nav-group">Dashboard</span>
 <a href="#dashboard" class="active">Overview</a>
-<a href="#project">Project Setup</a>
+<span class="portal-nav-group">Customers</span>
+<a href="portal-leads.html" data-requires-permission="customers">Homeowner Accounts</a>
+<a href="#customer-access" data-requires-permission="customers">Customer Logins</a>
+<a href="#customer-uploads" data-requires-permission="content">Customer Uploads</a>
+<a href="#login-activity" data-requires-permission="customers">Login Activity</a>
+<span class="portal-nav-group">Projects</span>
+<a href="#project-create" data-requires-permission="projects">Create Project</a>
+<a href="#project-settings" data-requires-permission="projects">Project Settings</a>
 <a href="#schedule" data-requires-permission="content">Weekly Schedule</a>
 <a href="#photos" data-requires-permission="content">Photos</a>
 <a href="#documents" data-requires-permission="content">Documents</a>
-<span class="portal-nav-group">People &amp; Communication</span>
-<a href="#customer-uploads" data-requires-permission="content">Customer Uploads</a>
-<a href="#login-activity" data-requires-permission="customers">Login Activity</a>
+<span class="portal-nav-group">Communication</span>
 <a href="#employee-approvals" data-requires-permission="content">Employee Approvals</a>
 <a href="#messages" data-requires-permission="content">Messages</a>
+<a href="#team-chat" data-requires-permission="employees">Team Chat</a>
+<span class="portal-nav-group">Team &amp; Access</span>
 <a href="#employees" data-requires-permission="employees">Employees</a>
 <a href="#employee-schedule" data-requires-permission="employees">Employee Schedule</a>
-<a href="#team-chat" data-requires-permission="employees">Team Chat</a>
 <a href="#administrators" data-owner-only>Administrator Accounts</a>
 </nav>
 <main class="portal-main">
@@ -71,14 +75,14 @@
 <strong id="message-count">0</strong>
 </div>
 </section>
-<section id="project" class="portal-grid section-gap">
+<section id="project-create" class="portal-grid section-gap">
 <div class="portal-card span-12 project-setup-intro">
 <p class="portal-kicker">Simple project onboarding</p>
 <h1 class="portal-title">Create a project and connect its customer</h1>
 <p class="portal-muted">Complete Step 1 first. The new project is selected automatically, so the customer login created in Step 2 is linked to the correct project.</p>
 <div class="setup-steps"><span><strong>1</strong>Create project</span><span><strong>2</strong>Create customer login</span><span><strong>3</strong>Manage project</span></div>
 </div>
-<div class="portal-card span-6 setup-card" data-requires-permission="projects">
+<div class="portal-card span-12 setup-card" data-requires-permission="projects">
 <p class="portal-kicker">Step 1</p>
 <h2>Create a New Project</h2>
 <p class="portal-muted">Enter the project name and property address. After creation, it becomes the selected project.</p>
@@ -90,7 +94,9 @@
 <button class="portal-btn primary" type="submit">Create Project &amp; Continue</button>
 </form>
 </div>
-<div class="portal-card span-6 setup-card" data-requires-permission="customers">
+</section>
+<section id="customer-access" class="portal-grid section-gap">
+<div class="portal-card span-12 setup-card" data-requires-permission="customers">
 <p class="portal-kicker">Step 2</p>
 <h2>Create or Manage Customer Login</h2>
 <p class="portal-muted">The login below will only have access to the project selected here.</p>
@@ -109,6 +115,8 @@
 </form>
 <p class="portal-muted">Give the username and temporary password to the customer securely. Passwords cannot be viewed later.</p>
 </div>
+</section>
+<section id="project-settings" class="portal-grid section-gap">
 <div class="portal-card span-12" data-requires-permission="projects">
 <p class="portal-kicker">Step 3 · Selected project</p>
 <h2>Review and Manage Project Information</h2>

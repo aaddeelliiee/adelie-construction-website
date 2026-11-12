@@ -4,6 +4,8 @@ const safe=s=>String(s??'').replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'
 
 async function init(){const {data:{session}}=await sb.auth.getSession();
 if(!session)return location.href='portal-login.html';
+const {data:{user},error:userError}=await sb.auth.getUser();
+if(userError||!user){await sb.auth.signOut({scope:'local'});return location.replace('portal-login.html?account-reset=1')}
 currentUserId=session.user.id;
 $('user-email').textContent=session.user.email;
 const {data:isAdmin}=await sb.rpc('is_portal_admin');
@@ -27,6 +29,9 @@ const progress=Math.max(0,Math.min(100,p.progress_percent||0));
 $('progress-bar').style.width=progress+'%';
 $('progress-label').textContent=progress+'%';
 $('progress-ring').style.setProperty('--progress',progress);
+const journeyIndex=progress>=100?4:progress>=75?3:progress>=35?2:progress>=10?1:0;
+document.querySelectorAll('#journey-steps span').forEach((step,index)=>step.classList.toggle('complete',index<=journeyIndex));
+$('journey-status').textContent=['Design','Planning','Construction','Finishing touches','Complete'][journeyIndex];
 const [{ data: questionnaire },{ data: onboarding }] = await Promise.all([
   sb.from('finish_questionnaires').select('project_id').eq('user_id', currentUserId).eq('project_id', projectId).maybeSingle(),
   sb.from('customer_onboarding').select('id,discovery,design_answers').eq('user_id',currentUserId).maybeSingle()

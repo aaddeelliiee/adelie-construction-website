@@ -10,6 +10,8 @@ scrollTo({top:0,behavior:'smooth'});
 setTimeout(()=>box.classList.add('hidden'),5000)}
 async function guard(){const {data:{session}}=await sb.auth.getSession();
 if(!session)return location.href='portal-login.html';
+const {data:{user},error:userError}=await sb.auth.getUser();
+if(userError||!user){await sb.auth.signOut({scope:'local'});return location.replace('portal-login.html?account-reset=1')}
 const {data:isAdmin}=await sb.rpc('is_portal_user');
 if(!isAdmin)return location.href='portal.html';
 const {data:access,error}=await sb.from('portal_admins').select('is_owner,permissions').eq('user_id',session.user.id).single();

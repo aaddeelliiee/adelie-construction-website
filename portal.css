@@ -46,9 +46,10 @@ body.portal-body{margin:0;font-family:Manrope,Arial,sans-serif;background:var(--
 .portal-form input,.portal-form select,.portal-form textarea{width:100%;margin-top:6px;padding:12px;border:1px solid #cfd4dc;border-radius:9px;font:inherit;background:#fff}
 .portal-form input:focus,.portal-form select:focus,.portal-form textarea:focus{outline:3px solid rgba(245,180,0,.2);border-color:#c28f00}
 .portal-form textarea{min-height:110px}
-.login-wrap{min-height:100vh;display:grid;place-items:center;padding:24px;background:linear-gradient(135deg,#111 0 50%,var(--gold) 50%)}
-.login-card{width:min(520px,100%);background:#fff;border-radius:18px;padding:30px;box-shadow:0 24px 70px rgba(0,0,0,.28)}
-.login-card img{width:230px;display:block;margin:0 auto 18px}
+.login-wrap{min-height:100vh;display:grid;grid-template-columns:minmax(360px,.9fr) minmax(480px,1.1fr);padding:0;background:#f4f2ec}
+.login-welcome{min-height:100vh;padding:clamp(44px,7vw,100px);display:flex;flex-direction:column;justify-content:center;color:#fff;background:radial-gradient(circle at 75% 18%,rgba(245,180,0,.2),transparent 32%),linear-gradient(145deg,#0d0f10,#25282a);position:relative;overflow:hidden}.login-welcome:after{content:'';position:absolute;width:340px;height:340px;right:-170px;bottom:-170px;border:1px solid rgba(245,191,33,.35);border-radius:50%;box-shadow:0 0 0 55px rgba(245,191,33,.04),0 0 0 110px rgba(245,191,33,.025)}.login-welcome>img{width:190px;height:86px;object-fit:contain;object-position:left center;margin-bottom:clamp(50px,9vh,110px)}.login-welcome h1{font-family:'Playfair Display',Georgia,serif;font-size:clamp(2.8rem,5vw,5rem);line-height:1.02;max-width:760px;margin:.3rem 0 1.4rem}.login-welcome>p:not(.portal-kicker){color:#d0d2d3;max-width:640px;line-height:1.75;font-size:1.05rem}.login-trust{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}.login-trust span{padding:9px 13px;border:1px solid rgba(255,255,255,.16);border-radius:999px;color:#e7e7e7;font-size:.76rem;font-weight:700}
+.login-card{width:min(560px,calc(100% - 48px));align-self:center;justify-self:center;background:#fff;border:1px solid #e5e2db;border-radius:24px;padding:clamp(26px,5vw,48px);box-shadow:0 24px 70px rgba(24,28,31,.12)}
+.login-card-brand{display:flex;align-items:center;gap:14px;padding-bottom:22px;margin-bottom:28px;border-bottom:1px solid var(--line)}.login-card-brand img{width:116px;height:54px;object-fit:contain;margin:0}.login-card-brand span{padding-left:14px;border-left:1px solid var(--line);font-size:.72rem;font-weight:900;text-transform:uppercase;letter-spacing:.13em;color:var(--muted)}.login-card .portal-title{font-size:clamp(2rem,4vw,3rem);margin-bottom:10px}.login-card .portal-form{margin:24px 0}.login-card .portal-btn{min-height:48px}.login-return{display:block;text-align:center;margin-top:22px;color:#555;text-decoration:none;font-size:.84rem;font-weight:700}.login-return:hover{color:#111}
 .notice{padding:13px 15px;border-radius:9px;background:#eef4ff;color:#1849a9;margin-bottom:18px}
 .notice.error{background:#fee4e2;color:#b42318}
 .notice.success{background:#dcfae6;color:#067647}
@@ -86,6 +87,7 @@ body.portal-body{margin:0;font-family:Manrope,Arial,sans-serif;background:var(--
 .portal-modal>div{background:#fff;border-radius:14px;padding:22px;width:min(680px,100%);max-height:90vh;overflow:auto}
 .account-modal-panel{width:min(520px,100%)!important}.account-modal-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}.account-modal-heading h2{margin-top:0}.account-close{border:0;background:transparent;font-size:1.6rem;line-height:1;cursor:pointer;color:var(--muted)}.account-status{margin:0}.portal-top-actions{display:flex;align-items:center;gap:10px}
 @media(max-width:900px){html{scroll-padding-top:145px}
+.login-wrap{grid-template-columns:1fr}.login-welcome{display:none}.login-card{margin:36px auto}
 .portal-layout{grid-template-columns:1fr}
 .portal-sidebar{display:flex;overflow:auto;border-right:0;border-bottom:1px solid var(--line);position:sticky;top:74px;z-index:10;height:auto;padding:9px 10px}
 .portal-nav-group{display:none}

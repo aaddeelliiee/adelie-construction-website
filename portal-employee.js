@@ -5,6 +5,8 @@ const safe=s=>String(s??'').replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'
 async function init(){
   const {data:{session}}=await sb.auth.getSession();
   if(!session)return location.href='portal-login.html';
+  const {data:{user},error:userError}=await sb.auth.getUser();
+  if(userError||!user){await sb.auth.signOut({scope:'local'});return location.replace('portal-login.html?account-reset=1')}
   userId=session.user.id;
   const {data:isEmployee}=await sb.rpc('is_employee');
   if(!isEmployee)return location.href='portal.html';

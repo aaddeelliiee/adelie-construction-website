@@ -5,6 +5,8 @@ function show(text,type=''){msg.textContent=text;msg.className='notice '+type}
 async function route() {
   const { data: { session } } = await sb.auth.getSession();
   if (!session) return;
+  const {data:{user},error:userError}=await sb.auth.getUser();
+  if(userError||!user){await sb.auth.signOut({scope:'local'});show('This account was reset. You can now use a new welcome link.','success');return}
   const { data: isAdmin } = await sb.rpc('is_portal_user');
   if (isAdmin) return location.replace('portal-admin.html');
   const { data: isEmployee } = await sb.rpc('is_employee');
@@ -20,6 +22,7 @@ async function route() {
   if (questionnaires?.length) return location.replace('portal-questionnaire.html?project=' + encodeURIComponent(questionnaires[0].project_id));
   location.replace('portal.html');
 }
+if(new URLSearchParams(location.search).has('account-reset'))show('This account was reset. Sign in with a newly created account or welcome link.','success');
 route();
 document.getElementById('login-form').addEventListener('submit',async event=>{
   event.preventDefault();

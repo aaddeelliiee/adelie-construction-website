@@ -16,23 +16,30 @@
 </head>
 <body class="portal-body">
 <main class="login-wrap">
+<section class="login-welcome" aria-label="ADELIE Construction client experience">
+<img src="assets/optimized/adelie-logo-transparent-512.webp" alt="ADELIE Construction">
+<p class="portal-kicker">Built around your project</p>
+<h1>A clearer way to follow every detail.</h1>
+<p>Project progress, selections, photos, documents, schedules, and conversations—kept together in one private place.</p>
+<div class="login-trust"><span>Private access</span><span>Real-time updates</span><span>One project home</span></div>
+</section>
 <section class="login-card">
-<img src="assets/optimized/adelie-logo-512.webp" alt="ADELIE Construction" width="512" height="512">
-<p class="portal-kicker">Secure account access</p>
-<h1 class="portal-title">ADELIE Portal</h1>
-<p class="portal-muted">Homeowners can sign in with their email and the password they created. Staff can use their assigned username and password.</p>
+<div class="login-card-brand"><img src="assets/optimized/adelie-logo-transparent-512.webp" alt="ADELIE Construction"><span>Secure Portal</span></div>
+<p class="portal-kicker">Welcome back</p>
+<h1 class="portal-title">Sign in to continue</h1>
+<p class="portal-muted">Homeowners use their email. ADELIE team members use their assigned username.</p>
 <div id="login-message" class="notice hidden">
 </div>
 <form id="login-form" class="portal-form">
-<label>Account type<select id="account-type"><option value="customer">Customer</option><option value="employee">Employee</option><option value="admin">Administrator</option></select></label>
-<label>Homeowner email or staff username<input type="text" id="login-id" autocomplete="username" required>
+<label>Who is signing in?<select id="account-type"><option value="customer">Homeowner</option><option value="employee">ADELIE team member</option><option value="admin">Administrator</option></select></label>
+<label>Email or username<input type="text" id="login-id" autocomplete="username" required placeholder="Enter your email or username">
 </label>
 <label>Password<input type="password" id="password" autocomplete="current-password" required>
 </label>
-<button class="portal-btn primary" type="submit">Sign In</button>
+<button class="portal-btn primary" type="submit">Continue to my portal</button>
 </form>
 <form id="email-link-form" class="portal-form"><label>Forgot your password? Enter your homeowner email<input id="email-link-address" type="email" autocomplete="email" required></label><button class="portal-btn light" type="submit">Email me a secure access link</button></form><p class="portal-muted" style="font-size:.85rem">Contact <a href="mailto:agustin@adelieconstruction.com">agustin@adelieconstruction.com</a> if you need help accessing your account.</p>
-<a href="index.html" class="portal-btn dark" style="width:100%">Return to ADELIEConstruction.com</a>
+<a href="index.html" class="login-return">← Return to adelieconstruction.com</a>
 </section>
 </main>
 <script src="portal-login.js">

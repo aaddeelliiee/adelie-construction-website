@@ -1,8 +1,8 @@
 window.ADELIE_ESTIMATOR_PRICING={
   version:'2026.11.4',location:'San Diego County',
-  quick:{whole:[125,225],kitchen:[190,270],bathroom:[250,400],addition:[300,480],outdoor:[100,220]},
+  quick:{whole:[125,225],kitchen:[190,270],bathroom:[250,400],addition:[230,330],newbuild:[220,320],outdoor:[100,220]},
   finish:{basic:.78,standard:1,premium:1.32,luxury:1.72},extent:{cosmetic:.62,replace:1,layout:1.20,structural:1.48},
-  core:{whole:[90,165],kitchen:[150,250],bathroom:[200,350],addition:[280,450],outdoor:[75,145]},
+  core:{whole:[90,165],kitchen:[150,250],bathroom:[200,350],addition:[215,315],newbuild:[205,305],outdoor:[75,145]},
   unit:{
     cabinetType:{keep:[0,0,.05],refinish:[180,350,.72],reface:[300,550,.55],imported:[450,720,.42],american:[620,940,.40],semi:[850,1300,.38],custom:[1200,2000,.45]},
     counterType:{keep:[0,0,.05],laminate:[45,75,.35],butcher:[65,110,.32],granite:[75,140,.30],quartz:[85,155,.30],quartzite:[110,220,.34],porcelain:[100,180,.36]},
@@ -17,5 +17,5 @@ window.ADELIE_ESTIMATOR_PRICING={
     panel:{upgrade:[6500,14000,.70],rewire:[18000,45000,.75]},softCosts:{simple:[2500,6000,.72],normal:[7000,18000,.68],complex:[18000,45000,.65]},
     structuralOpening:[9000,28000,.72],hvac:{modify:[4500,12000,.70],heatpump:[14000,28000,.48],zoned:[24000,48000,.52]},repipe:{partial:[8000,18000,.72],full:[18000,40000,.72]},waterHeater:{tank:[2800,5500,.45],tankless:[5500,11000,.58],heatpump:[4500,9000,.48]},
     insulation:[3,7,.50],roofType:{shingle:[9,16,.48],tile:[16,30,.52],metal:[22,42,.55]},exteriorType:{paint:[3.5,7,.65],stucco:[12,24,.60],siding:[18,38,.55]},hardscapeType:{concrete:[14,25,.58],paver:[22,40,.58],stone:[35,70,.56]},patioType:{wood:[55,105,.62],aluminum:[45,90,.48],custom:[140,275,.60]}
-  },adjustments:{occupied:1.08,homeAge:{newer:1,mid:1.05,older:1.12},access:{easy:1,limited:1.08,difficult:1.18}}
+  },adjustments:{occupied:1.08,homeAge:{newer:1,mid:1.05,older:1.12},access:{easy:1,limited:1.08,difficult:1.18},constructionStage:{exploring:1.08,design:1.05,plans:1.02,approved:1,ready:.98}},laborPosition:0,rangeWidth:15000
 };

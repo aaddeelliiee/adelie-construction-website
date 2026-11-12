@@ -12,6 +12,7 @@ alter table public.remodel_estimates add column if not exists customer_name text
 alter table public.remodel_estimates add column if not exists customer_email text;
 alter table public.remodel_estimates add column if not exists summary jsonb not null default '{}'::jsonb;
 alter table public.remodel_estimates add column if not exists is_draft boolean not null default false;
+alter table public.remodel_estimates add column if not exists customer_deleted boolean not null default false;
 alter table public.remodel_estimates enable row level security;
 revoke all on public.remodel_estimates from public, anon;
 grant select,insert,update,delete on public.remodel_estimates to authenticated;

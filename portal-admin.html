@@ -13,6 +13,7 @@
 <link rel="stylesheet" href="portal-admin-v2.css">
 <link rel="stylesheet" href="portal-homeowners.css">
 <link rel="stylesheet" href="portal-estimates.css">
+<link rel="stylesheet" href="portal-estimator-settings.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
 </script>
 <script src="portal-config.js">
@@ -54,6 +55,7 @@
 <a href="#employees" data-requires-permission="employees">Employees</a>
 <a href="#employee-schedule" data-requires-permission="employees">Employee Schedule</a>
 <a href="#administrators" data-owner-only>Administrator Accounts</a>
+<a href="#estimator-settings" data-owner-only>Estimator Pricing</a>
 </nav>
 <main class="portal-main">
 <div id="admin-message" class="notice hidden">
@@ -81,7 +83,7 @@
 </div>
 </section>
 <section id="customer-estimates" class="portal-grid section-gap" data-requires-permission="customers">
-<div class="portal-card span-12 estimate-view-heading"><div><p class="portal-kicker">Live planning activity</p><h1 class="portal-title">Customer Estimates</h1><p class="portal-muted">View the scenarios customers save while they explore their remodel. These are planning ranges, not proposals.</p></div><button id="refresh-customer-estimates" class="portal-btn light" type="button">Refresh Estimates</button></div>
+<div class="portal-card span-12 estimate-view-heading"><div><p class="portal-kicker">Live planning activity</p><h1 class="portal-title">Customer Estimates</h1><p class="portal-muted">Search homeowners and compare their live drafts and saved planning scenarios.</p></div><div class="estimate-toolbar"><label>Find a customer or scenario<input id="estimate-search" type="search" placeholder="Name, email, project, or scenario"></label><button id="refresh-customer-estimates" class="portal-btn light" type="button">Refresh Estimates</button></div></div>
 <div id="admin-estimates-list" class="span-12 estimate-view-list"></div>
 </section>
 <section id="project-directory" class="portal-grid section-gap" data-requires-permission="projects">
@@ -297,10 +299,19 @@
 <div class="portal-card span-7"><p class="portal-kicker">Protected owner controls</p><h2>Administrator Accounts</h2><p class="portal-muted">Manage permissions or return an administrator to an employee role. Your protected owner account cannot be changed.</p><div id="administrators-list"></div></div>
 <div class="portal-card span-5"><p class="portal-kicker">New or existing administrator</p><h2>Account &amp; Permissions</h2><form id="administrator-form" class="portal-form"><input type="hidden" id="administrator-id"><label>Full name<input id="administrator-full-name" required></label><label>Email address<input id="administrator-email" type="email" autocomplete="off" required></label><label>Temporary/new password<input id="administrator-password" type="password" minlength="12" autocomplete="new-password" placeholder="At least 12 characters" required></label><fieldset class="permission-fieldset"><legend>Allowed abilities</legend><label class="permission-option"><input type="checkbox" name="administrator-permission" value="projects"><span><strong>Projects</strong><small>Create and edit projects and internal project operations.</small></span></label><label class="permission-option"><input type="checkbox" name="administrator-permission" value="customers"><span><strong>Customer Accounts</strong><small>Create, update, and remove customer logins.</small></span></label><label class="permission-option"><input type="checkbox" name="administrator-permission" value="content"><span><strong>Customer-Facing Content</strong><small>Schedules, photos, documents, approvals, and customer messages.</small></span></label><label class="permission-option"><input type="checkbox" name="administrator-permission" value="employees"><span><strong>Employees</strong><small>Employee accounts, assignments, schedules, notes, and team chat.</small></span></label></fieldset><div class="button-row"><button class="portal-btn primary" id="administrator-submit">Create Administrator</button><button class="portal-btn light" id="administrator-cancel" type="button">Clear</button></div></form><p class="portal-muted">Administrator accounts sign in using their complete email address.</p></div>
 </section>
+<section id="estimator-settings" class="portal-grid section-gap" data-owner-only>
+<div class="portal-card span-12 pricing-control-heading"><div><p class="portal-kicker">Protected owner controls</p><h1 class="portal-title">Estimator Pricing</h1><p class="portal-muted">Adjust the estimator without changing previously saved scenarios. New calculations automatically receive a new pricing version.</p></div><div class="pricing-heading-actions"><button id="pricing-reset" class="portal-btn light" type="button">Restore ADELIE Defaults</button><button id="pricing-save" class="portal-btn primary" type="button">Publish New Pricing</button></div></div>
+<div class="portal-card span-12 pricing-master-controls"><label><span>San Diego labor position</span><output id="labor-position-output">At average</output><input id="labor-position" type="range" min="-40" max="40" step="1" value="0"><small>Move all labor portions below or above the current San Diego baseline.</small></label><label><span>Displayed estimate range</span><output id="range-width-output">$15,000</output><input id="range-width" type="range" min="2500" max="50000" step="2500" value="15000"><small>Controls the difference between the low and high number shown to customers.</small></label></div>
+<div class="portal-card span-12"><div class="pricing-table-intro"><div><h2>All estimator values</h2><p class="portal-muted">Every slider displays its active value. Low and high allowances are kept separate.</p></div><label>Find a pricing value<input id="pricing-search" type="search" placeholder="Cabinets, flooring, addition…"></label></div><div id="pricing-controls"></div><p id="pricing-status" role="status"></p></div>
+</section>
 </main>
 </div>
 </div>
 <script src="portal-admin.js">
+</script>
+<script src="portal-estimator-pricing.js">
+</script>
+<script src="portal-estimator-settings.js">
 </script>
 <script src="portal-homeowners.js">
 </script>

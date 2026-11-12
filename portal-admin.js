@@ -298,7 +298,8 @@ async function loadCustomerLoginLog(){
   try{
     const out=await adminFetch('/.netlify/functions/customer-login-log');
     const entries=out.entries||[];
-    $('customer-login-log').innerHTML=entries.length?`<table class="portal-table"><thead><tr><th>Customer</th><th>Project</th><th>Signed in</th><th>IP address</th><th>Browser / device</th></tr></thead><tbody>${entries.map(entry=>`<tr><td><strong>${safe(entry.username||'Customer')}</strong></td><td>${safe(entry.project_name||'Unknown project')}</td><td>${new Date(entry.logged_in_at).toLocaleString()}</td><td>${safe(entry.ip_address||'Unavailable')}</td><td>${safe(entry.user_agent||'Unavailable')}</td></tr>`).join('')}</tbody></table>`:empty('No customer sign-ins have been recorded yet.');
+    const typeLabel={owner:'Owner',administrator:'Administrator',employee:'Employee',homeowner:'Homeowner',customer:'Project customer'};
+    $('customer-login-log').innerHTML=entries.length?`<table class="portal-table"><thead><tr><th>Account</th><th>Type</th><th>Project / account</th><th>Signed in</th><th>IP address</th><th>Browser / device</th></tr></thead><tbody>${entries.map(entry=>`<tr><td><strong>${safe(entry.username||'Portal user')}</strong></td><td>${safe(typeLabel[entry.account_type]||'Project customer')}</td><td>${safe(entry.project_name||'Homeowner account')}</td><td>${new Date(entry.logged_in_at).toLocaleString()}</td><td>${safe(entry.ip_address||'Unavailable')}</td><td>${safe(entry.user_agent||'Unavailable')}</td></tr>`).join('')}</tbody></table>`:empty('No portal sign-ins have been recorded yet.');
   }catch(error){
     $('customer-login-log').innerHTML=empty(error.message);
   }

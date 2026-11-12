@@ -16,6 +16,12 @@ create index if not exists customer_login_log_logged_in_at_idx
 create index if not exists customer_login_log_user_id_idx
   on public.customer_login_log (user_id);
 
+alter table public.customer_login_log
+  add column if not exists account_type text not null default 'customer';
+
+create index if not exists customer_login_log_account_type_idx
+  on public.customer_login_log (account_type, logged_in_at desc);
+
 alter table public.customer_login_log enable row level security;
 
 -- Browser clients cannot read or write audit records. The Netlify function

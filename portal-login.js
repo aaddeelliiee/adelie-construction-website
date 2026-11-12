@@ -1,12 +1,26 @@
 const cfg=window.ADELIE_PORTAL_CONFIG;
 const sb=supabase.createClient(cfg.supabaseUrl,cfg.supabaseAnonKey);
 const msg=document.getElementById('login-message');
+let loginRecorded=false;
 function show(text,type=''){msg.textContent=text;msg.className='notice '+type}
+async function recordLogin(session){
+  if(loginRecorded||!session)return;
+  loginRecorded=true;
+  try{
+    await fetch('/.netlify/functions/customer-login-log',{
+      method:'POST',
+      headers:{'Authorization':'Bearer '+session.access_token}
+    });
+  }catch(error){
+    console.warn('Login activity could not be recorded.',error);
+  }
+}
 async function route() {
   const { data: { session } } = await sb.auth.getSession();
   if (!session) return;
   const {data:{user},error:userError}=await sb.auth.getUser();
   if(userError||!user){await sb.auth.signOut({scope:'local'});show('This account was reset. You can now use a new welcome link.','success');return}
+  await recordLogin(session);
   const { data: isAdmin } = await sb.rpc('is_portal_user');
   if (isAdmin) return location.replace('portal-admin.html');
   const { data: isEmployee } = await sb.rpc('is_employee');
@@ -36,16 +50,6 @@ document.getElementById('login-form').addEventListener('submit',async event=>{
   const password=document.getElementById('password').value;
   const {data,error}=await sb.auth.signInWithPassword({email:authEmail,password});
   if(error)return show('Username or password is incorrect. Ask ADELIE to confirm the username or assign a new password.','error');
-  if(data.session){
-    try{
-      await fetch('/.netlify/functions/customer-login-log',{
-        method:'POST',
-        headers:{'Authorization':'Bearer '+data.session.access_token}
-      });
-    }catch(error){
-      console.warn('Customer login activity could not be recorded.',error);
-    }
-  }
   route();
 });
 

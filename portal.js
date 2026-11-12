@@ -12,9 +12,9 @@ const {data:isAdmin}=await sb.rpc('is_portal_admin');
 if(isAdmin)return location.href='portal-admin.html';
 const {data:members,error}=await sb.from('project_members').select('project_id,projects(*)').eq('user_id',session.user.id).limit(1);
 if(error||!members?.length){projectId=null;
-const {data:onboarding}=await sb.from('customer_onboarding').select('design_answers').eq('user_id',session.user.id).maybeSingle();
-const designLink=$('open-finish-questionnaire');designLink.textContent=Object.keys(onboarding?.design_answers||{}).length?'Edit My Design Sheet':'Complete My Design Sheet';designLink.href='portal-questionnaire.html?view=design';designLink.classList.remove('hidden');
-$('project-name').textContent='Welcome to your ADELIE planning space';$('project-address').textContent='Explore your ideas now. Project tools will activate as your project moves forward.';$('project-status').textContent='Planning';$('current-phase').textContent='Early planning';$('start-date').textContent='Not scheduled';$('completion-date').textContent='Not scheduled';$('progress-label').textContent='0%';$('progress-ring').style.setProperty('--progress',0);$('journey-status').textContent='Planning your ideas';
+const [{data:onboarding},{data:estimates=[]}]=await Promise.all([sb.from('customer_onboarding').select('design_answers').eq('user_id',session.user.id).maybeSingle(),sb.from('remodel_estimates').select('id,is_draft,consultation_requested_at').eq('user_id',session.user.id).eq('customer_deleted',false)]),estimateComplete=estimates.some(item=>!item.is_draft||item.consultation_requested_at);
+const designLink=$('open-finish-questionnaire');designLink.textContent=Object.keys(onboarding?.design_answers||{}).length?'Edit My Design Sheet':estimateComplete?'Optional: Complete My Design Sheet':'Complete My Design Sheet';designLink.href='portal-questionnaire.html?view=design';designLink.classList.remove('hidden');
+$('project-name').textContent=estimateComplete?'Your initial project plan is ready':'Welcome to your ADELIE planning space';$('project-address').textContent=estimateComplete?'Your saved cost plan satisfies the initial planning step. The Design Sheet remains available whenever you want to explore finishes.':'Explore your ideas now. You can use either the Cost Planner or Design Sheet to begin.';$('project-status').textContent=estimateComplete?'Planning complete':'Planning';$('current-phase').textContent=estimateComplete?'Estimate prepared':'Early planning';$('start-date').textContent='Not scheduled';$('completion-date').textContent='Not scheduled';const planningProgress=estimateComplete?10:0;$('progress-label').textContent=planningProgress+'%';$('progress-ring').style.setProperty('--progress',planningProgress);$('journey-status').textContent=estimateComplete?'Initial plan complete':'Planning your ideas';
 const pending=message=>empty(`${message} This area will update automatically when ADELIE activates your project.`);$('schedule-list').innerHTML=pending('No project schedule is assigned yet.');$('photos-list').innerHTML=pending('Project photos are not active yet.');$('documents-list').innerHTML=pending('Project documents are not active yet.');$('messages-list').innerHTML=pending('Project messaging is not active yet.');
 document.querySelectorAll('#share form,#messages form').forEach(form=>{form.querySelectorAll('input,textarea,button').forEach(control=>control.disabled=true);form.insertAdjacentHTML('afterbegin','<p class="preproject-note">Uploads and project messages become available once your project is activated.</p>')});
 document.body.classList.add('preproject-portal');$('loading').classList.add('hidden');$('app').classList.remove('hidden');return}const p=members[0].projects;
@@ -33,13 +33,15 @@ $('progress-ring').style.setProperty('--progress',progress);
 const journeyIndex=progress>=100?4:progress>=75?3:progress>=35?2:progress>=10?1:0;
 document.querySelectorAll('#journey-steps span').forEach((step,index)=>step.classList.toggle('complete',index<=journeyIndex));
 $('journey-status').textContent=['Design','Planning','Construction','Finishing touches','Complete'][journeyIndex];
-const [{ data: questionnaire },{ data: onboarding }] = await Promise.all([
+const [{ data: questionnaire },{ data: onboarding },{ data: estimates=[] }] = await Promise.all([
   sb.from('finish_questionnaires').select('project_id').eq('user_id', currentUserId).eq('project_id', projectId).maybeSingle(),
-  sb.from('customer_onboarding').select('id,discovery,design_answers').eq('user_id',currentUserId).maybeSingle()
+  sb.from('customer_onboarding').select('id,discovery,design_answers').eq('user_id',currentUserId).maybeSingle(),
+  sb.from('remodel_estimates').select('id,is_draft,consultation_requested_at').eq('user_id',currentUserId).eq('customer_deleted',false)
 ]);
+const estimateComplete=estimates.some(item=>!item.is_draft||item.consultation_requested_at);
 if (onboarding) {
   const link = $('open-finish-questionnaire');
-  link.textContent = Object.keys(onboarding.design_answers||{}).length ? 'Edit My Design Sheet' : 'Complete My Design Sheet';
+  link.textContent = Object.keys(onboarding.design_answers||{}).length ? 'Edit My Design Sheet' : estimateComplete ? 'Optional: Complete My Design Sheet' : 'Complete My Design Sheet';
   link.href = 'portal-questionnaire.html?view=design';
   link.classList.remove('hidden');
 } else if (questionnaire) {

@@ -10,6 +10,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="portal.css">
 <link rel="stylesheet" href="portal-theme.css">
+<link rel="stylesheet" href="portal-admin-v2.css">
+<link rel="stylesheet" href="portal-homeowners.css">
+<link rel="stylesheet" href="portal-estimates.css">
+<link rel="stylesheet" href="portal-estimator-settings.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
 </script>
 <script src="portal-config.js">
@@ -19,7 +23,7 @@
 <div class="portal-shell">
 <header class="portal-topbar">
 <a class="portal-brand" href="portal-admin.html">
-<img src="assets/optimized/adelie-logo-512.webp" alt="ADELIE Construction" width="512" height="512">
+<img src="assets/adelie-portal-mark.png" alt="ADELIE Construction">
 <strong>Project Manager</strong>
 </a>
 <div class="portal-top-actions">
@@ -28,23 +32,30 @@
 </header>
 <div class="portal-layout">
 <nav class="portal-sidebar">
-<span class="portal-nav-group">Homeowners</span>
-<a href="portal-leads.html" data-requires-permission="customers">Homeowner Accounts</a>
-<span class="portal-nav-group">Project</span>
+<span class="portal-nav-group">Dashboard</span>
 <a href="#dashboard" class="active">Overview</a>
-<a href="#project">Project Setup</a>
+<span class="portal-nav-group">Customers</span>
+<a href="#homeowners" data-requires-permission="customers">Homeowner Accounts</a>
+<a href="#customer-estimates" data-requires-permission="customers">Customer Estimates</a>
+<a href="#customer-access" data-requires-permission="customers">Customer Logins</a>
+<a href="#customer-uploads" data-requires-permission="content">Customer Uploads</a>
+<a href="#login-activity" data-requires-permission="customers">Login Activity</a>
+<span class="portal-nav-group">Projects</span>
+<a href="#project-directory" data-requires-permission="projects">All Projects</a>
+<a href="#project-create" data-requires-permission="projects">Create Project</a>
+<a href="#project-workspace" data-requires-permission="projects">Selected Project</a>
 <a href="#schedule" data-requires-permission="content">Weekly Schedule</a>
 <a href="#photos" data-requires-permission="content">Photos</a>
 <a href="#documents" data-requires-permission="content">Documents</a>
-<span class="portal-nav-group">People &amp; Communication</span>
-<a href="#customer-uploads" data-requires-permission="content">Customer Uploads</a>
-<a href="#login-activity" data-requires-permission="customers">Login Activity</a>
+<span class="portal-nav-group">Communication</span>
 <a href="#employee-approvals" data-requires-permission="content">Employee Approvals</a>
 <a href="#messages" data-requires-permission="content">Messages</a>
+<a href="#team-chat" data-requires-permission="employees">Team Chat</a>
+<span class="portal-nav-group">Team &amp; Access</span>
 <a href="#employees" data-requires-permission="employees">Employees</a>
 <a href="#employee-schedule" data-requires-permission="employees">Employee Schedule</a>
-<a href="#team-chat" data-requires-permission="employees">Team Chat</a>
 <a href="#administrators" data-owner-only>Administrator Accounts</a>
+<a href="#estimator-settings" data-owner-only>Estimator Pricing</a>
 </nav>
 <main class="portal-main">
 <div id="admin-message" class="notice hidden">
@@ -54,7 +65,7 @@
 <p class="portal-kicker">Overview</p>
 <h1 class="portal-title">Your projects at a glance</h1>
 <p class="portal-muted">Select a project once, then manage everything from the six simple sections below.</p>
-<label class="project-picker">Current project<select id="current-project">
+<label class="project-picker legacy-project-picker">Current project<select id="current-project">
 </select>
 </label>
 </div>
@@ -71,14 +82,28 @@
 <strong id="message-count">0</strong>
 </div>
 </section>
-<section id="project" class="portal-grid section-gap">
+<section id="customer-estimates" class="portal-grid section-gap" data-requires-permission="customers">
+<div class="portal-card span-12 estimate-view-heading"><div><p class="portal-kicker">Live planning activity</p><h1 class="portal-title">Customer Estimates</h1><p class="portal-muted">Search homeowners and compare their live drafts and saved planning scenarios.</p></div><div class="estimate-toolbar"><label>Find a customer or scenario<input id="estimate-search" type="search" placeholder="Name, email, project, or scenario"></label><button id="refresh-customer-estimates" class="portal-btn light" type="button">Refresh Estimates</button></div></div>
+<div id="admin-estimates-list" class="span-12 estimate-view-list"></div>
+</section>
+<section id="project-directory" class="portal-grid section-gap" data-requires-permission="projects">
+<div class="portal-card span-12 project-directory-heading"><div><p class="portal-kicker">Project command center</p><h1 class="portal-title">Projects</h1><p class="portal-muted">Open a project to see its customer, team, progress, schedule, files, and communication together.</p></div><label>Find a project<input id="project-search" type="search" placeholder="Search name, address, phase, or status"></label></div>
+<div id="project-directory-list" class="span-12 project-directory-list"></div>
+</section>
+<section id="homeowners" class="portal-grid section-gap" data-requires-permission="customers">
+<div class="portal-card span-12 homeowner-hub-heading"><div><p class="portal-kicker">Customer relationships</p><h1 class="portal-title">Homeowner Accounts</h1><p class="portal-muted">Welcome a new lead, review answers, manage access, or safely remove an account without leaving the portal.</p></div><div class="homeowner-hub-tabs" role="tablist"><button class="portal-btn primary" type="button" data-homeowner-tab="active">Active Accounts</button><button class="portal-btn light" type="button" data-homeowner-tab="new">Add Homeowner</button><button id="hub-removed-tab" class="portal-btn light hidden" type="button" data-homeowner-tab="removed">Removed Accounts</button></div></div>
+<div id="hub-active-panel" class="portal-card span-12 homeowner-hub-panel"><div class="hub-panel-title"><div><p class="portal-kicker">Active homeowners</p><h2>Accounts and lead details</h2></div><label>Find a homeowner<input id="hub-homeowner-search" type="search" placeholder="Search name, email, or address"></label></div><div id="hub-onboarding-list"></div></div>
+<div id="hub-new-panel" class="portal-card span-12 homeowner-hub-panel hidden"><div class="hub-new-layout"><div><p class="portal-kicker">A simple first step</p><h2>Welcome a new homeowner</h2><p class="portal-muted">Enter their name, property address, and email. They receive a private welcome link and can begin their planning experience immediately.</p></div><form id="hub-lead-form" class="portal-form"><label>Homeowner name<input id="hub-lead-name" autocomplete="name" maxlength="120" required></label><label>Property address<input id="hub-lead-address" autocomplete="street-address" maxlength="300" required></label><label>Email address<input id="hub-lead-email" type="email" autocomplete="email" maxlength="254" required></label><button id="hub-send-invite" class="portal-btn primary">Create Account &amp; Send Welcome Link</button><p id="hub-lead-status" role="status"></p></form></div></div>
+<div id="hub-removed-panel" class="portal-card span-12 homeowner-hub-panel hidden"><p class="portal-kicker">Protected owner records</p><h2>Removed Homeowners</h2><p class="portal-muted">Restore an account or permanently reset it—including its login, saved onboarding data, project access, and customer uploads.</p><div id="hub-removed-list"></div></div>
+</section>
+<section id="project-create" class="portal-grid section-gap">
 <div class="portal-card span-12 project-setup-intro">
 <p class="portal-kicker">Simple project onboarding</p>
 <h1 class="portal-title">Create a project and connect its customer</h1>
 <p class="portal-muted">Complete Step 1 first. The new project is selected automatically, so the customer login created in Step 2 is linked to the correct project.</p>
 <div class="setup-steps"><span><strong>1</strong>Create project</span><span><strong>2</strong>Create customer login</span><span><strong>3</strong>Manage project</span></div>
 </div>
-<div class="portal-card span-6 setup-card" data-requires-permission="projects">
+<div class="portal-card span-12 setup-card" data-requires-permission="projects">
 <p class="portal-kicker">Step 1</p>
 <h2>Create a New Project</h2>
 <p class="portal-muted">Enter the project name and property address. After creation, it becomes the selected project.</p>
@@ -90,7 +115,9 @@
 <button class="portal-btn primary" type="submit">Create Project &amp; Continue</button>
 </form>
 </div>
-<div class="portal-card span-6 setup-card" data-requires-permission="customers">
+</section>
+<section id="customer-access" class="portal-grid section-gap">
+<div class="portal-card span-12 setup-card" data-requires-permission="customers">
 <p class="portal-kicker">Step 2</p>
 <h2>Create or Manage Customer Login</h2>
 <p class="portal-muted">The login below will only have access to the project selected here.</p>
@@ -109,6 +136,11 @@
 </form>
 <p class="portal-muted">Give the username and temporary password to the customer securely. Passwords cannot be viewed later.</p>
 </div>
+</section>
+<section id="project-workspace" class="portal-grid section-gap">
+<div class="portal-card span-12 project-workspace-hero"><div><p class="portal-kicker">Selected project</p><h1 id="workspace-project-name" class="portal-title">Choose a project</h1><p id="workspace-project-address" class="portal-muted"></p></div><div class="workspace-progress"><strong id="workspace-progress-value">0%</strong><span>complete</span></div></div>
+<div class="portal-card span-12"><div id="workspace-summary" class="workspace-summary"></div></div>
+<div class="portal-card span-12" data-requires-permission="employees"><p class="portal-kicker">Project team</p><h2>Assign employees</h2><p class="portal-muted">Check an employee to add them to this project. Uncheck them to remove access.</p><div id="workspace-team-checklist" class="assignment-checklist"></div><p id="workspace-team-status" role="status"></p></div>
 <div class="portal-card span-12" data-requires-permission="projects">
 <p class="portal-kicker">Step 3 · Selected project</p>
 <h2>Review and Manage Project Information</h2>
@@ -257,20 +289,31 @@
 </div>
 </section>
 <section id="employees" class="portal-grid section-gap">
-<div class="portal-card span-7"><p class="portal-kicker">Administrator only</p><h2>Employee Accounts</h2><div id="employees-list"></div></div>
-<div class="portal-card span-5"><h2>Create or Edit Employee</h2><form id="employee-form" class="portal-form"><input type="hidden" id="employee-id"><label>Full name<input id="employee-full-name" required></label><label>Job title<input id="employee-job-title"></label><label>Phone<input id="employee-phone" type="tel"></label><label>Username<input id="employee-username" pattern="[A-Za-z0-9._-]+" minlength="3" maxlength="32" required></label><label>Temporary/new password<input id="employee-password" type="password" minlength="10"></label><label>Assigned projects<select id="employee-projects" multiple size="6"></select></label><label class="checkline"><input id="employee-active" type="checkbox" checked> Active account</label><div class="button-row"><button class="portal-btn primary">Save Employee</button><button id="employee-cancel" class="portal-btn light" type="button">Clear</button></div></form></div>
+<div class="portal-card span-7"><p class="portal-kicker">Team directory</p><h2>Employee Accounts</h2><p class="portal-muted">Manage access, project assignments, or promote an employee to administrator.</p><div id="employees-list"></div></div>
+<div class="portal-card span-5"><h2>Add or Edit Employee</h2><form id="employee-form" class="portal-form"><input type="hidden" id="employee-id"><label>Full name<input id="employee-full-name" required></label><label>Job title<input id="employee-job-title"></label><label>Phone<input id="employee-phone" type="tel"></label><label>Username<input id="employee-username" pattern="[A-Za-z0-9._-]+" minlength="3" maxlength="32" required></label><label>Temporary/new password<input id="employee-password" type="password" minlength="10"></label><fieldset class="permission-fieldset"><legend>Project access</legend><div id="employee-project-checklist" class="assignment-checklist"></div></fieldset><label class="checkline"><input id="employee-active" type="checkbox" checked> Active account</label><div class="button-row"><button class="portal-btn primary">Save Employee</button><button id="employee-cancel" class="portal-btn light" type="button">Clear</button></div></form></div>
 <div class="portal-card span-12"><p class="portal-kicker">Administrator only</p><h2>Private Employee Notes</h2><p class="portal-muted">These notes are never returned to employee or customer accounts.</p><form id="employee-note-form" class="portal-form"><label>Employee<select id="note-employee" required></select></label><label>Private note<textarea id="employee-note-body" required></textarea></label><button class="portal-btn primary">Save Private Note</button></form><div id="employee-notes-list"></div></div>
 </section>
 <section id="employee-schedule" class="portal-grid section-gap"><div class="portal-card span-7"><p class="portal-kicker">Work assignments</p><h2>Employee Schedule</h2><div id="employee-schedule-list"></div></div><div class="portal-card span-5"><h2>Add Schedule Item</h2><form id="employee-schedule-form" class="portal-form"><label>Employee<select id="schedule-employee" required></select></label><label>Project<select id="schedule-project"><option value="">No project</option></select></label><label>Title<input id="employee-schedule-title" required></label><label>Details<textarea id="employee-schedule-details"></textarea></label><div class="two-col"><label>Starts<input id="employee-schedule-start" type="datetime-local" required></label><label>Ends<input id="employee-schedule-end" type="datetime-local"></label></div><label>Status<select id="employee-schedule-status"><option>Scheduled</option><option>In Progress</option><option>Complete</option><option>Cancelled</option></select></label><button class="portal-btn primary">Add to Schedule</button></form></div></section>
 <section id="team-chat" class="portal-grid section-gap"><div class="portal-card span-7"><p class="portal-kicker">Internal only</p><h2>Team Chat &amp; Private Messages</h2><div id="admin-internal-thread"></div></div><div class="portal-card span-5"><h2>New Internal Message</h2><form id="admin-internal-form" class="portal-form"><label>Channel<select id="admin-internal-recipient"><option value="">Team Chat — everyone</option></select></label><label>Message<textarea id="admin-internal-body" maxlength="5000" required></textarea></label><button class="portal-btn primary">Send Internal Message</button></form><p class="portal-muted">This channel is isolated from all customer messages.</p></div></section>
 <section id="administrators" class="portal-grid section-gap" data-owner-only>
-<div class="portal-card span-7"><p class="portal-kicker">Protected owner controls</p><h2>Administrator Accounts</h2><p class="portal-muted">Only your protected owner account can create, edit, or remove administrators. Other administrators cannot change your account.</p><div id="administrators-list"></div></div>
+<div class="portal-card span-7"><p class="portal-kicker">Protected owner controls</p><h2>Administrator Accounts</h2><p class="portal-muted">Manage permissions or return an administrator to an employee role. Your protected owner account cannot be changed.</p><div id="administrators-list"></div></div>
 <div class="portal-card span-5"><p class="portal-kicker">New or existing administrator</p><h2>Account &amp; Permissions</h2><form id="administrator-form" class="portal-form"><input type="hidden" id="administrator-id"><label>Full name<input id="administrator-full-name" required></label><label>Email address<input id="administrator-email" type="email" autocomplete="off" required></label><label>Temporary/new password<input id="administrator-password" type="password" minlength="12" autocomplete="new-password" placeholder="At least 12 characters" required></label><fieldset class="permission-fieldset"><legend>Allowed abilities</legend><label class="permission-option"><input type="checkbox" name="administrator-permission" value="projects"><span><strong>Projects</strong><small>Create and edit projects and internal project operations.</small></span></label><label class="permission-option"><input type="checkbox" name="administrator-permission" value="customers"><span><strong>Customer Accounts</strong><small>Create, update, and remove customer logins.</small></span></label><label class="permission-option"><input type="checkbox" name="administrator-permission" value="content"><span><strong>Customer-Facing Content</strong><small>Schedules, photos, documents, approvals, and customer messages.</small></span></label><label class="permission-option"><input type="checkbox" name="administrator-permission" value="employees"><span><strong>Employees</strong><small>Employee accounts, assignments, schedules, notes, and team chat.</small></span></label></fieldset><div class="button-row"><button class="portal-btn primary" id="administrator-submit">Create Administrator</button><button class="portal-btn light" id="administrator-cancel" type="button">Clear</button></div></form><p class="portal-muted">Administrator accounts sign in using their complete email address.</p></div>
+</section>
+<section id="estimator-settings" class="portal-grid section-gap" data-owner-only>
+<div class="portal-card span-12 pricing-control-heading"><div><p class="portal-kicker">Protected owner controls</p><h1 class="portal-title">Estimator Pricing</h1><p class="portal-muted">Adjust the estimator without changing previously saved scenarios. New calculations automatically receive a new pricing version.</p></div><div class="pricing-heading-actions"><button id="pricing-reset" class="portal-btn light" type="button">Restore Tuned Defaults</button><button id="pricing-save" class="portal-btn primary" type="button">Publish New Pricing</button></div></div>
+<div class="portal-card span-12 pricing-master-controls"><label><span>San Diego labor position</span><output id="labor-position-output">At average</output><input id="labor-position" type="range" min="-40" max="40" step="1" value="0"><small>Move all labor portions below or above the current San Diego baseline.</small></label><label><span>Displayed estimate range</span><output id="range-width-output">$15,000</output><input id="range-width" type="range" min="2500" max="50000" step="2500" value="15000"><small>Controls the difference between the low and high number shown to customers.</small></label></div>
+<div class="portal-card span-12"><div class="pricing-table-intro"><div><h2>All estimator values</h2><p class="portal-muted">Every slider displays its active value. Low and high allowances are kept separate.</p></div><label>Find a pricing value<input id="pricing-search" type="search" placeholder="Cabinets, flooring, addition…"></label></div><div id="pricing-controls"></div><p id="pricing-status" role="status"></p></div>
 </section>
 </main>
 </div>
 </div>
 <script src="portal-admin.js">
+</script>
+<script src="portal-estimator-pricing.js">
+</script>
+<script src="portal-estimator-settings.js">
+</script>
+<script src="portal-homeowners.js">
 </script>
 <script src="portal-account.js">
 </script>

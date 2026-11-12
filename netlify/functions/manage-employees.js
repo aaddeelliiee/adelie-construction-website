@@ -4,7 +4,7 @@ const USERNAME=/^[a-z0-9._-]{3,32}$/;
 const reply=(statusCode,body)=>({statusCode,headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
 
 exports.handler=async event=>{
-  if(!['GET','POST','DELETE'].includes(event.httpMethod))return reply(405,{error:'Method not allowed.'});
+  if(!['GET','POST','PUT','DELETE'].includes(event.httpMethod))return reply(405,{error:'Method not allowed.'});
   const url=process.env.SUPABASE_URL,key=process.env.SUPABASE_SERVICE_ROLE_KEY;
   if(!url||!key)return reply(500,{error:'Employee management is not configured.'});
   const db=createClient(url,key,{auth:{persistSession:false,autoRefreshToken:false}});
@@ -15,18 +15,27 @@ exports.handler=async event=>{
   if(!admin||(admin.is_owner!==true&&!admin.permissions?.includes('*')&&!admin.permissions?.includes('employees')))return reply(403,{error:'Employee-management permission required.'});
 
   if(event.httpMethod==='GET'){
-    const [{data:employees,error},{data:assignments},{data:projects}]=await Promise.all([
+    const [{data:employees,error},{data:assignments},{data:projects},{data:admins}]=await Promise.all([
       db.from('employees').select('*').order('full_name'),
       db.from('employee_project_assignments').select('*'),
-      db.from('projects').select('id,name').order('name')
+      db.from('projects').select('id,name').order('name'),
+      db.from('portal_admins').select('user_id')
     ]);
     if(error)return reply(400,{error:error.message});
     const {data:list}=await db.auth.admin.listUsers({page:1,perPage:1000});
     const users=new Map((list?.users||[]).map(x=>[x.id,x]));
-    return reply(200,{employees:(employees||[]).map(x=>({...x,username:users.get(x.user_id)?.user_metadata?.portal_username||'' ,project_ids:(assignments||[]).filter(a=>a.employee_id===x.user_id).map(a=>a.project_id)})),projects:projects||[]});
+    const adminIds=new Set((admins||[]).map(item=>item.user_id));
+    return reply(200,{employees:(employees||[]).filter(x=>!adminIds.has(x.user_id)).map(x=>({...x,username:users.get(x.user_id)?.user_metadata?.portal_username||'' ,project_ids:(assignments||[]).filter(a=>a.employee_id===x.user_id).map(a=>a.project_id)})),projects:projects||[]});
   }
 
   let body={};try{body=JSON.parse(event.body||'{}')}catch{return reply(400,{error:'Invalid request.'})}
+  if(event.httpMethod==='PUT'){
+    const employeeId=String(body.employeeId||''),projectId=String(body.projectId||'');
+    if(!employeeId||!projectId)return reply(400,{error:'Choose an employee and project.'});
+    if(body.assigned===false){const {error}=await db.from('employee_project_assignments').delete().eq('employee_id',employeeId).eq('project_id',projectId);return error?reply(400,{error:error.message}):reply(200,{message:'Employee removed from project.'})}
+    const {error}=await db.from('employee_project_assignments').upsert({employee_id:employeeId,project_id:projectId},{onConflict:'employee_id,project_id'});
+    return error?reply(400,{error:error.message}):reply(200,{message:'Employee assigned to project.'});
+  }
   if(event.httpMethod==='DELETE'){
     const id=String(body.userId||'');
     if(!id)return reply(400,{error:'Employee required.'});

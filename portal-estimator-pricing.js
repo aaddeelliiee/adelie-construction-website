@@ -1,0 +1,21 @@
+window.ADELIE_ESTIMATOR_PRICING={
+  version:'2026.11.4',location:'San Diego County',
+  quick:{whole:[125,225],kitchen:[190,270],bathroom:[250,400],addition:[230,330],newbuild:[220,320],outdoor:[100,220]},
+  finish:{basic:.78,standard:1,premium:1.32,luxury:1.72},extent:{cosmetic:.62,replace:1,layout:1.20,structural:1.48},
+  core:{whole:[90,165],kitchen:[150,250],bathroom:[200,350],addition:[215,315],newbuild:[205,305],outdoor:[75,145]},
+  unit:{
+    cabinetType:{keep:[0,0,.05],refinish:[180,350,.72],reface:[300,550,.55],imported:[450,720,.42],american:[620,940,.40],semi:[850,1300,.38],custom:[1200,2000,.45]},
+    counterType:{keep:[0,0,.05],laminate:[45,75,.35],butcher:[65,110,.32],granite:[75,140,.30],quartz:[85,155,.30],quartzite:[110,220,.34],porcelain:[100,180,.36]},
+    backsplash:[18,42,.55],appliances:{keep:[0,0,.02],basic:[6500,10500,.12],standard:[12000,22000,.12],premium:[25000,50000,.10],luxury:[55000,120000,.09]},
+    island:[7500,18000,.44],kitchenPlumbing:[4500,12000,.68],bathBase:[9500,18000,.62],
+    vanityType:{keep:[0,0,.05],refinish:[900,2200,.70],prefab:[1800,3500,.30],semi:[3500,6500,.34],custom:[6500,14000,.42]},
+    showerType:{keep:[0,0,.05],refresh:[3500,7500,.58],tub:[6500,13000,.56],shower:[12000,26000,.62],wetroom:[26000,60000,.60]},
+    bathTile:[16,38,.58],bathFixtures:{keep:[0,0,.03],basic:[2200,4500,.28],standard:[4500,8500,.24],premium:[9000,18000,.22],luxury:[20000,45000,.20]},
+    floorType:{keep:[0,0,.03],refinish:[5,12,.68],laminate:[7,13,.46],lvp:[8,15,.43],tile:[15,30,.60],engineered:[15,28,.46],hardwood:[18,35,.52]},floorDemo:[2.5,6,.78],
+    drywallLevel:{keep:[1,2.5,.82],l3:[3.5,6,.64],l4:[4.5,8,.66],l5:[6.5,11,.70]},paintSheen:{keep:[0,0,.02],flat:[2,4,.65],eggshell:[2.5,5,.64],satin:[3,5.5,.63],semi:[4,6.5,.62]},
+    baseboardType:{keep:[0,0,.02],mdf:[8,15,.58],pine:[12,22,.56],hardwood:[20,40,.58]},light:[350,750,.68],device:[180,420,.72],door:[900,2200,.45],window:[1400,3200,.48],
+    panel:{upgrade:[6500,14000,.70],rewire:[18000,45000,.75]},softCosts:{simple:[2500,6000,.72],normal:[7000,18000,.68],complex:[18000,45000,.65]},
+    structuralOpening:[9000,28000,.72],hvac:{modify:[4500,12000,.70],heatpump:[14000,28000,.48],zoned:[24000,48000,.52]},repipe:{partial:[8000,18000,.72],full:[18000,40000,.72]},waterHeater:{tank:[2800,5500,.45],tankless:[5500,11000,.58],heatpump:[4500,9000,.48]},
+    insulation:[3,7,.50],roofType:{shingle:[9,16,.48],tile:[16,30,.52],metal:[22,42,.55]},exteriorType:{paint:[3.5,7,.65],stucco:[12,24,.60],siding:[18,38,.55]},hardscapeType:{concrete:[14,25,.58],paver:[22,40,.58],stone:[35,70,.56]},patioType:{wood:[55,105,.62],aluminum:[45,90,.48],custom:[140,275,.60]}
+  },adjustments:{occupied:1.08,homeAge:{newer:1,mid:1.05,older:1.12},access:{easy:1,limited:1.08,difficult:1.18},constructionStage:{exploring:1.08,design:1.05,plans:1.02,approved:1,ready:.98}},laborPosition:0,rangeWidth:15000
+};

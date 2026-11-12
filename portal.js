@@ -4,17 +4,19 @@ const safe=s=>String(s??'').replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'
 
 async function init(){const {data:{session}}=await sb.auth.getSession();
 if(!session)return location.href='portal-login.html';
+const {data:{user},error:userError}=await sb.auth.getUser();
+if(userError||!user){await sb.auth.signOut({scope:'local'});return location.replace('portal-login.html?account-reset=1')}
 currentUserId=session.user.id;
 $('user-email').textContent=session.user.email;
 const {data:isAdmin}=await sb.rpc('is_portal_admin');
 if(isAdmin)return location.href='portal-admin.html';
 const {data:members,error}=await sb.from('project_members').select('project_id,projects(*)').eq('user_id',session.user.id).limit(1);
 if(error||!members?.length){projectId=null;
-const {data:onboarding}=await sb.from('customer_onboarding').select('design_answers').eq('user_id',session.user.id).maybeSingle();
-$('app').classList.add('hidden');
-$('loading').classList.remove('hidden');
-$('loading').innerHTML=onboarding?`<div class="preproject-welcome"><p class="portal-kicker">Your ADELIE planning space</p><h2>Your account is ready.</h2><p class="portal-muted">Use your Design Sheet now. Project progress, schedules, photos, documents, uploads, and messages will appear here when your ADELIE project is activated.</p><p><a class="portal-btn primary" href="portal-questionnaire.html?view=design">${Object.keys(onboarding.design_answers||{}).length?'Edit My Design Sheet':'Complete My Design Sheet'}</a></p></div>`:empty('Your account is active, but a project has not been assigned yet. Please contact ADELIE.');
-return}const p=members[0].projects;
+const [{data:onboarding},{data:estimates=[]}]=await Promise.all([sb.from('customer_onboarding').select('design_answers').eq('user_id',session.user.id).maybeSingle(),sb.from('remodel_estimates').select('id,is_draft,consultation_requested_at').eq('user_id',session.user.id).eq('customer_deleted',false)]),estimateComplete=estimates.some(item=>!item.is_draft||item.consultation_requested_at);
+const designLink=$('open-finish-questionnaire');designLink.textContent=Object.keys(onboarding?.design_answers||{}).length?'Edit My Design Sheet':estimateComplete?'Optional: Complete My Design Sheet':'Complete My Design Sheet';designLink.href='portal-questionnaire.html?view=design';designLink.classList.remove('hidden');
+$('project-name').textContent=estimateComplete?'Your initial project plan is ready':'Welcome to your ADELIE planning space';$('project-address').textContent=estimateComplete?'Your saved cost plan satisfies the initial planning step. The Design Sheet remains available whenever you want to explore finishes.':'Explore your ideas now. You can use either the Cost Planner or Design Sheet to begin.';$('project-status').textContent=estimateComplete?'Planning complete':'Planning';$('current-phase').textContent=estimateComplete?'Estimate prepared':'Early planning';$('start-date').textContent='Not scheduled';$('completion-date').textContent='Not scheduled';const planningProgress=estimateComplete?10:0;$('progress-label').textContent=planningProgress+'%';$('progress-ring').style.setProperty('--progress',planningProgress);$('journey-status').textContent=estimateComplete?'Initial plan complete':'Planning your ideas';
+const pending=message=>empty(`${message} This area will update automatically when ADELIE activates your project.`);$('schedule-list').innerHTML=pending('No project schedule is assigned yet.');$('photos-list').innerHTML=pending('Project photos are not active yet.');$('documents-list').innerHTML=pending('Project documents are not active yet.');$('messages-list').innerHTML=pending('Project messaging is not active yet.');
+document.body.classList.add('preproject-portal');$('loading').classList.add('hidden');$('app').classList.remove('hidden');await Promise.all([loadPhotos(),loadDocuments(),loadMessages()]);return}const p=members[0].projects;
 projectId=p.id;
 projectName=p.name||'Customer project';
 $('project-name').textContent=p.name;
@@ -27,13 +29,18 @@ const progress=Math.max(0,Math.min(100,p.progress_percent||0));
 $('progress-bar').style.width=progress+'%';
 $('progress-label').textContent=progress+'%';
 $('progress-ring').style.setProperty('--progress',progress);
-const [{ data: questionnaire },{ data: onboarding }] = await Promise.all([
+const journeyIndex=progress>=100?4:progress>=75?3:progress>=35?2:progress>=10?1:0;
+document.querySelectorAll('#journey-steps span').forEach((step,index)=>step.classList.toggle('complete',index<=journeyIndex));
+$('journey-status').textContent=['Design','Planning','Construction','Finishing touches','Complete'][journeyIndex];
+const [{ data: questionnaire },{ data: onboarding },{ data: estimates=[] }] = await Promise.all([
   sb.from('finish_questionnaires').select('project_id').eq('user_id', currentUserId).eq('project_id', projectId).maybeSingle(),
-  sb.from('customer_onboarding').select('id,discovery,design_answers').eq('user_id',currentUserId).maybeSingle()
+  sb.from('customer_onboarding').select('id,discovery,design_answers').eq('user_id',currentUserId).maybeSingle(),
+  sb.from('remodel_estimates').select('id,is_draft,consultation_requested_at').eq('user_id',currentUserId).eq('customer_deleted',false)
 ]);
+const estimateComplete=estimates.some(item=>!item.is_draft||item.consultation_requested_at);
 if (onboarding) {
   const link = $('open-finish-questionnaire');
-  link.textContent = Object.keys(onboarding.design_answers||{}).length ? 'Edit My Design Sheet' : 'Complete My Design Sheet';
+  link.textContent = Object.keys(onboarding.design_answers||{}).length ? 'Edit My Design Sheet' : estimateComplete ? 'Optional: Complete My Design Sheet' : 'Complete My Design Sheet';
   link.href = 'portal-questionnaire.html?view=design';
   link.classList.remove('hidden');
 } else if (questionnaire) {
@@ -44,7 +51,7 @@ if (onboarding) {
 await Promise.all([loadSchedule(),loadPhotos(),loadDocuments(),loadMessages()]);
 $('loading').classList.add('hidden');
 $('app').classList.remove('hidden')}
-async function rows(table,order='created_at',ascending=false){const {data=[],error}=await sb.from(table).select('*').eq('project_id',projectId).order(order,{ascending});
+async function rows(table,order='created_at',ascending=false){let query=sb.from(table).select('*').order(order,{ascending});query=projectId?query.eq('project_id',projectId):query.eq('onboarding_user_id',currentUserId);const {data=[],error}=await query;
 return error?[]:data}async function signed(bucket,path){if(!path)return null;
 if(path.startsWith('http')||path.startsWith('assets/'))return path;
 const {data}=await sb.storage.from(bucket).createSignedUrl(path,3600);
@@ -85,7 +92,7 @@ $('message-form').onsubmit=async e=>{e.preventDefault();
 const body=$('message-body').value.trim();
 if(!body)return;
 const {data:{user}}=await sb.auth.getUser();
-const {error}=await sb.from('messages').insert({project_id:projectId,sender_id:user.id,sender_role:'client',body});
+const {error}=await sb.from('messages').insert({project_id:projectId,onboarding_user_id:projectId?null:user.id,sender_id:user.id,sender_role:'client',body});
 if(!error){e.target.reset();
 loadMessages()}};
 $('customer-photo-form').onsubmit=async event=>{
@@ -96,9 +103,9 @@ $('customer-photo-form').onsubmit=async event=>{
   form.dataset.uploading='true';button.disabled=true;button.textContent='Uploading...';
   try{
   const {data:{user}}=await sb.auth.getUser();
-  const path=`${projectId}/customer/${user.id}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g,'-')}`;
+  const path=`${projectId||user.id}/customer/${user.id}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g,'-')}`;
   let {error}=await sb.storage.from('project-photos').upload(path,file);
-  if(!error)({error}=await sb.from('project_photos').insert({project_id:projectId,caption:note,bucket:'project-photos',storage_path:path,taken_at:new Date().toISOString(),uploaded_by:user.id,uploaded_role:'client'}));
+  if(!error)({error}=await sb.from('project_photos').insert({project_id:projectId,onboarding_user_id:projectId?null:user.id,caption:note,bucket:'project-photos',storage_path:path,taken_at:new Date().toISOString(),uploaded_by:user.id,uploaded_role:'client'}));
   if(error){await sb.storage.from('project-photos').remove([path]);alert(error.message)}else{event.target.reset();await Promise.all([loadPhotos(),notifyCustomerUpload({type:'Photo',fileName:file.name,note,customer:user.email}).catch(()=>{})]);alert('Photo shared with ADELIE.')}
   }finally{form.dataset.uploading='false';button.disabled=false;button.textContent='Share Photo'}
 };
@@ -110,9 +117,9 @@ $('customer-document-form').onsubmit=async event=>{
   form.dataset.uploading='true';button.disabled=true;button.textContent='Uploading...';
   try{
   const {data:{user}}=await sb.auth.getUser();
-  const path=`${projectId}/customer/${user.id}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g,'-')}`;
+  const path=`${projectId||user.id}/customer/${user.id}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g,'-')}`;
   let {error}=await sb.storage.from('project-files').upload(path,file);
-  if(!error)({error}=await sb.from('documents').insert({project_id:projectId,title,category:'Customer Upload',notes,bucket:'project-files',storage_path:path,file_name:file.name,uploaded_by:user.id,uploaded_role:'client'}));
+  if(!error)({error}=await sb.from('documents').insert({project_id:projectId,onboarding_user_id:projectId?null:user.id,title,category:'Customer Upload',notes,bucket:'project-files',storage_path:path,file_name:file.name,uploaded_by:user.id,uploaded_role:'client'}));
   if(error){await sb.storage.from('project-files').remove([path]);alert(error.message)}else{event.target.reset();await Promise.all([loadDocuments(),notifyCustomerUpload({type:'Document',fileName:file.name,note:notes,customer:user.email}).catch(()=>{})]);alert('Document shared with ADELIE.')}
   }finally{form.dataset.uploading='false';button.disabled=false;button.textContent='Share Document'}
 };

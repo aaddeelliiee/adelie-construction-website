@@ -6,14 +6,7 @@ function show(text,type=''){msg.textContent=text;msg.className='notice '+type}
 async function recordLogin(session){
   if(loginRecorded||!session)return;
   loginRecorded=true;
-  try{
-    await fetch('/.netlify/functions/customer-login-log',{
-      method:'POST',
-      headers:{'Authorization':'Bearer '+session.access_token}
-    });
-  }catch(error){
-    console.warn('Login activity could not be recorded.',error);
-  }
+  await window.ADELIE_RECORD_PORTAL_LOGIN?.(session);
 }
 async function route() {
   const { data: { session } } = await sb.auth.getSession();

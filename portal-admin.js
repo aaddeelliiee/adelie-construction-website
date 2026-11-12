@@ -12,6 +12,7 @@ async function guard(){const {data:{session}}=await sb.auth.getSession();
 if(!session)return location.href='portal-login.html';
 const {data:{user},error:userError}=await sb.auth.getUser();
 if(userError||!user){await sb.auth.signOut({scope:'local'});return location.replace('portal-login.html?account-reset=1')}
+await window.ADELIE_RECORD_PORTAL_LOGIN?.(session);
 const {data:isAdmin}=await sb.rpc('is_portal_user');
 if(!isAdmin)return location.href='portal.html';
 const {data:access,error}=await sb.from('portal_admins').select('is_owner,permissions').eq('user_id',session.user.id).single();
@@ -304,6 +305,8 @@ async function loadCustomerLoginLog(){
     $('customer-login-log').innerHTML=empty(error.message);
   }
 }
+$('refresh-login-activity').onclick=loadCustomerLoginLog;
+setInterval(()=>{if(location.hash==='#login-activity'&&hasPermission('customers'))loadCustomerLoginLog()},10000);
 let customerEstimates=[];
 const estimateMoney=value=>new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0}).format(value);
 function estimateCard(estimate){

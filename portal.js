@@ -6,6 +6,7 @@ async function init(){const {data:{session}}=await sb.auth.getSession();
 if(!session)return location.href='portal-login.html';
 const {data:{user},error:userError}=await sb.auth.getUser();
 if(userError||!user){await sb.auth.signOut({scope:'local'});return location.replace('portal-login.html?account-reset=1')}
+await window.ADELIE_RECORD_PORTAL_LOGIN?.(session);
 currentUserId=session.user.id;
 $('user-email').textContent=session.user.email;
 const {data:isAdmin}=await sb.rpc('is_portal_admin');

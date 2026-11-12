@@ -1,3 +1,4 @@
+if(new URLSearchParams(location.search).has('embedded'))document.body.classList.add('embedded-estimator');
 const cfg=window.ADELIE_PORTAL_CONFIG,db=supabase.createClient(cfg.supabaseUrl,cfg.supabaseAnonKey),P=window.ADELIE_ESTIMATOR_PRICING,$=id=>document.getElementById(id),form=$('estimator-form');
 let session,userRole='customer',projectId=null,saved=[],lastEstimate=null,draftEstimateId=null,draftTimer=null,draftSaving=false,draftQueued=false;
 const money=value=>new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0}).format(Math.round(value/500)*500);

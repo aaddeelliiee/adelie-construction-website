@@ -20,6 +20,18 @@ exports.handler = async event => {
 
   if(event.httpMethod==='GET'){
     const projectId=String(event.queryStringParameters?.projectId||'');
+    if(event.queryStringParameters?.all==='1'){
+      const {data:members=[],error}=await admin.from('project_members').select('user_id,project_id,projects(id,name,address,status)').eq('role','client');
+      if(error)return response(400,{error:error.message});
+      const byUser=new Map();
+      for(const member of members){
+        const user=userList.users.find(item=>item.id===member.user_id);
+        if(!user?.email?.toLowerCase().endsWith(`@${DOMAIN}`))continue;
+        if(!byUser.has(user.id))byUser.set(user.id,{id:user.id,username:user.user_metadata?.portal_username||String(user.email||'').replace(`@${DOMAIN}`,''),projects:[]});
+        byUser.get(user.id).projects.push(member.projects||{id:member.project_id,name:'Unnamed project'});
+      }
+      return response(200,{accounts:[...byUser.values()].sort((a,b)=>a.username.localeCompare(b.username))});
+    }
     if(!projectId)return response(400,{error:'Choose a project.'});
     const {data:members=[],error}=await admin.from('project_members').select('user_id').eq('project_id',projectId).eq('role','client');
     if(error)return response(400,{error:error.message});

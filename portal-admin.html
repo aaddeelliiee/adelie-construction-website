@@ -10,6 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="portal.css">
 <link rel="stylesheet" href="portal-theme.css">
+<link rel="stylesheet" href="portal-admin-v2.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
 </script>
 <script src="portal-config.js">
@@ -36,8 +37,9 @@
 <a href="#customer-uploads" data-requires-permission="content">Customer Uploads</a>
 <a href="#login-activity" data-requires-permission="customers">Login Activity</a>
 <span class="portal-nav-group">Projects</span>
+<a href="#project-directory" data-requires-permission="projects">All Projects</a>
 <a href="#project-create" data-requires-permission="projects">Create Project</a>
-<a href="#project-settings" data-requires-permission="projects">Project Settings</a>
+<a href="#project-workspace" data-requires-permission="projects">Selected Project</a>
 <a href="#schedule" data-requires-permission="content">Weekly Schedule</a>
 <a href="#photos" data-requires-permission="content">Photos</a>
 <a href="#documents" data-requires-permission="content">Documents</a>
@@ -58,7 +60,7 @@
 <p class="portal-kicker">Overview</p>
 <h1 class="portal-title">Your projects at a glance</h1>
 <p class="portal-muted">Select a project once, then manage everything from the six simple sections below.</p>
-<label class="project-picker">Current project<select id="current-project">
+<label class="project-picker legacy-project-picker">Current project<select id="current-project">
 </select>
 </label>
 </div>
@@ -74,6 +76,10 @@
 <span>Unread priorities</span>
 <strong id="message-count">0</strong>
 </div>
+</section>
+<section id="project-directory" class="portal-grid section-gap" data-requires-permission="projects">
+<div class="portal-card span-12 project-directory-heading"><div><p class="portal-kicker">Project command center</p><h1 class="portal-title">Projects</h1><p class="portal-muted">Open a project to see its customer, team, progress, schedule, files, and communication together.</p></div><label>Find a project<input id="project-search" type="search" placeholder="Search name, address, phase, or status"></label></div>
+<div id="project-directory-list" class="span-12 project-directory-list"></div>
 </section>
 <section id="project-create" class="portal-grid section-gap">
 <div class="portal-card span-12 project-setup-intro">
@@ -116,7 +122,10 @@
 <p class="portal-muted">Give the username and temporary password to the customer securely. Passwords cannot be viewed later.</p>
 </div>
 </section>
-<section id="project-settings" class="portal-grid section-gap">
+<section id="project-workspace" class="portal-grid section-gap">
+<div class="portal-card span-12 project-workspace-hero"><div><p class="portal-kicker">Selected project</p><h1 id="workspace-project-name" class="portal-title">Choose a project</h1><p id="workspace-project-address" class="portal-muted"></p></div><div class="workspace-progress"><strong id="workspace-progress-value">0%</strong><span>complete</span></div></div>
+<div class="portal-card span-12"><div id="workspace-summary" class="workspace-summary"></div></div>
+<div class="portal-card span-12" data-requires-permission="employees"><p class="portal-kicker">Project team</p><h2>Assign employees</h2><p class="portal-muted">Check an employee to add them to this project. Uncheck them to remove access.</p><div id="workspace-team-checklist" class="assignment-checklist"></div><p id="workspace-team-status" role="status"></p></div>
 <div class="portal-card span-12" data-requires-permission="projects">
 <p class="portal-kicker">Step 3 · Selected project</p>
 <h2>Review and Manage Project Information</h2>
@@ -265,14 +274,14 @@
 </div>
 </section>
 <section id="employees" class="portal-grid section-gap">
-<div class="portal-card span-7"><p class="portal-kicker">Administrator only</p><h2>Employee Accounts</h2><div id="employees-list"></div></div>
-<div class="portal-card span-5"><h2>Create or Edit Employee</h2><form id="employee-form" class="portal-form"><input type="hidden" id="employee-id"><label>Full name<input id="employee-full-name" required></label><label>Job title<input id="employee-job-title"></label><label>Phone<input id="employee-phone" type="tel"></label><label>Username<input id="employee-username" pattern="[A-Za-z0-9._-]+" minlength="3" maxlength="32" required></label><label>Temporary/new password<input id="employee-password" type="password" minlength="10"></label><label>Assigned projects<select id="employee-projects" multiple size="6"></select></label><label class="checkline"><input id="employee-active" type="checkbox" checked> Active account</label><div class="button-row"><button class="portal-btn primary">Save Employee</button><button id="employee-cancel" class="portal-btn light" type="button">Clear</button></div></form></div>
+<div class="portal-card span-7"><p class="portal-kicker">Team directory</p><h2>Employee Accounts</h2><p class="portal-muted">Manage access, project assignments, or promote an employee to administrator.</p><div id="employees-list"></div></div>
+<div class="portal-card span-5"><h2>Add or Edit Employee</h2><form id="employee-form" class="portal-form"><input type="hidden" id="employee-id"><label>Full name<input id="employee-full-name" required></label><label>Job title<input id="employee-job-title"></label><label>Phone<input id="employee-phone" type="tel"></label><label>Username<input id="employee-username" pattern="[A-Za-z0-9._-]+" minlength="3" maxlength="32" required></label><label>Temporary/new password<input id="employee-password" type="password" minlength="10"></label><fieldset class="permission-fieldset"><legend>Project access</legend><div id="employee-project-checklist" class="assignment-checklist"></div></fieldset><label class="checkline"><input id="employee-active" type="checkbox" checked> Active account</label><div class="button-row"><button class="portal-btn primary">Save Employee</button><button id="employee-cancel" class="portal-btn light" type="button">Clear</button></div></form></div>
 <div class="portal-card span-12"><p class="portal-kicker">Administrator only</p><h2>Private Employee Notes</h2><p class="portal-muted">These notes are never returned to employee or customer accounts.</p><form id="employee-note-form" class="portal-form"><label>Employee<select id="note-employee" required></select></label><label>Private note<textarea id="employee-note-body" required></textarea></label><button class="portal-btn primary">Save Private Note</button></form><div id="employee-notes-list"></div></div>
 </section>
 <section id="employee-schedule" class="portal-grid section-gap"><div class="portal-card span-7"><p class="portal-kicker">Work assignments</p><h2>Employee Schedule</h2><div id="employee-schedule-list"></div></div><div class="portal-card span-5"><h2>Add Schedule Item</h2><form id="employee-schedule-form" class="portal-form"><label>Employee<select id="schedule-employee" required></select></label><label>Project<select id="schedule-project"><option value="">No project</option></select></label><label>Title<input id="employee-schedule-title" required></label><label>Details<textarea id="employee-schedule-details"></textarea></label><div class="two-col"><label>Starts<input id="employee-schedule-start" type="datetime-local" required></label><label>Ends<input id="employee-schedule-end" type="datetime-local"></label></div><label>Status<select id="employee-schedule-status"><option>Scheduled</option><option>In Progress</option><option>Complete</option><option>Cancelled</option></select></label><button class="portal-btn primary">Add to Schedule</button></form></div></section>
 <section id="team-chat" class="portal-grid section-gap"><div class="portal-card span-7"><p class="portal-kicker">Internal only</p><h2>Team Chat &amp; Private Messages</h2><div id="admin-internal-thread"></div></div><div class="portal-card span-5"><h2>New Internal Message</h2><form id="admin-internal-form" class="portal-form"><label>Channel<select id="admin-internal-recipient"><option value="">Team Chat — everyone</option></select></label><label>Message<textarea id="admin-internal-body" maxlength="5000" required></textarea></label><button class="portal-btn primary">Send Internal Message</button></form><p class="portal-muted">This channel is isolated from all customer messages.</p></div></section>
 <section id="administrators" class="portal-grid section-gap" data-owner-only>
-<div class="portal-card span-7"><p class="portal-kicker">Protected owner controls</p><h2>Administrator Accounts</h2><p class="portal-muted">Only your protected owner account can create, edit, or remove administrators. Other administrators cannot change your account.</p><div id="administrators-list"></div></div>
+<div class="portal-card span-7"><p class="portal-kicker">Protected owner controls</p><h2>Administrator Accounts</h2><p class="portal-muted">Manage permissions or return an administrator to an employee role. Your protected owner account cannot be changed.</p><div id="administrators-list"></div></div>
 <div class="portal-card span-5"><p class="portal-kicker">New or existing administrator</p><h2>Account &amp; Permissions</h2><form id="administrator-form" class="portal-form"><input type="hidden" id="administrator-id"><label>Full name<input id="administrator-full-name" required></label><label>Email address<input id="administrator-email" type="email" autocomplete="off" required></label><label>Temporary/new password<input id="administrator-password" type="password" minlength="12" autocomplete="new-password" placeholder="At least 12 characters" required></label><fieldset class="permission-fieldset"><legend>Allowed abilities</legend><label class="permission-option"><input type="checkbox" name="administrator-permission" value="projects"><span><strong>Projects</strong><small>Create and edit projects and internal project operations.</small></span></label><label class="permission-option"><input type="checkbox" name="administrator-permission" value="customers"><span><strong>Customer Accounts</strong><small>Create, update, and remove customer logins.</small></span></label><label class="permission-option"><input type="checkbox" name="administrator-permission" value="content"><span><strong>Customer-Facing Content</strong><small>Schedules, photos, documents, approvals, and customer messages.</small></span></label><label class="permission-option"><input type="checkbox" name="administrator-permission" value="employees"><span><strong>Employees</strong><small>Employee accounts, assignments, schedules, notes, and team chat.</small></span></label></fieldset><div class="button-row"><button class="portal-btn primary" id="administrator-submit">Create Administrator</button><button class="portal-btn light" id="administrator-cancel" type="button">Clear</button></div></form><p class="portal-muted">Administrator accounts sign in using their complete email address.</p></div>
 </section>
 </main>

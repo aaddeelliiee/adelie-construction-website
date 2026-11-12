@@ -14,6 +14,8 @@ window.ADELIE_ESTIMATOR_PRICING={
     floorType:{laminate:[7,13,.46],lvp:[8,15,.43],tile:[15,30,.60],engineered:[15,28,.46],hardwood:[18,35,.52]},floorDemo:[2.5,6,.78],
     drywallLevel:{l3:[3.5,6,.64],l4:[4.5,8,.66],l5:[6.5,11,.70]},paintSheen:{flat:[2,4,.65],eggshell:[2.5,5,.64],satin:[3,5.5,.63],semi:[4,6.5,.62]},
     baseboardType:{mdf:[8,15,.58],pine:[12,22,.56],hardwood:[20,40,.58]},light:[350,750,.68],device:[180,420,.72],door:[900,2200,.45],window:[1400,3200,.48],
-    panel:{upgrade:[6500,14000,.70],rewire:[18000,45000,.75]},softCosts:{simple:[2500,6000,.72],normal:[7000,18000,.68],complex:[18000,45000,.65]}
+    panel:{upgrade:[6500,14000,.70],rewire:[18000,45000,.75]},softCosts:{simple:[2500,6000,.72],normal:[7000,18000,.68],complex:[18000,45000,.65]},
+    structuralOpening:[9000,28000,.72],hvac:{modify:[4500,12000,.70],heatpump:[14000,28000,.48],zoned:[24000,48000,.52]},repipe:{partial:[8000,18000,.72],full:[18000,40000,.72]},waterHeater:{tank:[2800,5500,.45],tankless:[5500,11000,.58],heatpump:[4500,9000,.48]},
+    insulation:[3,7,.50],roofType:{shingle:[9,16,.48],tile:[16,30,.52],metal:[22,42,.55]},exteriorType:{paint:[3.5,7,.65],stucco:[12,24,.60],siding:[18,38,.55]},hardscapeType:{concrete:[14,25,.58],paver:[22,40,.58],stone:[35,70,.56]},patioType:{wood:[55,105,.62],aluminum:[45,90,.48],custom:[140,275,.60]}
   },adjustments:{occupied:1.08,homeAge:{newer:1,mid:1.05,older:1.12},access:{easy:1,limited:1.08,difficult:1.18}}
 };

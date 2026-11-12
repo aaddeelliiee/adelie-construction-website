@@ -16,8 +16,7 @@ const [{data:onboarding},{data:estimates=[]}]=await Promise.all([sb.from('custom
 const designLink=$('open-finish-questionnaire');designLink.textContent=Object.keys(onboarding?.design_answers||{}).length?'Edit My Design Sheet':estimateComplete?'Optional: Complete My Design Sheet':'Complete My Design Sheet';designLink.href='portal-questionnaire.html?view=design';designLink.classList.remove('hidden');
 $('project-name').textContent=estimateComplete?'Your initial project plan is ready':'Welcome to your ADELIE planning space';$('project-address').textContent=estimateComplete?'Your saved cost plan satisfies the initial planning step. The Design Sheet remains available whenever you want to explore finishes.':'Explore your ideas now. You can use either the Cost Planner or Design Sheet to begin.';$('project-status').textContent=estimateComplete?'Planning complete':'Planning';$('current-phase').textContent=estimateComplete?'Estimate prepared':'Early planning';$('start-date').textContent='Not scheduled';$('completion-date').textContent='Not scheduled';const planningProgress=estimateComplete?10:0;$('progress-label').textContent=planningProgress+'%';$('progress-ring').style.setProperty('--progress',planningProgress);$('journey-status').textContent=estimateComplete?'Initial plan complete':'Planning your ideas';
 const pending=message=>empty(`${message} This area will update automatically when ADELIE activates your project.`);$('schedule-list').innerHTML=pending('No project schedule is assigned yet.');$('photos-list').innerHTML=pending('Project photos are not active yet.');$('documents-list').innerHTML=pending('Project documents are not active yet.');$('messages-list').innerHTML=pending('Project messaging is not active yet.');
-document.querySelectorAll('#share form,#messages form').forEach(form=>{form.querySelectorAll('input,textarea,button').forEach(control=>control.disabled=true);form.insertAdjacentHTML('afterbegin','<p class="preproject-note">Uploads and project messages become available once your project is activated.</p>')});
-document.body.classList.add('preproject-portal');$('loading').classList.add('hidden');$('app').classList.remove('hidden');return}const p=members[0].projects;
+document.body.classList.add('preproject-portal');$('loading').classList.add('hidden');$('app').classList.remove('hidden');await Promise.all([loadPhotos(),loadDocuments(),loadMessages()]);return}const p=members[0].projects;
 projectId=p.id;
 projectName=p.name||'Customer project';
 $('project-name').textContent=p.name;
@@ -52,7 +51,7 @@ if (onboarding) {
 await Promise.all([loadSchedule(),loadPhotos(),loadDocuments(),loadMessages()]);
 $('loading').classList.add('hidden');
 $('app').classList.remove('hidden')}
-async function rows(table,order='created_at',ascending=false){const {data=[],error}=await sb.from(table).select('*').eq('project_id',projectId).order(order,{ascending});
+async function rows(table,order='created_at',ascending=false){let query=sb.from(table).select('*').order(order,{ascending});query=projectId?query.eq('project_id',projectId):query.eq('onboarding_user_id',currentUserId);const {data=[],error}=await query;
 return error?[]:data}async function signed(bucket,path){if(!path)return null;
 if(path.startsWith('http')||path.startsWith('assets/'))return path;
 const {data}=await sb.storage.from(bucket).createSignedUrl(path,3600);
@@ -93,7 +92,7 @@ $('message-form').onsubmit=async e=>{e.preventDefault();
 const body=$('message-body').value.trim();
 if(!body)return;
 const {data:{user}}=await sb.auth.getUser();
-const {error}=await sb.from('messages').insert({project_id:projectId,sender_id:user.id,sender_role:'client',body});
+const {error}=await sb.from('messages').insert({project_id:projectId,onboarding_user_id:projectId?null:user.id,sender_id:user.id,sender_role:'client',body});
 if(!error){e.target.reset();
 loadMessages()}};
 $('customer-photo-form').onsubmit=async event=>{
@@ -104,9 +103,9 @@ $('customer-photo-form').onsubmit=async event=>{
   form.dataset.uploading='true';button.disabled=true;button.textContent='Uploading...';
   try{
   const {data:{user}}=await sb.auth.getUser();
-  const path=`${projectId}/customer/${user.id}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g,'-')}`;
+  const path=`${projectId||user.id}/customer/${user.id}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g,'-')}`;
   let {error}=await sb.storage.from('project-photos').upload(path,file);
-  if(!error)({error}=await sb.from('project_photos').insert({project_id:projectId,caption:note,bucket:'project-photos',storage_path:path,taken_at:new Date().toISOString(),uploaded_by:user.id,uploaded_role:'client'}));
+  if(!error)({error}=await sb.from('project_photos').insert({project_id:projectId,onboarding_user_id:projectId?null:user.id,caption:note,bucket:'project-photos',storage_path:path,taken_at:new Date().toISOString(),uploaded_by:user.id,uploaded_role:'client'}));
   if(error){await sb.storage.from('project-photos').remove([path]);alert(error.message)}else{event.target.reset();await Promise.all([loadPhotos(),notifyCustomerUpload({type:'Photo',fileName:file.name,note,customer:user.email}).catch(()=>{})]);alert('Photo shared with ADELIE.')}
   }finally{form.dataset.uploading='false';button.disabled=false;button.textContent='Share Photo'}
 };
@@ -118,9 +117,9 @@ $('customer-document-form').onsubmit=async event=>{
   form.dataset.uploading='true';button.disabled=true;button.textContent='Uploading...';
   try{
   const {data:{user}}=await sb.auth.getUser();
-  const path=`${projectId}/customer/${user.id}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g,'-')}`;
+  const path=`${projectId||user.id}/customer/${user.id}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g,'-')}`;
   let {error}=await sb.storage.from('project-files').upload(path,file);
-  if(!error)({error}=await sb.from('documents').insert({project_id:projectId,title,category:'Customer Upload',notes,bucket:'project-files',storage_path:path,file_name:file.name,uploaded_by:user.id,uploaded_role:'client'}));
+  if(!error)({error}=await sb.from('documents').insert({project_id:projectId,onboarding_user_id:projectId?null:user.id,title,category:'Customer Upload',notes,bucket:'project-files',storage_path:path,file_name:file.name,uploaded_by:user.id,uploaded_role:'client'}));
   if(error){await sb.storage.from('project-files').remove([path]);alert(error.message)}else{event.target.reset();await Promise.all([loadDocuments(),notifyCustomerUpload({type:'Document',fileName:file.name,note:notes,customer:user.email}).catch(()=>{})]);alert('Document shared with ADELIE.')}
   }finally{form.dataset.uploading='false';button.disabled=false;button.textContent='Share Document'}
 };

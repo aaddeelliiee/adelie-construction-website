@@ -32,10 +32,12 @@ async function loadProject(){
     $('customer-schedule-list').innerHTML=empty('No project selected.');
     $('employee-board').innerHTML=empty('No project selected.');
     $('employee-submissions').innerHTML=empty('No project selected.');
+    $('employee-estimates-list').innerHTML=empty('No project selected.');
     return;
   }
-  await Promise.all([loadCustomerSchedule(),loadCustomerBoard(),loadSubmissions()]);
+  await Promise.all([loadCustomerSchedule(),loadCustomerBoard(),loadSubmissions(),loadCustomerEstimates()]);
 }
+async function loadCustomerEstimates(){const box=$('employee-estimates-list'),{data=[],error}=await sb.from('remodel_estimates').select('*').eq('project_id',projectId).order('updated_at',{ascending:false});if(error){box.innerHTML=empty('Estimate sharing will appear after account syncing is activated.');return}const currency=value=>new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0}).format(value);box.innerHTML=data.length?`<div class="schedule-stack">${data.map(item=>`<article class="schedule-item"><div><strong>${safe(item.name||'Saved scenario')}</strong><span>${safe(item.customer_name||item.customer_email||'Customer')} · ${new Date(item.updated_at).toLocaleString()}</span><p>${safe((item.summary?.scopes||[]).join(' + ')||'Remodel')} · ${safe(item.summary?.finish||'Unspecified')} finish</p></div><span class="status-pill">${currency(item.estimate_low)}–${currency(item.estimate_high)}</span></article>`).join('')}</div>`:empty('The customer has not saved an estimate for this project yet.')}
 
 async function loadCustomerSchedule(){
   const {data=[]}=await sb.from('milestones').select('*').eq('project_id',projectId).order('target_date',{ascending:true});
@@ -88,6 +90,7 @@ $('employee-update-form').onsubmit=async event=>{
 };
 
 $('employee-project').onchange=event=>{projectId=event.target.value;loadProject()};
+setInterval(()=>{if(location.hash==='#customer-estimates'&&projectId)loadCustomerEstimates()},30000);
 $('internal-message-form').onsubmit=async event=>{event.preventDefault();const {error}=await sb.from('internal_messages').insert({sender_id:userId,recipient_id:$('internal-recipient').value||null,project_id:projectId,body:$('internal-body').value.trim()});if(error)return alert(error.message);event.target.reset();loadInternal()};
 $('logout').onclick=async()=>{await sb.auth.signOut();location.href='portal-login.html'};
 init();

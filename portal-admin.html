@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="portal-theme.css">
 <link rel="stylesheet" href="portal-admin-v2.css">
 <link rel="stylesheet" href="portal-homeowners.css">
+<link rel="stylesheet" href="portal-estimates.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
 </script>
 <script src="portal-config.js">
@@ -34,6 +35,7 @@
 <a href="#dashboard" class="active">Overview</a>
 <span class="portal-nav-group">Customers</span>
 <a href="#homeowners" data-requires-permission="customers">Homeowner Accounts</a>
+<a href="#customer-estimates" data-requires-permission="customers">Customer Estimates</a>
 <a href="#customer-access" data-requires-permission="customers">Customer Logins</a>
 <a href="#customer-uploads" data-requires-permission="content">Customer Uploads</a>
 <a href="#login-activity" data-requires-permission="customers">Login Activity</a>
@@ -77,6 +79,10 @@
 <span>Unread priorities</span>
 <strong id="message-count">0</strong>
 </div>
+</section>
+<section id="customer-estimates" class="portal-grid section-gap" data-requires-permission="customers">
+<div class="portal-card span-12 estimate-view-heading"><div><p class="portal-kicker">Live planning activity</p><h1 class="portal-title">Customer Estimates</h1><p class="portal-muted">View the scenarios customers save while they explore their remodel. These are planning ranges, not proposals.</p></div><button id="refresh-customer-estimates" class="portal-btn light" type="button">Refresh Estimates</button></div>
+<div id="admin-estimates-list" class="span-12 estimate-view-list"></div>
 </section>
 <section id="project-directory" class="portal-grid section-gap" data-requires-permission="projects">
 <div class="portal-card span-12 project-directory-heading"><div><p class="portal-kicker">Project command center</p><h1 class="portal-title">Projects</h1><p class="portal-muted">Open a project to see its customer, team, progress, schedule, files, and communication together.</p></div><label>Find a project<input id="project-search" type="search" placeholder="Search name, address, phase, or status"></label></div>

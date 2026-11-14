@@ -22,4 +22,3 @@ document.addEventListener('visibilitychange',()=>{
 });
 window.addEventListener('focus',refreshPortalData);
 window.addEventListener('online',refreshPortalData);
-setInterval(refreshPortalData,15000);
